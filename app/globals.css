@@ -533,10 +533,138 @@ body:has(.compare-bar) .to-top { bottom: 92px; }
 .scope-text { fill: #f5c542; font: 600 11px var(--body); letter-spacing: .05em; }
 .scope-text.ch2 { fill: #5fd3a3; }
 
+/* =====================================================================
+ * BOARD IDENTITY — the home hero is a populated PCB; parts are shown as
+ * product shots (components/PartRender.tsx) on a lit "stage" everywhere else.
+ * ===================================================================== */
+:root {
+  --soldermask: #0f3d2e;
+  --soldermask-deep: #0a2c21;
+  --trace: #47a978;
+  --enig: #d4a93a;
+  --silk: #eef2ea;
+  --stage-hi: #ffffff;
+  --stage-lo: #e8ece6;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --stage-hi: #234a3d; --stage-lo: #11271f; }
+}
+
+/* glass header that stays on top while scrolling */
+.site-header { position: sticky; top: 0; z-index: 30; background: color-mix(in srgb, var(--sheet) 80%, transparent); -webkit-backdrop-filter: saturate(1.6) blur(14px); backdrop-filter: saturate(1.6) blur(14px); }
+.detail aside { top: 88px; }
+
+/* ---------- hero board ---------- */
+.hero-pcb {
+  position: relative; isolation: isolate; overflow: hidden;
+  display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(24px, 4vw, 56px); align-items: center;
+  padding: clamp(30px, 5vw, 64px) clamp(22px, 4.5vw, 60px);
+  border-radius: 28px;
+  background: radial-gradient(120% 90% at 85% 0%, #1b5b43 0%, var(--soldermask) 48%, var(--soldermask-deep) 100%);
+  color: var(--silk);
+  box-shadow: 0 40px 70px -40px rgb(10 44 33 / .7), inset 0 0 0 1px rgb(255 255 255 / .06);
+}
+.hero-pcb::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image: radial-gradient(circle, rgb(212 169 58 / .24) 1.3px, transparent 1.8px);
+  background-size: 26px 26px;
+  -webkit-mask-image: radial-gradient(90% 85% at 72% 45%, #000 15%, transparent 78%);
+  mask-image: radial-gradient(90% 85% at 72% 45%, #000 15%, transparent 78%);
+}
+.hero-pcb::after {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0; transition: opacity .5s;
+  background: radial-gradient(360px circle at var(--mx, 70%) var(--my, 40%), rgb(255 238 196 / .17), transparent 65%);
+}
+.hero-pcb[data-lamp]::after { opacity: 1; }
+.hero-pcb h1 { color: #f6f8f3; }
+.hero-pcb p { color: rgb(238 242 234 / .76); font-size: var(--step-1); line-height: 1.5; }
+.hero-pcb .btn { background: var(--enig); border-color: var(--enig); color: #1c1606; }
+.hero-pcb .btn:hover { box-shadow: 0 8px 24px -8px rgb(212 169 58 / .6); }
+.hero-pcb .btn.ghost { background: transparent; border-color: rgb(238 242 234 / .45); color: var(--silk); }
+.hero-pcb .btn.ghost:hover { border-color: var(--silk); box-shadow: none; }
+.hero-pcb .stats li { color: rgb(238 242 234 / .62); }
+.hero-pcb .stats strong { color: #f6f8f3; }
+.hero-pcb :focus-visible { outline-color: var(--enig); }
+
+.hero-pcb .trace { stroke: var(--trace); stroke-width: 3.2; }
+.hero-pcb .pad, .hero-pcb .pulse { fill: var(--enig); }
+.hero-pcb .pulse { filter: drop-shadow(0 0 5px var(--enig)); }
+.hero-pcb .hole { fill: rgb(0 0 0 / .3); stroke: var(--enig); stroke-width: 2.5; }
+.hero-pcb .chip-label { fill: #cdd3d8; }
+.hero-pcb .chip-dot { fill: #8b9198; }
+.via { fill: var(--soldermask-deep); stroke: var(--enig); stroke-width: 2; opacity: 0; animation: pad-in .3s ease-out 1.5s forwards; }
+.silk-ref { fill: rgb(238 242 234 / .82); font: 600 11px var(--body); letter-spacing: .05em; opacity: 0; animation: pad-in .4s ease-out 2s forwards; }
+.silk-ref.small { font-size: 9px; font-weight: 500; fill: rgb(238 242 234 / .4); }
+.board-part { opacity: 0; transform-box: fill-box; transform-origin: center; animation: part-drop .55s cubic-bezier(.3, 1.4, .5, 1) forwards; }
+@keyframes part-drop { from { opacity: 0; transform: translateY(-12px) scale(1.08); } to { opacity: 1; transform: none; } }
+
+/* ---------- product shots ---------- */
+.part-marking { font-family: var(--body); }
+.tray-shot, .thumb, .compare-shot, .part-stage { background: radial-gradient(75% 80% at 50% 35%, var(--stage-hi), var(--stage-lo)); }
+
+.tray { list-style: none; margin: 24px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); background: var(--sheet); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; }
+.tray li { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.tray li:nth-child(4n) { border-right: 0; }
+.tray li:nth-last-child(-n + 4) { border-bottom: 0; }
+.tray a { display: grid; gap: 2px; align-content: start; height: 100%; padding: 14px 16px 18px; color: var(--ink); text-decoration: none; }
+.tray-shot { display: block; aspect-ratio: 4 / 3; margin-bottom: 12px; border-radius: 12px; overflow: hidden; }
+.tray-shot svg { display: block; width: 100%; height: 100%; transition: transform .45s var(--ease-out); }
+.tray a:hover .tray-shot svg { transform: translateY(-4px) scale(1.06); }
+.tray-name { font-family: var(--display); font-weight: 500; font-size: 0.98rem; }
+.tray-meta { color: var(--muted); font-size: var(--step--1); }
+.tray-price { color: var(--mask); font-size: var(--step--1); font-variant-numeric: tabular-nums; }
+
+.pn-row { display: flex; align-items: center; gap: 14px; }
+.pn-row .dim { display: block; }
+.thumb { flex: none; display: block; width: 68px; height: 52px; border-radius: 10px; }
+.thumb svg { display: block; width: 100%; height: 100%; transition: transform .35s var(--ease-out); }
+.guide tbody tr:hover .thumb svg { transform: scale(1.12) rotate(-3deg); }
+
+.compare-shot { display: block; width: 128px; height: 92px; margin-bottom: 10px; border-radius: 12px; }
+.compare-shot svg { display: block; width: 100%; height: 100%; }
+
+.part-stage { position: relative; margin: 0 0 28px; border: 1px solid var(--line); border-radius: 22px; overflow: hidden; perspective: 900px; }
+.part-stage::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(260px circle at var(--hx, 50%) var(--hy, 30%), rgb(255 255 255 / .28), transparent 60%); }
+.part-stage-inner { transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .3s var(--ease-out); }
+.part-stage-inner > svg { display: block; width: 100%; height: clamp(220px, 30vw, 320px); animation: part-drop .7s cubic-bezier(.3, 1.3, .5, 1) both; }
+.part-stage-inner img { display: block; width: 100%; height: auto; }
+.part-stage figcaption { position: absolute; left: 18px; bottom: 14px; color: var(--muted); font-size: var(--step--1); }
+
+/* ---------- project rows with generated covers ---------- */
+.project-list.covers a { grid-template-columns: 176px minmax(0, 1fr) auto; align-items: start; gap: 8px 24px; }
+.row-cover { grid-row: 1 / span 2; display: block; aspect-ratio: 16 / 10; border-radius: 12px; overflow: hidden; }
+.row-cover svg { display: block; width: 100%; height: 100%; transition: transform .6s var(--ease-out); }
+.project-list.covers a:hover .row-cover svg { transform: scale(1.06); }
+.row-text { display: grid; gap: 6px; align-content: start; }
+.project-list.covers .row-text p { grid-column: auto; }
+.project-list.covers .side { grid-column: 3; grid-row: 1; }
+.cover-figure svg { display: block; width: 100%; height: auto; }
+
+.search-results .kind { text-transform: none; letter-spacing: 0; font-weight: 600; }
+
+@media (max-width: 900px) {
+  .hero-pcb { grid-template-columns: 1fr; border-radius: 22px; }
+  .tray { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tray li:nth-child(4n) { border-right: 1px solid var(--line); }
+  .tray li:nth-child(2n) { border-right: 0; }
+  .tray li:nth-last-child(-n + 4) { border-bottom: 1px solid var(--line); }
+  .tray li:nth-last-child(-n + 2) { border-bottom: 0; }
+}
+@media (max-width: 600px) {
+  .project-list.covers a { grid-template-columns: 112px minmax(0, 1fr); gap: 6px 14px; }
+  .project-list.covers .side { grid-column: 2; grid-row: auto; justify-items: start; text-align: left; }
+  .thumb { width: 56px; height: 44px; }
+}
+
+.source-links { display: grid; gap: 10px; justify-items: start; margin-top: 20px; }
+.source-links .dim { margin: 4px 0 0; max-width: 34ch; }
+
 /* ---------- reduced motion: no movement, final states shown ---------- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; animation-delay: 0s !important; transition-duration: .01ms !important; transition-delay: 0s !important; scroll-behavior: auto !important; }
   .pulse, .pad-ring, .scope-cursor, .fav-burst { display: none; }
+  .board-part, .via, .silk-ref { opacity: 1; }
+  .part-stage-inner { transform: none !important; }
   .chip-label.cycle { animation: none !important; opacity: 0; }
   .chip-label.cycle:first-of-type { opacity: 1; }
   .status-led { animation: none !important; opacity: 1; }

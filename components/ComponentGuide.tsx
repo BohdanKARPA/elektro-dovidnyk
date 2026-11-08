@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useMemo, useState } from 'react'
 import type { Lang } from '@/lib/types'
 import type { Dict } from '@/lib/i18n'
+import { PartRender } from './PartRender'
 
 const MAX_COMPARE = 4
 
@@ -94,8 +95,15 @@ export function ComponentGuide({
             {visible.map((r) => (
               <tr key={r.id}>
                 <td className="pn">
-                  <Link href={`/${lang}/components/${r.slug}`}>{r.name}</Link>
-                  <div className="dim">{r.manufacturer}</div>
+                  <span className="pn-row">
+                    <span className="thumb">
+                      <PartRender name={r.name} pkg={r.package} manufacturer={r.manufacturer} />
+                    </span>
+                    <span>
+                      <Link href={`/${lang}/components/${r.slug}`}>{r.name}</Link>
+                      <span className="dim">{r.manufacturer}</span>
+                    </span>
+                  </span>
                 </td>
                 <td>
                   {r.summary}

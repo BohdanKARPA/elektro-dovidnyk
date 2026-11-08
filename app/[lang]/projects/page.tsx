@@ -1,9 +1,8 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { Difficulty } from '@/components/Difficulty'
+import { ProjectRow } from '@/components/ProjectRow'
 import { getProjects } from '@/lib/data'
-import { formatDate, getDict, isLang, t } from '@/lib/i18n'
+import { getDict, isLang } from '@/lib/i18n'
 
 export const revalidate = 3600
 
@@ -27,23 +26,9 @@ export default async function ProjectsPage({ params }: PageProps<'/[lang]/projec
           ? 'Покрокові збірки з переліком компонентів, часом на виконання і рівнем складності.'
           : 'Step-by-step builds with a parts list, time estimate and difficulty level.'}
       </p>
-      <ul className="project-list">
+      <ul className="project-list covers">
         {projects.map((p) => (
-          <li key={p._id}>
-            <Link href={`/${lang}/projects/${p.slug}`}>
-              <h3>{t(p.title, lang)}</h3>
-              <p>{t(p.summary, lang)}</p>
-              <span className="side">
-                <Difficulty value={p.difficulty} dict={dict} />
-                {p.durationHours ? (
-                  <span>
-                    {p.durationHours} {dict.hours}
-                  </span>
-                ) : null}
-                <span>{formatDate(p.publishedAt, lang)}</span>
-              </span>
-            </Link>
-          </li>
+          <ProjectRow key={p._id} p={p} lang={lang} dict={dict} />
         ))}
       </ul>
     </>

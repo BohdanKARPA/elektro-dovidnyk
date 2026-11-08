@@ -15,10 +15,13 @@ const categoryFields = groq`_id, title, "slug": slug.current, icon, description`
 const componentCard = groq`
   _id, name, "slug": slug.current, manufacturer, summary, image, package, priceUah, tags,
   "category": category->{ ${categoryFields} }`
-const componentFull = groq`${componentCard}, description, seoDescription, specs, datasheetUrl`
+const componentFull = groq`${componentCard}, description, seoDescription, specs, datasheetUrl, lcscPart`
 const projectCard = groq`
   _id, title, "slug": slug.current, summary, difficulty, durationHours, publishedAt, cover,
   "author": author->{ _id, name, "slug": slug.current, role }`
+
+// Lists also carry a light parts list: project covers are drawn from it.
+const projectListItem = groq`${projectCard}, "components": components[]->{ _id, name, "slug": slug.current, manufacturer, package }`
 
 const Q = {
   categories: groq`*[_type == "category"] | order(order asc) {
@@ -27,8 +30,8 @@ const Q = {
   components: groq`*[_type == "component"] | order(name asc) { ${componentCard} }`,
   component: groq`*[_type == "component" && slug.current == $slug][0] { ${componentFull} }`,
   componentSlugs: groq`*[_type == "component" && defined(slug.current)].slug.current`,
-  projectsUsing: groq`*[_type == "project" && references($id)] | order(publishedAt desc) { ${projectCard} }`,
-  projects: groq`*[_type == "project"] | order(publishedAt desc) { ${projectCard} }`,
+  projectsUsing: groq`*[_type == "project" && references($id)] | order(publishedAt desc) { ${projectListItem} }`,
+  projects: groq`*[_type == "project"] | order(publishedAt desc) { ${projectListItem} }`,
   project: groq`*[_type == "project" && slug.current == $slug][0] {
     ${projectCard}, seoDescription, steps, "components": components[]->{ ${componentCard} }
   }`,

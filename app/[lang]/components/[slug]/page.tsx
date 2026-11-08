@@ -3,7 +3,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Comments } from '@/components/Comments'
-import { Difficulty } from '@/components/Difficulty'
+import { PartRender } from '@/components/PartRender'
+import { PartStage } from '@/components/PartStage'
+import { ProjectRow } from '@/components/ProjectRow'
 import { FavoriteButton } from '@/components/FavoriteButton'
 import { getComponent, getProjectsUsing, getSlugs } from '@/lib/data'
 import { getDict, isLang, LANGS, t } from '@/lib/i18n'
@@ -11,6 +13,12 @@ import { getExtraDict } from '@/lib/i18n-extra'
 import { imageUrl } from '@/lib/sanity'
 
 export const revalidate = 3600
+
+/** Exact LCSC part when the editor set one, otherwise a catalogue search by part name. */
+const lcscUrl = (c: { name: string; lcscPart?: string }) =>
+  c.lcscPart && /^C\d{1,9}$/.test(c.lcscPart)
+    ? `https://www.lcsc.com/product-detail/${c.lcscPart}.html`
+    : `https://www.lcsc.com/search?q=${encodeURIComponent(c.name)}`
 
 export async function generateStaticParams() {
   const slugs = await getSlugs('component')
@@ -82,11 +90,13 @@ export default async function ComponentPage({ params }: PageProps<'/[lang]/compo
               {x.compareWith}
             </Link>
           </div>
-          {img && (
-            <figure className="figure">
+          <PartStage caption={img ? undefined : `${c.package ?? ''}`.trim() || undefined}>
+            {img ? (
               <Image src={img} alt={c.name} width={900} height={600} sizes="(max-width: 900px) 100vw, 700px" />
-            </figure>
-          )}
+            ) : (
+              <PartRender name={c.name} pkg={c.package} manufacturer={c.manufacturer} title={`${c.name}, ${c.package ?? ''}`} />
+            )}
+          </PartStage>
           <p style={{ fontSize: 'var(--step-1)' }}>{t(c.summary, lang)}</p>
           <div className="prose">
             {t(c.description, lang)
@@ -107,17 +117,9 @@ export default async function ComponentPage({ params }: PageProps<'/[lang]/compo
           {projects.length > 0 && (
             <section className="section">
               <h2>{dict.usedIn}</h2>
-              <ul className="project-list">
+              <ul className="project-list covers">
                 {projects.map((p) => (
-                  <li key={p._id}>
-                    <Link href={`/${lang}/projects/${p.slug}`}>
-                      <h3>{t(p.title, lang)}</h3>
-                      <p>{t(p.summary, lang)}</p>
-                      <span className="side">
-                        <Difficulty value={p.difficulty} dict={dict} />
-                      </span>
-                    </Link>
-                  </li>
+                  <ProjectRow key={p._id} p={p} lang={lang} dict={dict} meta="short" />
                 ))}
               </ul>
             </section>
@@ -140,13 +142,17 @@ export default async function ComponentPage({ params }: PageProps<'/[lang]/compo
               </tbody>
             </table>
           )}
-          {c.datasheetUrl && (
-            <p style={{ marginTop: 20 }}>
+          <div className="source-links">
+            {c.datasheetUrl && (
               <a className="btn ghost" href={c.datasheetUrl} target="_blank" rel="noopener noreferrer">
                 {dict.datasheet}
               </a>
-            </p>
-          )}
+            )}
+            <a className="btn ghost" href={lcscUrl(c)} target="_blank" rel="noopener noreferrer">
+              {x.lcsc}
+            </a>
+            {!img && <p className="dim">{x.lcscNote}</p>}
+          </div>
         </aside>
       </div>
     </>

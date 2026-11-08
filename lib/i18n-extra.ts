@@ -34,6 +34,8 @@ const extra = {
     rss: 'RSS',
     rssTitle: 'Нові проєкти й теми форуму',
     toTop: 'Нагору',
+    lcsc: 'Фото й наявність на LCSC',
+    lcscNote: 'Справжні фото, ціни й наявність — у каталозі LCSC. Зображення вище — рендер корпусу.',
     scopeLabel: 'Осцилограма: ШІМ-сигнал і синусоїда',
   },
   en: {
@@ -68,6 +70,8 @@ const extra = {
     rss: 'RSS',
     rssTitle: 'New projects and forum topics',
     toTop: 'Back to top',
+    lcsc: 'Photos and stock on LCSC',
+    lcscNote: 'Real photos, prices and stock are in the LCSC catalogue. The image above is a package render.',
     scopeLabel: 'Oscilloscope trace: a PWM signal and a sine wave',
   },
 }

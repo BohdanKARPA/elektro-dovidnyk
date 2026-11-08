@@ -47,6 +47,7 @@
 
   {
     "_id": "comp-esp32c3",
+    "lcscPart": "C2838500",
     "_type": "component",
     "name": "ESP32-C3",
     "slug": { "_type": "slug", "current": "esp32-c3" },
@@ -68,6 +69,7 @@
   },
   {
     "_id": "comp-stm32g431",
+    "lcscPart": "C529356",
     "_type": "component",
     "name": "STM32G431CBU6",
     "slug": { "_type": "slug", "current": "stm32g431" },
@@ -89,6 +91,7 @@
   },
   {
     "_id": "comp-atmega328p",
+    "lcscPart": "C33901",
     "_type": "component",
     "name": "ATmega328P",
     "slug": { "_type": "slug", "current": "atmega328p" },
@@ -109,6 +112,7 @@
   },
   {
     "_id": "comp-ina226",
+    "lcscPart": "C49851",
     "_type": "component",
     "name": "INA226",
     "slug": { "_type": "slug", "current": "ina226" },
@@ -129,6 +133,7 @@
   },
   {
     "_id": "comp-bme280",
+    "lcscPart": "C92489",
     "_type": "component",
     "name": "BME280",
     "slug": { "_type": "slug", "current": "bme280" },
@@ -149,6 +154,7 @@
   },
   {
     "_id": "comp-irlz44n",
+    "lcscPart": "C38774",
     "_type": "component",
     "name": "IRLZ44N",
     "slug": { "_type": "slug", "current": "irlz44n" },
@@ -169,6 +175,7 @@
   },
   {
     "_id": "comp-tp4056",
+    "lcscPart": "C16581",
     "_type": "component",
     "name": "TP4056",
     "slug": { "_type": "slug", "current": "tp4056" },
@@ -189,6 +196,7 @@
   },
   {
     "_id": "comp-lm2596",
+    "lcscPart": "C1355333",
     "_type": "component",
     "name": "LM2596",
     "slug": { "_type": "slug", "current": "lm2596" },
@@ -352,6 +360,7 @@
   },
   {
     "_id": "comp-stm32g030",
+    "lcscPart": "C724040",
     "_type": "component",
     "name": "STM32G030",
     "slug": {
@@ -411,6 +420,7 @@
   },
   {
     "_id": "comp-stm32f407",
+    "lcscPart": "C12345",
     "_type": "component",
     "name": "STM32F407VGT6",
     "slug": {
@@ -471,6 +481,7 @@
   },
   {
     "_id": "comp-esp32c6",
+    "lcscPart": "C5364646",
     "_type": "component",
     "name": "ESP32-C6",
     "slug": {
@@ -592,6 +603,7 @@
   },
   {
     "_id": "comp-ina238",
+    "lcscPart": "C2868250",
     "_type": "component",
     "name": "INA238",
     "slug": {
@@ -705,6 +717,7 @@
   },
   {
     "_id": "comp-max485",
+    "lcscPart": "C19738",
     "_type": "component",
     "name": "MAX485",
     "slug": {
@@ -759,6 +772,7 @@
   },
   {
     "_id": "comp-el357c",
+    "lcscPart": "C29981",
     "_type": "component",
     "name": "EL357C",
     "slug": {
@@ -865,6 +879,7 @@
   },
   {
     "_id": "comp-lm5060",
+    "lcscPart": "C74456",
     "_type": "component",
     "name": "LM5060",
     "slug": {

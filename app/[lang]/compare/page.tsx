@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { PartRender } from '@/components/PartRender'
 import { getComponent, getComponents } from '@/lib/data'
 import { getDict, isLang, t } from '@/lib/i18n'
 import { getExtraDict } from '@/lib/i18n-extra'
@@ -66,6 +67,9 @@ export default async function ComparePage({ params, searchParams }: PageProps<'/
                 <th scope="col">{x.compareParam}</th>
                 {items.map((c) => (
                   <th key={c._id} scope="col">
+                    <span className="compare-shot">
+                      <PartRender name={c.name} pkg={c.package} manufacturer={c.manufacturer} />
+                    </span>
                     <Link className="pn-link" href={`/${lang}/components/${c.slug}`}>
                       {c.name}
                     </Link>

@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 import { Comments } from '@/components/Comments'
 import { Difficulty } from '@/components/Difficulty'
 import { FavoriteButton } from '@/components/FavoriteButton'
+import { ProjectCover } from '@/components/ProjectCover'
 import { getProject, getSlugs } from '@/lib/data'
 import { formatDate, getDict, isLang, LANGS, t } from '@/lib/i18n'
 import { getExtraDict } from '@/lib/i18n-extra'
@@ -64,11 +65,13 @@ export default async function ProjectPage({ params }: PageProps<'/[lang]/project
           <div className="item-actions">
             <FavoriteButton kind="project" slug={p.slug} labels={{ add: x.favAdd, remove: x.favRemove }} />
           </div>
-          {cover && (
-            <figure className="figure">
+          <figure className="figure cover-figure">
+            {cover ? (
               <Image src={cover} alt="" width={1200} height={675} sizes="(max-width: 900px) 100vw, 700px" priority />
-            </figure>
-          )}
+            ) : (
+              <ProjectCover parts={p.components} />
+            )}
+          </figure>
           <p style={{ fontSize: 'var(--step-1)' }}>{t(p.summary, lang)}</p>
 
           <h2 style={{ marginTop: 40 }}>{dict.steps}</h2>

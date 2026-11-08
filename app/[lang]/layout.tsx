@@ -51,7 +51,7 @@ export default async function LangLayout({ children, params }: LayoutProps<'/[la
             <span>
               © 2026 {dict.siteName}. Next.js + Sanity (headless CMS).
             </span>
-            <a href="/studio">{dict.admin}</a>
+            <a href="/studio">Sanity Studio</a>
           </div>
         </footer>
       </body>

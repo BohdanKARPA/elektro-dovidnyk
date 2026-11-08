@@ -1,3 +1,4 @@
+
 {
   "name": "elektro-dovidnyk",
   "version": "1.0.0",
@@ -32,5 +33,17 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "typescript": "^7.0.2"
+  },
+  "overrides": {
+    "@oclif/core": {
+      "minimatch": "11.0.1"
+    },
+    "@vercel/frameworks": {
+      "js-yaml": "3.15.2",
+      "smol-toml": "1.9.1"
+    },
+    "@module-federation/dts-plugin": {
+      "undici": "7.30.2"
+    }
   }
 }

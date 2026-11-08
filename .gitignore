@@ -6,3 +6,7 @@ out/
 *.tsbuildinfo
 next-env.d.ts
 .vercel
+
+# звіт і резервні копії — не для репозиторію
+*.docx
+*.backup

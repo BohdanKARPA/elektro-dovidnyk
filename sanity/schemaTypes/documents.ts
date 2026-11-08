@@ -175,6 +175,8 @@ export const topic = defineType({
     defineField({ name: 'body', title: 'Питання', type: 'text', rows: 5, validation: (r) => r.required().max(4000) }),
     defineField({ name: 'related', title: "Пов'язаний компонент", type: 'reference', to: [{ type: 'component' }] }),
     defineField({ name: 'pinned', title: 'Закріплена', type: 'boolean', initialValue: false }),
+    defineField({ name: 'hidden', title: 'Прихована адміністратором', type: 'boolean', initialValue: false }),
+    defineField({ name: 'author', title: 'Користувач', type: 'reference', to: [{ type: 'siteUser' }], weak: true, readOnly: true }),
     defineField({ name: 'createdAt', title: 'Створено', type: 'datetime', initialValue: () => new Date().toISOString() }),
   ],
 })
@@ -209,6 +211,7 @@ export const comment = defineType({
       to: [{ type: 'topic' }, { type: 'component' }, { type: 'project' }],
       validation: (r) => r.required(),
     }),
+    defineField({ name: 'author', title: 'Користувач', type: 'reference', to: [{ type: 'siteUser' }], weak: true, readOnly: true }),
     defineField({
       name: 'aiModeration',
       title: 'Результат AI-модерації',
@@ -226,6 +229,34 @@ export const comment = defineType({
     select: { title: 'authorName', subtitle: 'text', status: 'status' },
     prepare: ({ title, subtitle, status }) => ({
       title: `${status === 'approved' ? '✅' : status === 'rejected' ? '⛔' : '⏳'} ${title}`,
+      subtitle,
+    }),
+  },
+})
+
+export const siteUser = defineType({
+  name: 'siteUser',
+  title: 'Користувач сайту',
+  type: 'document',
+  icon: () => '🔑',
+  fields: [
+    defineField({ name: 'name', title: "Ім'я", type: 'string', validation: (r) => r.required().max(40) }),
+    defineField({ name: 'email', title: 'Email', type: 'string', readOnly: true }),
+    defineField({ name: 'passwordHash', type: 'string', hidden: true, readOnly: true }),
+    defineField({
+      name: 'role',
+      title: 'Роль',
+      type: 'string',
+      options: { list: [{ title: 'Користувач', value: 'user' }, { title: 'Адміністратор', value: 'admin' }], layout: 'radio' },
+      initialValue: 'user',
+    }),
+    defineField({ name: 'blocked', title: 'Заблоковано', type: 'boolean', initialValue: false }),
+    defineField({ name: 'createdAt', title: 'Зареєстровано', type: 'datetime', readOnly: true }),
+  ],
+  preview: {
+    select: { title: 'name', subtitle: 'email', role: 'role', blocked: 'blocked' },
+    prepare: ({ title, subtitle, role, blocked }) => ({
+      title: `${blocked ? '⛔ ' : ''}${title}${role === 'admin' ? ' (адмін)' : ''}`,
       subtitle,
     }),
   },

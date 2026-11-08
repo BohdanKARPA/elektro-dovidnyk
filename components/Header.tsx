@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import type { Lang } from '@/lib/types'
 import type { Dict } from '@/lib/i18n'
+import { getAuthDict } from '@/lib/i18n-auth'
+import { AuthNav } from './AuthNav'
 
 export function Header({ lang, dict }: { lang: Lang; dict: Dict }) {
   const pathname = usePathname() || `/${lang}`
@@ -19,7 +21,7 @@ export function Header({ lang, dict }: { lang: Lang; dict: Dict }) {
   return (
     <header className="site-header">
       <div className="wrap">
-        <Link href={`/${lang}`} className="brand">
+        <Link href={`/${lang}`} className="brand" aria-label={dict.siteName}>
           <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true">
             <rect x="6" y="6" width="16" height="16" rx="2" fill="currentColor" />
             {[9, 14, 19].map((p) => (
@@ -31,7 +33,7 @@ export function Header({ lang, dict }: { lang: Lang; dict: Dict }) {
               </g>
             ))}
           </svg>
-          {dict.siteName}
+          <span className="brand-name">{dict.siteName}</span>
         </Link>
         <nav className="nav" aria-label="Main">
           {items.map((item) => {
@@ -50,6 +52,7 @@ export function Header({ lang, dict }: { lang: Lang; dict: Dict }) {
             </Link>
           ))}
         </div>
+        <AuthNav lang={lang} labels={getAuthDict(lang)} />
       </div>
     </header>
   )

@@ -11,12 +11,12 @@ export default defineConfig({
   name: 'elektro-dovidnyk',
   title: 'Довідник електроніки — адмін',
   basePath: '/studio',
-  projectId: projectId || 'demo0000',
+  projectId: projectId || '10y4h59g',
   dataset,
   schema: { types: schemaTypes },
   plugins: [structureTool({ structure }), visionTool({ defaultApiVersion: apiVersion })],
   document: {
     // Comments are created by visitors through the API, not from the "new document" menu.
-    newDocumentOptions: (prev) => prev.filter((item) => item.templateId !== 'comment'),
+    newDocumentOptions: (prev) => prev.filter((item) => !['comment', 'siteUser'].includes(item.templateId)),
   },
 })

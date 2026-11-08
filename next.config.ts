@@ -22,11 +22,11 @@ const siteCsp = [
 
 const studioCsp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.sanity.io",
-  "style-src 'self' 'unsafe-inline'",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.sanity.io https://sanity-cdn.com https://*.sanity-cdn.com",
+  "style-src 'self' 'unsafe-inline' https://*.sanity.io",
   "img-src 'self' data: blob: https://*.sanity.io https://lh3.googleusercontent.com https://avatars.githubusercontent.com",
-  "font-src 'self' data:",
-  "connect-src 'self' https://*.sanity.io wss://*.sanity.io",
+  "font-src 'self' data: https://*.sanity.io",
+  "connect-src 'self' https://*.sanity.io wss://*.sanity.io https://sanity-cdn.com https://*.sanity-cdn.com",
   "frame-src 'self' https://*.sanity.io",
   "frame-ancestors 'self'",
   "object-src 'none'",

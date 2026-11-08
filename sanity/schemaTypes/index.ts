@@ -1,6 +1,6 @@
 import type { SchemaTypeDefinition } from 'sanity'
 import { localeString, localeText } from './locale'
-import { author, category, comment, component, project, topic } from './documents'
+import { author, category, comment, component, project, siteUser, topic } from './documents'
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   localeString,
@@ -11,4 +11,5 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   project,
   topic,
   comment,
+  siteUser,
 ]

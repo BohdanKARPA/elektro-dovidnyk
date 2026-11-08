@@ -4,6 +4,7 @@ import seed from '@/data/seed.json'
 import { isSanityConfigured } from '@/sanity/env'
 import { sanityFetch } from './sanity'
 import type { Category, CommentDoc, ComponentDoc, ProjectDoc, Topic } from './types'
+import { mem } from './memory'
 
 /* ------------------------------------------------------------------ *
  *  GROQ queries. All user-supplied values are passed as $params,     *
@@ -32,11 +33,11 @@ const Q = {
     ${projectCard}, seoDescription, steps, "components": components[]->{ ${componentCard} }
   }`,
   projectSlugs: groq`*[_type == "project" && defined(slug.current)].slug.current`,
-  topics: groq`*[_type == "topic"] | order(pinned desc, createdAt desc) {
+  topics: groq`*[_type == "topic" && hidden != true] | order(pinned desc, createdAt desc) {
     _id, title, "slug": slug.current, authorName, body, pinned, createdAt,
     "commentCount": count(*[_type == "comment" && status == "approved" && references(^._id)])
   }`,
-  topic: groq`*[_type == "topic" && slug.current == $slug][0] {
+  topic: groq`*[_type == "topic" && hidden != true && slug.current == $slug][0] {
     _id, title, "slug": slug.current, authorName, body, pinned, createdAt,
     "related": related->{ ${componentCard} }
   }`,
@@ -47,7 +48,7 @@ const Q = {
   stats: groq`{
     "components": count(*[_type == "component"]),
     "projects": count(*[_type == "project"]),
-    "topics": count(*[_type == "topic"])
+    "topics": count(*[_type == "topic" && hidden != true])
   }`,
 }
 
@@ -123,28 +124,71 @@ export async function getProject(slug: string): Promise<ProjectDoc | null> {
   return d ? demo.project(d) : null
 }
 
+const approvedLocal = (id: string) => mem.comments.filter((c) => c.target === id && c.status === 'approved').length
+const sortTopics = (list: Topic[]) =>
+  list.sort((a, b) => Number(!!b.pinned) - Number(!!a.pinned) || (b.createdAt ?? '').localeCompare(a.createdAt ?? ''))
+
 export async function getTopics(): Promise<Topic[]> {
-  if (isSanityConfigured) return sanityFetch(Q.topics, {}, ['topic', 'comment'])
-  return ofType('topic')
-    .map((d) => ({ ...(d as Topic), slug: slugOf(d), related: null, commentCount: demo.approvedFor(d._id).length }))
-    .sort((a, b) => Number(!!b.pinned) - Number(!!a.pinned) || (b.createdAt ?? '').localeCompare(a.createdAt ?? ''))
+  const local: Topic[] = mem.topics
+    .filter((t) => !t.hidden)
+    .map((t) => ({ _id: t._id, title: t.title, slug: t.slug, authorName: t.authorName, body: t.body, pinned: false, createdAt: t.createdAt, related: null, commentCount: approvedLocal(t._id) }))
+  const base: Topic[] = isSanityConfigured
+    ? await sanityFetch<Topic[]>(Q.topics, {}, ['topic', 'comment'])
+    : ofType('topic')
+        .filter((d) => !d.hidden)
+        .map((d) => ({ ...(d as Topic), slug: slugOf(d), related: null, commentCount: demo.approvedFor(d._id).length }))
+  return sortTopics([...base.map((t) => ({ ...t, commentCount: (t.commentCount ?? 0) + approvedLocal(t._id) })), ...local])
 }
 
 export async function getTopic(slug: string): Promise<Topic | null> {
+  const m = mem.topics.find((t) => t.slug === slug && !t.hidden)
+  if (m) {
+    const related = m.related ? ((await getComponents()).find((c) => c._id === m.related) ?? null) : null
+    return { _id: m._id, title: m.title, slug: m.slug, authorName: m.authorName, body: m.body, pinned: false, createdAt: m.createdAt, related }
+  }
   if (isSanityConfigured) return sanityFetch(Q.topic, { slug }, ['topic', 'component'])
-  const d = ofType('topic').find((x) => slugOf(x) === slug)
+  const d = ofType('topic').find((x) => slugOf(x) === slug && !x.hidden)
   if (!d) return null
   return { ...(d as Topic), slug: slugOf(d), related: d.related ? demo.component(byId.get(d.related._ref)!) : null }
 }
 
 export async function getComments(targetId: string): Promise<CommentDoc[]> {
-  if (isSanityConfigured) return sanityFetch(Q.comments, { id: targetId }, ['comment'])
-  return demo.approvedFor(targetId) as CommentDoc[]
+  // Approved comments from the in-memory store (local mode without a Sanity write token).
+  const local = mem.comments
+    .filter((c) => c.target === targetId && c.status === 'approved')
+    .map(({ _id, authorName, text, createdAt }) => ({ _id, authorName, text, createdAt }))
+  if (isSanityConfigured) return [...(await sanityFetch<CommentDoc[]>(Q.comments, { id: targetId }, ['comment'])), ...local]
+  return [...(demo.approvedFor(targetId) as CommentDoc[]), ...local]
+}
+
+/** Does a commentable document with this id exist (CMS, demo data or a user topic)? */
+export async function targetExists(id: string): Promise<boolean> {
+  if (mem.topics.some((t) => t._id === id && !t.hidden)) return true
+  if (isSanityConfigured) {
+    return Boolean(await sanityFetch<string | null>(`*[_id == $id && _type in $types][0]._id`, { id, types: COMMENTABLE_TYPES }, []))
+  }
+  return docs.some((d) => d._id === id && (COMMENTABLE_TYPES as readonly string[]).includes(d._type))
+}
+
+/** Titles and links for a set of comment targets (admin panel, account page). */
+export async function describeTargets(ids: string[]): Promise<Record<string, { type: string; slug: string; title: string }>> {
+  const out: Record<string, { type: string; slug: string; title: string }> = {}
+  for (const t of mem.topics) if (ids.includes(t._id)) out[t._id] = { type: 'topic', slug: t.slug, title: t.title }
+  const rest = ids.filter((id) => !out[id])
+  if (rest.length === 0) return out
+  const rows: Raw[] = isSanityConfigured
+    ? await sanityFetch<Raw[]>(`*[_id in $ids]{ _id, _type, "slug": slug.current, "title": coalesce(name, title.uk, title) }`, { ids: rest }, [])
+    : docs.filter((d) => rest.includes(d._id)).map((d) => ({ _id: d._id, _type: d._type, slug: slugOf(d), title: d.name ?? d.title?.uk ?? d.title }))
+  for (const r of rows) out[r._id] = { type: r._type, slug: r.slug, title: r.title }
+  return out
 }
 
 export async function getStats(): Promise<{ components: number; projects: number; topics: number }> {
-  if (isSanityConfigured) return sanityFetch(Q.stats, {}, ['component', 'project', 'topic'])
-  return { components: ofType('component').length, projects: ofType('project').length, topics: ofType('topic').length }
+  const extraTopics = mem.topics.filter((t) => !t.hidden).length
+  const base = isSanityConfigured
+    ? await sanityFetch<{ components: number; projects: number; topics: number }>(Q.stats, {}, ['component', 'project', 'topic'])
+    : { components: ofType('component').length, projects: ofType('project').length, topics: ofType('topic').length }
+  return { ...base, topics: base.topics + extraTopics }
 }
 
 export async function getSlugs(type: 'component' | 'project' | 'topic'): Promise<string[]> {

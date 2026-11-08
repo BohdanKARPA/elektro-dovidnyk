@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getTopics } from '@/lib/data'
 import { formatDate, getDict, isLang } from '@/lib/i18n'
+import { getAuthDict } from '@/lib/i18n-auth'
 
 export const revalidate = 600
 
@@ -20,7 +21,12 @@ export default async function ForumPage({ params }: PageProps<'/[lang]/forum'>) 
 
   return (
     <>
-      <h1>{dict.nav.forum}</h1>
+      <div className="section-head">
+        <h1>{dict.nav.forum}</h1>
+        <Link className="btn" href={`/${lang}/forum/new`}>
+          {getAuthDict(lang).newTopic}
+        </Link>
+      </div>
       <p className="lede">{dict.forumIntro}</p>
       <ul className="topic-list">
         {topics.map((topic) => (

@@ -61,6 +61,11 @@ const dict = {
     notFound: 'Сторінку не знайдено',
     toHome: 'На головну',
     admin: 'Адмін-панель',
+    login: 'Увійти',
+    logout: 'Вийти',
+    loginRequired: 'Коментувати можуть лише зареєстровані користувачі.',
+    blockedMsg: 'Ваш обліковий запис заблоковано адміністратором.',
+    writingAs: 'Ви пишете як',
   },
   en: {
     siteName: 'Electronics Reference',
@@ -109,6 +114,11 @@ const dict = {
     notFound: 'Page not found',
     toHome: 'Go home',
     admin: 'Admin panel',
+    login: 'Sign in',
+    logout: 'Sign out',
+    loginRequired: 'Only registered users can comment.',
+    blockedMsg: 'Your account has been blocked by an administrator.',
+    writingAs: 'Posting as',
   },
 } as const
 

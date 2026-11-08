@@ -20,7 +20,7 @@ export async function Comments({ targetId, lang, dict }: { targetId: string; lan
           <p>{c.text}</p>
         </article>
       ))}
-      <CommentForm targetId={targetId} dict={dict} />
+      <CommentForm targetId={targetId} dict={dict} lang={lang} />
     </section>
   )
 }

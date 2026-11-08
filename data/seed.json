@@ -5,7 +5,7 @@
     "name": "Богдан Карпа",
     "slug": { "_type": "slug", "current": "bohdan-karpa" },
     "role": { "_type": "localeString", "uk": "Автор і модератор", "en": "Author and moderator" },
-    "bio": { "_type": "localeText", "uk": "Інженер вбудованих систем. Пише про мікроконтролери, силову електроніку та системи керування батареями.", "en": "Embedded systems engineer. Writes about microcontrollers, power electronics and battery management systems." }
+    "bio": { "_type": "localeText", "uk": "Інженер вбудованих систем, бакалавр комп'ютерної інженерії (Львівська політехніка, 2026), магістрант. Пише про мікроконтролери STM32, AVR і ESP32, силову електроніку, захист і живлення та системи керування батареями.", "en": "Embedded systems engineer, BSc in Computer Engineering (Lviv Polytechnic, 2026), now a master's student. Writes about STM32, AVR and ESP32 microcontrollers, power electronics, protection and supply circuits, and battery management systems." }
   },
 
   {
@@ -329,5 +329,1051 @@
     "status": "approved",
     "target": { "_type": "reference", "_ref": "comp-ina226" },
     "createdAt": "2026-11-05T12:00:00Z"
+  },
+  {
+    "_id": "cat-interfaces",
+    "_type": "category",
+    "slug": {
+      "_type": "slug",
+      "current": "interfaces"
+    },
+    "icon": "link",
+    "order": 5,
+    "title": {
+      "_type": "localeString",
+      "uk": "Інтерфейси та розв'язка",
+      "en": "Interfaces & isolation"
+    },
+    "description": {
+      "_type": "localeText",
+      "uk": "Приймачі-передавачі шин, мультиплексори та оптопари для гальванічної розв'язки.",
+      "en": "Bus transceivers, multiplexers and optocouplers for galvanic isolation."
+    }
+  },
+  {
+    "_id": "comp-stm32g030",
+    "_type": "component",
+    "name": "STM32G030",
+    "slug": {
+      "_type": "slug",
+      "current": "stm32g030"
+    },
+    "manufacturer": "STMicroelectronics",
+    "category": {
+      "_type": "reference",
+      "_ref": "cat-mcu"
+    },
+    "package": "TSSOP-20 / LQFP-32 / LQFP-48",
+    "priceUah": 45,
+    "tags": [
+      "stm32",
+      "cortex-m0+",
+      "low-cost"
+    ],
+    "summary": {
+      "_type": "localeString",
+      "uk": "Найдешевша лінійка STM32: Cortex-M0+ на 64 МГц для простих вимірювальних і керувальних пристроїв.",
+      "en": "The cheapest STM32 line: a 64 MHz Cortex-M0+ for simple measurement and control devices."
+    },
+    "description": {
+      "_type": "localeText",
+      "uk": "Value-лінійка STM32G0 закриває нішу між 8-бітними AVR і продуктивними STM32F4: 32-бітне ядро, апаратний I²C і SPI, 12-бітний АЦП і ціна на рівні ATmega. Прошивається та налагоджується через SWD будь-яким ST-Link.\n\nУ малих корпусах кілька функцій ділять один вивід, тому розпіновку варто зафіксувати в STM32CubeMX ще до розведення плати. Для вимірювальних пристроїв зручно читати цифровий датчик по I²C, а АЦП залишити для контролю живлення.",
+      "en": "The STM32G0 value line fills the gap between 8-bit AVRs and the high-end STM32F4: a 32-bit core, hardware I²C and SPI, a 12-bit ADC and an ATmega-level price. Flash and debug it over SWD with any ST-Link.\n\nIn small packages several functions share one pin, so lock the pinout in STM32CubeMX before routing the board. In measurement devices it is convenient to read a digital sensor over I²C and keep the ADC for supply monitoring."
+    },
+    "specs": [
+      {
+        "_key": "s1",
+        "label": "Ядро",
+        "value": "Arm Cortex-M0+, до 64 МГц"
+      },
+      {
+        "_key": "s2",
+        "label": "Flash / SRAM",
+        "value": "до 64 КБ / 8 КБ"
+      },
+      {
+        "_key": "s3",
+        "label": "АЦП",
+        "value": "12 біт, до 2,5 Msps"
+      },
+      {
+        "_key": "s4",
+        "label": "Інтерфейси",
+        "value": "USART, SPI, I²C, SWD"
+      },
+      {
+        "_key": "s5",
+        "label": "Живлення",
+        "value": "2,0–3,6 В"
+      }
+    ],
+    "datasheetUrl": "https://www.st.com/en/microcontrollers-microprocessors/stm32g030c8.html"
+  },
+  {
+    "_id": "comp-stm32f407",
+    "_type": "component",
+    "name": "STM32F407VGT6",
+    "slug": {
+      "_type": "slug",
+      "current": "stm32f407"
+    },
+    "manufacturer": "STMicroelectronics",
+    "category": {
+      "_type": "reference",
+      "_ref": "cat-mcu"
+    },
+    "package": "LQFP-100",
+    "priceUah": 420,
+    "tags": [
+      "stm32",
+      "cortex-m4",
+      "fpu",
+      "trng"
+    ],
+    "summary": {
+      "_type": "localeString",
+      "uk": "Продуктивний Cortex-M4 з FPU та апаратним генератором випадкових чисел — для обробки сигналів і криптографії.",
+      "en": "A capable Cortex-M4 with an FPU and a hardware random number generator — for signal processing and cryptography."
+    },
+    "description": {
+      "_type": "localeText",
+      "uk": "STM32F407 — класика для навчальних і промислових проєктів: саме він стоїть на платі STM32F4DISCOVERY. FPU прискорює обчислення з плаваючою комою, а DSP-інструкції — фільтри та БПФ.\n\nДля криптографії важливий вбудований генератор справжніх випадкових чисел: з нього беруть ключі та одноразові значення (nonce). Апаратного AES у F407 немає (він є у F415/F417), тому шифрування виконується програмно.",
+      "en": "The STM32F407 is a classic for teaching and industrial projects — it is the chip on the STM32F4DISCOVERY board. The FPU speeds up floating-point maths and the DSP instructions help with filters and FFTs.\n\nFor cryptography the built-in true random number generator matters: keys and nonces come from it. The F407 has no hardware AES (the F415/F417 do), so encryption runs in software."
+    },
+    "specs": [
+      {
+        "_key": "s1",
+        "label": "Ядро",
+        "value": "Arm Cortex-M4F, 168 МГц"
+      },
+      {
+        "_key": "s2",
+        "label": "Flash / SRAM",
+        "value": "1 МБ / 192 КБ"
+      },
+      {
+        "_key": "s3",
+        "label": "Прискорювачі",
+        "value": "FPU, DSP-інструкції, апаратний генератор випадкових чисел"
+      },
+      {
+        "_key": "s4",
+        "label": "Інтерфейси",
+        "value": "USART/UART, SPI, I²C, CAN, USB OTG, Ethernet MAC"
+      },
+      {
+        "_key": "s5",
+        "label": "Живлення",
+        "value": "1,8–3,6 В"
+      }
+    ],
+    "datasheetUrl": "https://www.st.com/en/microcontrollers-microprocessors/stm32f407vg.html"
+  },
+  {
+    "_id": "comp-esp32c6",
+    "_type": "component",
+    "name": "ESP32-C6",
+    "slug": {
+      "_type": "slug",
+      "current": "esp32c6"
+    },
+    "manufacturer": "Espressif",
+    "category": {
+      "_type": "reference",
+      "_ref": "cat-mcu"
+    },
+    "package": "QFN40 (5×5 мм) / QFN32",
+    "priceUah": 150,
+    "tags": [
+      "wifi6",
+      "ble",
+      "thread",
+      "zigbee",
+      "risc-v"
+    ],
+    "summary": {
+      "_type": "localeString",
+      "uk": "RISC-V мікроконтролер з Wi-Fi 6, Bluetooth LE та Thread/Zigbee — для бездротових вузлів і шлюзів.",
+      "en": "A RISC-V MCU with Wi-Fi 6, Bluetooth LE and Thread/Zigbee — for wireless nodes and gateways."
+    },
+    "description": {
+      "_type": "localeText",
+      "uk": "ESP32-C6 поєднує три радіо: Wi-Fi 6, Bluetooth LE 5 і IEEE 802.15.4. Тому один чип може бути і Wi-Fi-клієнтом, і вузлом мережі Thread або Zigbee. Окреме низькоенергетичне ядро опитує датчики, поки основне спить.\n\nЯк і ESP32-C3, має вбудований USB Serial/JTAG, тож прошивається без окремого USB-UART перетворювача. Зручний як радіомодуль поруч з основним мікроконтролером: дані приходять по UART або SPI, а ESP32-C6 відповідає лише за мережу.",
+      "en": "The ESP32-C6 combines three radios: Wi-Fi 6, Bluetooth LE 5 and IEEE 802.15.4, so one chip can be a Wi-Fi client and a Thread or Zigbee node. A separate low-power core polls sensors while the main core sleeps.\n\nLike the ESP32-C3 it has a built-in USB Serial/JTAG, so it flashes without a USB-UART bridge. It works well as a radio companion to a main MCU: data arrives over UART or SPI and the ESP32-C6 only handles the network."
+    },
+    "specs": [
+      {
+        "_key": "s1",
+        "label": "Ядро",
+        "value": "RISC-V 160 МГц + LP-ядро 20 МГц"
+      },
+      {
+        "_key": "s2",
+        "label": "SRAM",
+        "value": "512 КБ"
+      },
+      {
+        "_key": "s3",
+        "label": "Радіо",
+        "value": "Wi-Fi 6 (2,4 ГГц), BLE 5, IEEE 802.15.4 (Thread, Zigbee)"
+      },
+      {
+        "_key": "s4",
+        "label": "Інтерфейси",
+        "value": "UART, SPI, I²C, I²S, TWAI (CAN), USB Serial/JTAG"
+      },
+      {
+        "_key": "s5",
+        "label": "Живлення",
+        "value": "3,0–3,6 В"
+      }
+    ],
+    "datasheetUrl": "https://www.espressif.com/en/products/socs/esp32-c6"
+  },
+  {
+    "_id": "comp-uno-q",
+    "_type": "component",
+    "name": "Arduino UNO Q",
+    "slug": {
+      "_type": "slug",
+      "current": "uno-q"
+    },
+    "manufacturer": "Arduino",
+    "category": {
+      "_type": "reference",
+      "_ref": "cat-mcu"
+    },
+    "package": "Плата формату UNO",
+    "priceUah": 2000,
+    "tags": [
+      "linux",
+      "stm32",
+      "gateway",
+      "board"
+    ],
+    "summary": {
+      "_type": "localeString",
+      "uk": "Гібридна плата: Linux-процесор і мікроконтролер STM32 на одній платі — зручна як шлюз між датчиками та мережею.",
+      "en": "A hybrid board: a Linux processor and an STM32 microcontroller on one board — handy as a gateway between sensors and the network."
+    },
+    "description": {
+      "_type": "localeText",
+      "uk": "UNO Q поєднує дві системи. На процесорі Qualcomm працює Linux з мережею, базами даних і вебсервером, а мікроконтролер STM32U585 відповідає за роботу з виводами в реальному часі. Обидві частини обмінюються даними всередині плати.\n\nТакий поділ зручний для шлюзів: мікроконтролер приймає дані від датчиків або радіомодуля, а Linux-частина зберігає їх, показує на вебсторінці або пересилає далі. Роз'єми сумісні з платами розширення формату UNO.",
+      "en": "The UNO Q combines two systems. The Qualcomm processor runs Linux with networking, databases and a web server, while the STM32U585 microcontroller handles real-time pin work. The two halves exchange data on the board.\n\nThis split suits gateways: the MCU receives data from sensors or a radio module and the Linux side stores it, shows it on a web page or forwards it. The headers are compatible with UNO-format shields."
+    },
+    "specs": [
+      {
+        "_key": "s1",
+        "label": "Процесор",
+        "value": "Qualcomm Dragonwing QRB2210, 4× Cortex-A53, Linux"
+      },
+      {
+        "_key": "s2",
+        "label": "Мікроконтролер",
+        "value": "STM32U585, Cortex-M33, 160 МГц"
+      },
+      {
+        "_key": "s3",
+        "label": "Пам'ять",
+        "value": "2 або 4 ГБ LPDDR4, 16 або 32 ГБ eMMC"
+      },
+      {
+        "_key": "s4",
+        "label": "Радіо",
+        "value": "Wi-Fi 5, Bluetooth 5.1"
+      },
+      {
+        "_key": "s5",
+        "label": "Роз'єми",
+        "value": "UNO-сумісні, USB-C"
+      }
+    ],
+    "datasheetUrl": "https://docs.arduino.cc/"
+  },
+  {
+    "_id": "comp-ina238",
+    "_type": "component",
+    "name": "INA238",
+    "slug": {
+      "_type": "slug",
+      "current": "ina238"
+    },
+    "manufacturer": "Texas Instruments",
+    "category": {
+      "_type": "reference",
+      "_ref": "cat-sensors"
+    },
+    "package": "VSSOP-10",
+    "priceUah": 130,
+    "tags": [
+      "current",
+      "power",
+      "i2c",
+      "85v"
+    ],
+    "summary": {
+      "_type": "localeString",
+      "uk": "Цифровий монітор струму, напруги, потужності й температури для шин до 85 В.",
+      "en": "A digital current, voltage, power and temperature monitor for buses up to 85 V."
+    },
+    "description": {
+      "_type": "localeText",
+      "uk": "INA238 вимірює падіння напруги на шунті та напругу шини, а потужність рахує сам. На відміну від INA226 (до 36 В), витримує синфазну напругу до 85 В і має вбудований датчик температури. Тому підходить для USB PD з підвищеною напругою, 48-вольтових систем і батарейних збірок.\n\nКалібрування задається одним регістром: SHUNT_CAL = 819,2·10⁶ × CURRENT_LSB × Rшунта (для діапазону ±163,84 мВ). CURRENT_LSB зазвичай беруть як Imax / 2¹⁵. Шунт підключайте за схемою Кельвіна — окремими доріжками від його контактних площадок.",
+      "en": "The INA238 measures the shunt voltage drop and the bus voltage and computes power itself. Unlike the INA226 (up to 36 V) it tolerates common-mode voltages up to 85 V and has a built-in temperature sensor, so it suits high-voltage USB PD, 48 V systems and battery packs.\n\nCalibration is a single register: SHUNT_CAL = 819.2·10⁶ × CURRENT_LSB × Rshunt (for the ±163.84 mV range). CURRENT_LSB is usually Imax / 2¹⁵. Use a Kelvin connection to the shunt — separate traces from its pads."
+    },
+    "specs": [
+      {
+        "_key": "s1",
+        "label": "Напруга шини",
+        "value": "0–85 В"
+      },
+      {
+        "_key": "s2",
+        "label": "Розрядність",
+        "value": "16 біт"
+      },
+      {
+        "_key": "s3",
+        "label": "Діапазон шунта",
+        "value": "±163,84 мВ або ±40,96 мВ"
+      },
+      {
+        "_key": "s4",
+        "label": "Інтерфейс",
+        "value": "I²C / SMBus, вивід ALERT"
+      },
+      {
+        "_key": "s5",
+        "label": "Живлення",
+        "value": "2,7–5,5 В"
+      }
+    ],
+    "datasheetUrl": "https://www.ti.com/product/INA238"
+  },
+  {
+    "_id": "comp-dg408",
+    "_type": "component",
+    "name": "DG408",
+    "slug": {
+      "_type": "slug",
+      "current": "dg408"
+    },
+    "manufacturer": "Vishay",
+    "category": {
+      "_type": "reference",
+      "_ref": "cat-interfaces"
+    },
+    "package": "SOIC-16 / DIP-16",
+    "priceUah": 70,
+    "tags": [
+      "mux",
+      "analog",
+      "measurement"
+    ],
+    "summary": {
+      "_type": "localeString",
+      "uk": "Восьмиканальний аналоговий мультиплексор: один вимірювач по черзі опитує вісім точок схеми.",
+      "en": "An eight-channel analog multiplexer: one meter polls eight points of a circuit in turn."
+    },
+    "description": {
+      "_type": "localeText",
+      "uk": "DG408 під'єднує один із восьми входів до спільного виходу за трибітною адресою. Так один АЦП або один INA226 може по черзі виміряти вісім напруг — наприклад, комірки батареї 8S.\n\nОпір каналу в сотню ом утворює дільник з вхідним опором вимірювача, тому після DG408 потрібен високоомний вхід і калібрування. Після перемикання адреси дайте сигналу встановитися, перш ніж запускати перетворення.",
+      "en": "The DG408 connects one of eight inputs to a common output by a three-bit address, so a single ADC or INA226 can measure eight voltages in turn — for example the cells of an 8S battery.\n\nThe channel resistance of about a hundred ohms forms a divider with the meter input, so use a high-impedance input after the DG408 and calibrate. After switching the address let the signal settle before starting a conversion."
+    },
+    "specs": [
+      {
+        "_key": "s1",
+        "label": "Тип",
+        "value": "аналоговий мультиплексор 8:1"
+      },
+      {
+        "_key": "s2",
+        "label": "Керування",
+        "value": "адреса A0–A2 + вхід дозволу EN"
+      },
+      {
+        "_key": "s3",
+        "label": "Опір каналу",
+        "value": "≈ 100 Ом"
+      },
+      {
+        "_key": "s4",
+        "label": "Живлення",
+        "value": "двополярне ±15 В або однополярне 12 В"
+      }
+    ]
+  },
+  {
+    "_id": "comp-max485",
+    "_type": "component",
+    "name": "MAX485",
+    "slug": {
+      "_type": "slug",
+      "current": "max485"
+    },
+    "manufacturer": "Analog Devices (Maxim)",
+    "category": {
+      "_type": "reference",
+      "_ref": "cat-interfaces"
+    },
+    "package": "SOIC-8 / DIP-8",
+    "priceUah": 30,
+    "tags": [
+      "rs485",
+      "uart",
+      "industrial"
+    ],
+    "summary": {
+      "_type": "localeString",
+      "uk": "Приймач-передавач RS-485: перетворює UART мікроконтролера на диференційну промислову шину.",
+      "en": "An RS-485 transceiver: turns an MCU UART into a differential industrial bus."
+    },
+    "description": {
+      "_type": "localeText",
+      "uk": "RS-485 передає дані диференційною парою, тому стійкий до завад і працює на сотні метрів. MAX485 — найпоширеніший напівдуплексний приймач-передавач: виводи DE і RE перемикають його між передаванням і прийманням.\n\nНа кінцях лінії ставлять узгоджувальні резистори 120 Ом, а щоб шина мала визначений стан у тиші, додають резистори зміщення. Через RS-485 зручно каскадувати кілька модулів, наприклад BMS-плати у збірках 16S і 24S.",
+      "en": "RS-485 sends data over a differential pair, so it resists noise and runs for hundreds of metres. The MAX485 is the most common half-duplex transceiver: the DE and RE pins switch it between transmit and receive.\n\nPut 120 Ω terminators at both ends of the line and add bias resistors so the idle bus has a defined state. RS-485 is a convenient way to cascade modules, for example BMS boards in 16S and 24S packs."
+    },
+    "specs": [
+      {
+        "_key": "s1",
+        "label": "Стандарт",
+        "value": "RS-485 / RS-422, напівдуплекс"
+      },
+      {
+        "_key": "s2",
+        "label": "Швидкість",
+        "value": "до 2,5 Мбіт/с"
+      },
+      {
+        "_key": "s3",
+        "label": "Навантаження",
+        "value": "до 32 приймачів на шині"
+      },
+      {
+        "_key": "s4",
+        "label": "Живлення",
+        "value": "5 В"
+      }
+    ],
+    "datasheetUrl": "https://www.analog.com/en/products/max485.html"
+  },
+  {
+    "_id": "comp-el357c",
+    "_type": "component",
+    "name": "EL357C",
+    "slug": {
+      "_type": "slug",
+      "current": "el357c"
+    },
+    "manufacturer": "Everlight",
+    "category": {
+      "_type": "reference",
+      "_ref": "cat-interfaces"
+    },
+    "package": "SOP-4",
+    "priceUah": 6,
+    "tags": [
+      "optocoupler",
+      "isolation"
+    ],
+    "summary": {
+      "_type": "localeString",
+      "uk": "Мініатюрна оптопара для гальванічної розв'язки сигналів керування.",
+      "en": "A tiny optocoupler for galvanic isolation of control signals."
+    },
+    "description": {
+      "_type": "localeText",
+      "uk": "Оптопара передає сигнал світлом, тому між входом і виходом немає електричного з'єднання. Це потрібно, коли ключі працюють на іншому потенціалі, ніж мікроконтролер: наприклад, у BMS кожна комірка 8S-збірки «висить» на своїй напрузі відносно спільної землі.\n\nГрупа C має високий коефіцієнт передачі струму, тож світлодіод можна живити кількома міліамперами прямо з виводу МК. Фототранзистор відносно повільний, тому для швидкої ШІМ перевіряйте час перемикання за даташитом.",
+      "en": "An optocoupler passes the signal as light, so there is no electrical connection between input and output. This is needed when switches sit at a different potential from the MCU: in a BMS every cell of an 8S pack floats at its own voltage relative to the common ground.\n\nThe C rank has a high current transfer ratio, so a few milliamps straight from an MCU pin drive the LED. The phototransistor is relatively slow, so check switching times in the datasheet for fast PWM."
+    },
+    "specs": [
+      {
+        "_key": "s1",
+        "label": "Тип",
+        "value": "оптопара з фототранзисторним виходом"
+      },
+      {
+        "_key": "s2",
+        "label": "Ізоляція",
+        "value": "3750 В ефективної"
+      },
+      {
+        "_key": "s3",
+        "label": "CTR (група C)",
+        "value": "200–400 %"
+      },
+      {
+        "_key": "s4",
+        "label": "Vceo",
+        "value": "80 В"
+      }
+    ]
+  },
+  {
+    "_id": "comp-lmr51430",
+    "_type": "component",
+    "name": "LMR51430",
+    "slug": {
+      "_type": "slug",
+      "current": "lmr51430"
+    },
+    "manufacturer": "Texas Instruments",
+    "category": {
+      "_type": "reference",
+      "_ref": "cat-power"
+    },
+    "package": "SOT-23-6",
+    "priceUah": 55,
+    "tags": [
+      "buck",
+      "dc-dc",
+      "synchronous"
+    ],
+    "summary": {
+      "_type": "localeString",
+      "uk": "Компактний синхронний понижувальний перетворювач 3 А з входом до 36 В.",
+      "en": "A compact 3 A synchronous buck converter with an input of up to 36 V."
+    },
+    "description": {
+      "_type": "localeText",
+      "uk": "LMR51430 має обидва ключі всередині корпусу SOT-23-6, тому вся схема перетворювача займає кілька квадратних сантиметрів: мікросхема, дросель, конденсатори та дільник зворотного зв'язку. Діапазон 4,5–36 В покриває і USB (5–20 В), і 24-вольтову автоматику.\n\nГоловне при розведенні — короткий контур вхідного конденсатора: розмістіть його впритул до виводів VIN і GND. Вузол SW робіть невеликим, щоб зменшити випромінювання.",
+      "en": "The LMR51430 has both switches inside a SOT-23-6, so the whole converter fits in a few square centimetres: the IC, an inductor, capacitors and the feedback divider. The 4.5–36 V range covers both USB (5–20 V) and 24 V automation.\n\nThe key layout rule is a short input-capacitor loop: place it right next to the VIN and GND pins. Keep the SW node small to reduce radiated noise."
+    },
+    "specs": [
+      {
+        "_key": "s1",
+        "label": "Вхід",
+        "value": "4,5–36 В"
+      },
+      {
+        "_key": "s2",
+        "label": "Вихідний струм",
+        "value": "до 3 А"
+      },
+      {
+        "_key": "s3",
+        "label": "Частота",
+        "value": "500 кГц або 1,1 МГц (залежно від версії)"
+      },
+      {
+        "_key": "s4",
+        "label": "Тип",
+        "value": "синхронний понижувальний (buck)"
+      }
+    ],
+    "datasheetUrl": "https://www.ti.com/product/LMR51430"
+  },
+  {
+    "_id": "comp-lm5060",
+    "_type": "component",
+    "name": "LM5060",
+    "slug": {
+      "_type": "slug",
+      "current": "lm5060"
+    },
+    "manufacturer": "Texas Instruments",
+    "category": {
+      "_type": "reference",
+      "_ref": "cat-power"
+    },
+    "package": "VSSOP-10",
+    "priceUah": 140,
+    "tags": [
+      "hot-swap",
+      "protection",
+      "mosfet"
+    ],
+    "summary": {
+      "_type": "localeString",
+      "uk": "Контролер захисту high-side для зовнішнього N-MOSFET: м'який пуск, захист від перенапруги, недонапруги та КЗ.",
+      "en": "A high-side protection controller for an external N-MOSFET: soft start plus over-voltage, under-voltage and short-circuit protection."
+    },
+    "description": {
+      "_type": "localeText",
+      "uk": "LM5060 керує зовнішнім N-MOSFET у плюсовій лінії живлення. Вбудована помпа заряду відкриває ключ, а напруга на виході наростає з заданою швидкістю. Так пусковий струм у великі конденсатори навантаження не перевищує допустимого.\n\nПід час роботи контролер стежить за падінням напруги на ключі. Якщо воно довше за час таймера перевищує поріг, ключ вимикається — так спрацьовує захист від КЗ і перевантаження. Пороги UVLO та OVP задаються резистивними дільниками.",
+      "en": "The LM5060 drives an external N-MOSFET in the positive supply rail. A built-in charge pump turns the switch on and the output voltage rises at a set rate, so the inrush current into large load capacitors stays within limits.\n\nIn operation the controller watches the voltage across the switch. If it exceeds the threshold for longer than the timer, the switch turns off — that is the short-circuit and overload protection. UVLO and OVP thresholds are set by resistor dividers."
+    },
+    "specs": [
+      {
+        "_key": "s1",
+        "label": "Вхід",
+        "value": "5,5–65 В"
+      },
+      {
+        "_key": "s2",
+        "label": "Ключ",
+        "value": "зовнішній N-MOSFET (high-side)"
+      },
+      {
+        "_key": "s3",
+        "label": "Захист",
+        "value": "UVLO, OVP, контроль Vds (КЗ), таймер аварії"
+      },
+      {
+        "_key": "s4",
+        "label": "Пуск",
+        "value": "обмеження швидкості наростання вихідної напруги"
+      }
+    ],
+    "datasheetUrl": "https://www.ti.com/product/LM5060"
+  },
+  {
+    "_id": "proj-bms-8s",
+    "_type": "project",
+    "slug": {
+      "_type": "slug",
+      "current": "bms-8s-lifepo4-inductive-balancing"
+    },
+    "title": {
+      "_type": "localeString",
+      "uk": "BMS для 8S LiFePO4 з активним індуктивним балансуванням",
+      "en": "8S LiFePO4 BMS with active inductive balancing"
+    },
+    "summary": {
+      "_type": "localeString",
+      "uk": "Навчально-дослідна система керування батареєю, у якій можна змінювати алгоритм: вибір комірок, паузи перемикання, пороги балансування й реакцію на аварії.",
+      "en": "A teaching and research battery management system with a changeable algorithm: cell selection, switching pauses, balancing thresholds and fault response."
+    },
+    "difficulty": "hard",
+    "durationHours": 80,
+    "author": {
+      "_type": "reference",
+      "_ref": "author-karpa"
+    },
+    "publishedAt": "2026-06-20T10:00:00Z",
+    "components": [
+      {
+        "_type": "reference",
+        "_ref": "comp-atmega328p",
+        "_key": "c1"
+      },
+      {
+        "_type": "reference",
+        "_ref": "comp-ina226",
+        "_key": "c2"
+      },
+      {
+        "_type": "reference",
+        "_ref": "comp-dg408",
+        "_key": "c3"
+      },
+      {
+        "_type": "reference",
+        "_ref": "comp-el357c",
+        "_key": "c4"
+      },
+      {
+        "_type": "reference",
+        "_ref": "comp-max485",
+        "_key": "c5"
+      },
+      {
+        "_type": "reference",
+        "_ref": "comp-lm2596",
+        "_key": "c6"
+      }
+    ],
+    "steps": [
+      {
+        "_key": "st1",
+        "title": {
+          "_type": "localeString",
+          "uk": "Архітектура",
+          "en": "Architecture"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "Система складається з семи вузлів: керуючого (ATmega328P), вимірювального (INA226), селектора каналів (DG408 і дешифратори 74HC238), силового балансувального контуру з восьми каналів і спільного дроселя 47 мкГн, силового вузла відключення, вузла живлення на LM2596 і комунікаційного модуля (ESP32 + RS-485).\n\nСелектор вимірювальних точок і селектор балансувальних каналів керуються спільними адресними лініями. Окремі сигнали дозволу визначають, що саме зараз активне — вимірювання чи балансування.",
+          "en": "The system has seven blocks: control (ATmega328P), measurement (INA226), channel selection (DG408 and 74HC238 decoders), a balancing power stage of eight channels with a shared 47 µH inductor, a disconnect power stage, a supply block on the LM2596 and a communication module (ESP32 + RS-485).\n\nThe measurement selector and the balancing selector share address lines; separate enable signals decide whether measurement or balancing is active at a given moment."
+        }
+      },
+      {
+        "_key": "st2",
+        "title": {
+          "_type": "localeString",
+          "uk": "Вимірювання напруг комірок",
+          "en": "Measuring cell voltages"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "Мультиплексор DG408 по черзі підключає комірки до INA226, а мікроконтролер читає результат по I²C. Опір каналу мультиплексора разом із вхідними резисторами дає систематичне заниження, тому вимірювальний тракт калібрується коефіцієнтом.\n\nЗа проєктним розрахунком після калібрування похибка вимірювання напруги не перевищує ±10 мВ при вимозі ±30 мВ.",
+          "en": "The DG408 multiplexer connects the cells to the INA226 one by one and the MCU reads the result over I²C. The multiplexer channel resistance together with the input resistors causes a systematic offset, so the measurement path is calibrated with a coefficient.\n\nBy design calculation the voltage error after calibration stays within ±10 mV against a ±30 mV requirement."
+        }
+      },
+      {
+        "_key": "st3",
+        "title": {
+          "_type": "localeString",
+          "uk": "Силовий канал",
+          "en": "Power channel"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "Кожен канал балансування — це симетрична зустрічно-послідовна (back-to-back) пара MOSFET у плюсовій і мінусовій лінії. Без такої схеми внутрішні діоди транзисторів замикали б сусідні комірки через спільний дросель навіть у вимкненому стані.\n\nКомірки 8S-збірки мають різні потенціали відносно землі мікроконтролера, тому сигнали керування ключами розв'язані оптопарами EL357C. Струм балансування вимірюється на шунті 10 мОм.",
+          "en": "Each balancing channel is a symmetric back-to-back MOSFET pair in both the positive and negative line. Without it the body diodes would short neighbouring cells through the shared inductor even when switched off.\n\nCells of an 8S pack sit at different potentials relative to the MCU ground, so the gate signals are isolated with EL357C optocouplers. The balancing current is measured on a 10 mΩ shunt."
+        }
+      },
+      {
+        "_key": "st4",
+        "title": {
+          "_type": "localeString",
+          "uk": "Алгоритм балансування",
+          "en": "Balancing algorithm"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "У кожному циклі мікроконтролер вимірює всі вісім комірок, знаходить максимальну й мінімальну напругу та обчислює різницю ΔU = Umax − Umin. Якщо вона перевищує поріг, енергія накопичується в дроселі від найбільш зарядженої комірки й передається найменш зарядженій.\n\nПеред увімкненням іншого каналу витримується захисна пауза 3 мс, щоб струм дроселя спав і два канали ніколи не були відкриті одночасно. Порядок вибору комірок, паузи та пороги задаються в прошивці й можуть змінюватися.",
+          "en": "In every cycle the MCU measures all eight cells, finds the highest and lowest voltage and computes ΔU = Umax − Umin. If it exceeds the threshold, energy is stored in the inductor from the most charged cell and passed to the least charged one.\n\nBefore another channel is enabled a 3 ms guard pause lets the inductor current decay, so two channels are never on at once. Cell order, pauses and thresholds live in the firmware and can be changed."
+        }
+      },
+      {
+        "_key": "st5",
+        "title": {
+          "_type": "localeString",
+          "uk": "Аварійні стани",
+          "en": "Fault handling"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "Чотири типи аварійних станів обробляються в перериваннях, зокрема перегрів за сигналом NTC-термістора та аварійна зупинка. Розрахунковий час реакції обробника — до 10 мкс. Силовий вузол відключення на транзисторах IRF1404Z від'єднує батарею від навантаження.",
+          "en": "Four fault types are handled in interrupts, including over-temperature from an NTC thermistor and an emergency stop. The calculated handler response time is up to 10 µs. A disconnect stage on IRF1404Z transistors separates the battery from the load."
+        }
+      },
+      {
+        "_key": "st6",
+        "title": {
+          "_type": "localeString",
+          "uk": "Моделювання в Multisim",
+          "en": "Simulation in Multisim"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "Працездатність силового каналу перевірено моделюванням у Multisim 14.2 з аналізом перехідних процесів і статистичним оцінюванням методом Монте-Карло. Піковий струм через дросель — 1,13 А (розрахунок 1,08 А), середній струм балансування за період ШІМ — 370,9 мА, середня потужність на частоті 20 кГц — близько 0,6 Вт.\n\nДослідний зразок плати виготовлено. Експериментальні випробування у складі батареї, масштабування до 16S/24S через RS-485 та оцінювання SoC/SoH — наступні кроки.",
+          "en": "The power channel was verified in Multisim 14.2 with transient analysis and a Monte Carlo statistical estimate. Peak inductor current is 1.13 A (1.08 A calculated), the average balancing current over a PWM period is 370.9 mA and the average power at 20 kHz is about 0.6 W.\n\nA prototype board has been made. Experimental tests with a real pack, scaling to 16S/24S over RS-485 and SoC/SoH estimation are the next steps."
+        }
+      }
+    ]
+  },
+  {
+    "_id": "proj-usbc-wattmeter",
+    "_type": "project",
+    "slug": {
+      "_type": "slug",
+      "current": "usb-c-wattmeter"
+    },
+    "title": {
+      "_type": "localeString",
+      "uk": "USB-C ватметр на STM32G030 та INA238",
+      "en": "USB-C wattmeter with STM32G030 and INA238"
+    },
+    "summary": {
+      "_type": "localeString",
+      "uk": "Компактний вимірювач напруги, струму й потужності для лінії USB-C: власна плата з JLCPCB і корпус, надрукований на 3D-принтері.",
+      "en": "A compact voltage, current and power meter for a USB-C line: a custom JLCPCB board and a 3D-printed enclosure."
+    },
+    "difficulty": "medium",
+    "durationHours": 20,
+    "author": {
+      "_type": "reference",
+      "_ref": "author-karpa"
+    },
+    "publishedAt": "2026-09-20T10:00:00Z",
+    "components": [
+      {
+        "_type": "reference",
+        "_ref": "comp-stm32g030",
+        "_key": "c1"
+      },
+      {
+        "_type": "reference",
+        "_ref": "comp-ina238",
+        "_key": "c2"
+      },
+      {
+        "_type": "reference",
+        "_ref": "comp-lmr51430",
+        "_key": "c3"
+      }
+    ],
+    "steps": [
+      {
+        "_key": "st1",
+        "title": {
+          "_type": "localeString",
+          "uk": "Схема вимірювання",
+          "en": "Measurement circuit"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "У лінію VBUS між вхідним і вихідним роз'ємами USB-C ставиться шунт. INA238 вимірює падіння напруги на ньому та напругу шини й сам обчислює потужність. Мікроконтролер STM32G030 читає регістри по I²C.\n\nINA238 витримує до 85 В на шині, тож запасу вистачає й для USB PD з підвищеною напругою. Лінії CC і даних проходять наскрізь, щоб пристрої могли домовитися про режим живлення.",
+          "en": "A shunt sits in the VBUS line between the input and output USB-C connectors. The INA238 measures the drop across it and the bus voltage and computes power itself; the STM32G030 reads the registers over I²C.\n\nThe INA238 handles up to 85 V on the bus, so there is margin even for extended-voltage USB PD. CC and data lines pass straight through so the devices can negotiate the power mode."
+        }
+      },
+      {
+        "_key": "st2",
+        "title": {
+          "_type": "localeString",
+          "uk": "Живлення від VBUS",
+          "en": "Powering from VBUS"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "Схема живиться від тієї ж лінії, яку вимірює. Понижувальний перетворювач LMR51430 приймає від 4,5 до 36 В і дає стабільні 3,3 В для мікроконтролера та датчика за будь-якого режиму USB PD.",
+          "en": "The circuit is powered from the line it measures. The LMR51430 buck converter accepts 4.5 to 36 V and provides a steady 3.3 V for the MCU and the sensor in any USB PD mode."
+        }
+      },
+      {
+        "_key": "st3",
+        "title": {
+          "_type": "localeString",
+          "uk": "Калібрування",
+          "en": "Calibration"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "Оберіть CURRENT_LSB = Imax / 2¹⁵ і запишіть у регістр SHUNT_CAL = 819,2·10⁶ × CURRENT_LSB × Rшунта. Після цього INA238 видає струм і потужність одразу в інженерних одиницях. Для точності порівняйте показання з еталонним мультиметром і скоригуйте коефіцієнт.",
+          "en": "Pick CURRENT_LSB = Imax / 2¹⁵ and write SHUNT_CAL = 819.2·10⁶ × CURRENT_LSB × Rshunt. The INA238 then reports current and power directly in engineering units. For accuracy compare readings with a reference multimeter and adjust the coefficient."
+        }
+      },
+      {
+        "_key": "st4",
+        "title": {
+          "_type": "localeString",
+          "uk": "Плата",
+          "en": "PCB"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "Схему й плату розведено в EasyEDA та замовлено на JLCPCB. Силові доріжки VBUS і GND зроблено широкими. Шунт підключено за схемою Кельвіна: вимірювальні доріжки до INA238 відходять безпосередньо від його контактних площадок. Вхідний конденсатор перетворювача стоїть впритул до виводів.",
+          "en": "The schematic and PCB were drawn in EasyEDA and ordered from JLCPCB. VBUS and GND power traces are wide. The shunt uses a Kelvin connection: the sense traces to the INA238 leave directly from its pads. The converter input capacitor sits right next to its pins."
+        }
+      },
+      {
+        "_key": "st5",
+        "title": {
+          "_type": "localeString",
+          "uk": "Корпус",
+          "en": "Enclosure"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "Корпус змодельовано під розміри плати й надруковано на 3D-принтері. Отвори під роз'єми USB-C мають невеликий зазор, щоб кабелі входили до упору, а плата не зміщувалася під час підключення.",
+          "en": "The enclosure is modelled around the board and 3D-printed. USB-C cut-outs have a small clearance so cables seat fully and the board does not shift when plugging in."
+        }
+      }
+    ]
+  },
+  {
+    "_id": "proj-secure-telemetry",
+    "_type": "project",
+    "slug": {
+      "_type": "slug",
+      "current": "secure-telemetry-channel"
+    },
+    "title": {
+      "_type": "localeString",
+      "uk": "Захищений канал телеметрії: STM32F407 → ESP32-C6 → UNO Q",
+      "en": "Secure telemetry channel: STM32F407 → ESP32-C6 → UNO Q"
+    },
+    "summary": {
+      "_type": "localeString",
+      "uk": "Передавання вимірювань від мікроконтролера до шлюзу з шифруванням і перевіркою цілісності на базі власної криптобібліотеки на C.",
+      "en": "Sending measurements from an MCU to a gateway with encryption and integrity checks built on a custom C crypto library."
+    },
+    "difficulty": "hard",
+    "durationHours": 40,
+    "author": {
+      "_type": "reference",
+      "_ref": "author-karpa"
+    },
+    "publishedAt": "2026-10-12T10:00:00Z",
+    "components": [
+      {
+        "_type": "reference",
+        "_ref": "comp-stm32f407",
+        "_key": "c1"
+      },
+      {
+        "_type": "reference",
+        "_ref": "comp-esp32c6",
+        "_key": "c2"
+      },
+      {
+        "_type": "reference",
+        "_ref": "comp-uno-q",
+        "_key": "c3"
+      }
+    ],
+    "steps": [
+      {
+        "_key": "st1",
+        "title": {
+          "_type": "localeString",
+          "uk": "Архітектура",
+          "en": "Architecture"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "STM32F407 збирає дані та шифрує кожен пакет. ESP32-C6 працює як радіомодуль і лише переносить зашифровані байти. Шлюз на Arduino UNO Q розшифровує пакети, перевіряє їх і передає Linux-частині плати для зберігання або показу.\n\nОтже, радіоканал і проміжний модуль не бачать відкритих даних: ключі є лише на кінцевих вузлах.",
+          "en": "The STM32F407 collects data and encrypts each packet. The ESP32-C6 acts as a radio module and only carries encrypted bytes. The gateway on the Arduino UNO Q decrypts and verifies packets and hands them to the board's Linux side for storage or display.\n\nSo neither the radio link nor the intermediate module sees plaintext: keys exist only on the end nodes."
+        }
+      },
+      {
+        "_key": "st2",
+        "title": {
+          "_type": "localeString",
+          "uk": "Криптобібліотека на C",
+          "en": "C crypto library"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "Бібліотека написана на C, щоб однаково компілюватися і для мікроконтролера, і для шлюзу. Шифрування поєднується з кодом автентифікації повідомлення: пакет зі зміненим хоча б одним бітом відкидається.\n\nДля ключів і одноразових значень (nonce) на STM32F407 використовується апаратний генератор випадкових чисел. Порівняння тегів автентифікації виконується за сталий час, щоб не давати підказок через тривалість перевірки.",
+          "en": "The library is written in C so it compiles the same way for the MCU and the gateway. Encryption is combined with a message authentication code: a packet with even one bit changed is rejected.\n\nKeys and nonces on the STM32F407 come from its hardware random number generator. Authentication tags are compared in constant time so the check duration leaks nothing."
+        }
+      },
+      {
+        "_key": "st3",
+        "title": {
+          "_type": "localeString",
+          "uk": "Формат пакета",
+          "en": "Packet format"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "Пакет складається з відкритого заголовка (ідентифікатор пристрою та лічильник), зашифрованого корисного навантаження і тегу автентифікації. Заголовок теж входить в автентифіковані дані, тож підмінити номер пакета чи відправника не вийде.",
+          "en": "A packet has a plaintext header (device ID and counter), an encrypted payload and an authentication tag. The header is part of the authenticated data, so the packet number or sender cannot be swapped."
+        }
+      },
+      {
+        "_key": "st4",
+        "title": {
+          "_type": "localeString",
+          "uk": "Захист від повторів",
+          "en": "Replay protection"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "Лічильник у заголовку лише зростає. Шлюз пам'ятає останнє прийняте значення для кожного пристрою й відкидає пакети зі старшим або тим самим номером. Перехоплений пакет неможливо надіслати вдруге.",
+          "en": "The header counter only increases. The gateway remembers the last accepted value per device and rejects packets with an equal or older number, so a captured packet cannot be resent."
+        }
+      },
+      {
+        "_key": "st5",
+        "title": {
+          "_type": "localeString",
+          "uk": "Перевірка",
+          "en": "Testing"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "Реалізацію алгоритмів перевіряють на офіційних тестових векторах, а весь канал — навмисно пошкодженими й повтореними пакетами: шлюз має відкинути кожен із них.",
+          "en": "The algorithm implementations are checked against official test vectors and the whole channel with deliberately corrupted and replayed packets: the gateway must reject every one."
+        }
+      }
+    ]
+  },
+  {
+    "_id": "proj-smart-lighting",
+    "_type": "project",
+    "slug": {
+      "_type": "slug",
+      "current": "smart-lighting-uno-q"
+    },
+    "title": {
+      "_type": "localeString",
+      "uk": "Розумне освітлення на UNO Q та ESP32-C6",
+      "en": "Smart lighting with UNO Q and ESP32-C6"
+    },
+    "summary": {
+      "_type": "localeString",
+      "uk": "Світло вмикається, коли в приміщенні є рух і темно, та вимикається саме, коли рух зникає.",
+      "en": "Lights turn on when there is motion and it is dark, and switch off by themselves when the motion stops."
+    },
+    "difficulty": "medium",
+    "durationHours": 8,
+    "author": {
+      "_type": "reference",
+      "_ref": "author-karpa"
+    },
+    "publishedAt": "2026-11-06T10:00:00Z",
+    "components": [
+      {
+        "_type": "reference",
+        "_ref": "comp-uno-q",
+        "_key": "c1"
+      },
+      {
+        "_type": "reference",
+        "_ref": "comp-esp32c6",
+        "_key": "c2"
+      }
+    ],
+    "steps": [
+      {
+        "_key": "st1",
+        "title": {
+          "_type": "localeString",
+          "uk": "Датчики",
+          "en": "Sensors"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "Потрібні два датчики: руху (наприклад, PIR) і освітленості. Датчик освітленості не дає світлу вмикатися вдень, а датчик руху визначає, чи є хтось у приміщенні.",
+          "en": "Two sensors are needed: motion (for example a PIR) and ambient light. The light sensor keeps the lamp off in daylight and the motion sensor tells whether anyone is in the room."
+        }
+      },
+      {
+        "_key": "st2",
+        "title": {
+          "_type": "localeString",
+          "uk": "Логіка керування",
+          "en": "Control logic"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "Світло вмикається, лише коли одночасно є рух і рівень освітленості нижчий за поріг. Після останнього руху запускається таймер вимкнення. Для порогу освітленості потрібен гістерезис, інакше лампа сама себе «побачить» і почне блимати.",
+          "en": "The light turns on only when there is motion and the light level is below the threshold. After the last motion an off-timer starts. The light threshold needs hysteresis, otherwise the lamp will \"see\" itself and start flickering."
+        }
+      },
+      {
+        "_key": "st3",
+        "title": {
+          "_type": "localeString",
+          "uk": "Зв'язок ESP32-C6 і UNO Q",
+          "en": "ESP32-C6 and UNO Q link"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "ESP32-C6 стоїть біля датчиків і передає їхній стан бездротово. UNO Q приймає дані, виконує логіку й керує навантаженням. Linux-частина плати зручна для журналу подій і налаштування порогів через вебсторінку.",
+          "en": "The ESP32-C6 sits near the sensors and sends their state wirelessly. The UNO Q receives the data, runs the logic and switches the load. The Linux side of the board is handy for an event log and for setting thresholds through a web page."
+        }
+      },
+      {
+        "_key": "st4",
+        "title": {
+          "_type": "localeString",
+          "uk": "Налаштування",
+          "en": "Tuning"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "Підберіть поріг освітленості ввечері, коли світло вже потрібне, і тривалість таймера під приміщення: у коридорі вистачить хвилини, у кімнаті потрібно довше.",
+          "en": "Tune the light threshold in the evening when light is just becoming necessary, and the timer for the room: a minute is enough in a hallway, a room needs longer."
+        }
+      }
+    ]
+  },
+  {
+    "_id": "topic-renode-stm32",
+    "_type": "topic",
+    "slug": {
+      "_type": "slug",
+      "current": "renode-stm32f103-unsupported-peripherals"
+    },
+    "title": "Renode: як запустити прошивку STM32F103, якщо емулятор не підтримує частину периферії",
+    "createdAt": "2026-11-07T16:30:00Z",
+    "authorName": "Богдан",
+    "pinned": false,
+    "body": "Ділюся підходом, який допоміг відлагодити стейт-машину ще до роботи із залізом.\n\n1. Логи через UART: printf перенаправлено (retarget) на USART, і Renode показує вивід в окремому вікні.\n2. Умовна компіляція: макрос на кшталт SIMULATION вмикає заглушки там, де Renode не моделює периферію (EXTI, SPI, АЦП). Замість реальних даних функції повертають тестові значення.\n3. Код без макроса збирається для заліза без змін, тож логіка однакова в обох режимах.\n\nЧи хтось писав власні моделі периферії для Renode замість заглушок? Цікаво, наскільки це трудомістко."
   }
 ]

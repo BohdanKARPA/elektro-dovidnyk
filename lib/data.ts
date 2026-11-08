@@ -3,7 +3,7 @@ import { groq } from 'next-sanity'
 import seed from '@/data/seed.json'
 import { isSanityConfigured } from '@/sanity/env'
 import { sanityFetch } from './sanity'
-import type { Category, CommentDoc, ComponentDoc, ProjectDoc, Topic } from './types'
+import type { Author, Category, CommentDoc, ComponentDoc, ProjectDoc, Topic } from './types'
 import { mem } from './memory'
 
 /* ------------------------------------------------------------------ *
@@ -33,6 +33,7 @@ const Q = {
     ${projectCard}, seoDescription, steps, "components": components[]->{ ${componentCard} }
   }`,
   projectSlugs: groq`*[_type == "project" && defined(slug.current)].slug.current`,
+  author: groq`*[_type == "author" && slug.current == $slug][0] { _id, name, "slug": slug.current, role, bio }`,
   topics: groq`*[_type == "topic" && hidden != true] | order(pinned desc, createdAt desc) {
     _id, title, "slug": slug.current, authorName, body, pinned, createdAt,
     "commentCount": count(*[_type == "comment" && status == "approved" && references(^._id)])
@@ -122,6 +123,12 @@ export async function getProject(slug: string): Promise<ProjectDoc | null> {
   if (isSanityConfigured) return sanityFetch(Q.project, { slug }, ['project', 'component', 'author'])
   const d = ofType('project').find((p) => slugOf(p) === slug)
   return d ? demo.project(d) : null
+}
+
+export async function getAuthor(slug: string): Promise<Author | null> {
+  if (isSanityConfigured) return sanityFetch(Q.author, { slug }, ['author'])
+  const a = ofType('author').find((d) => slugOf(d) === slug)
+  return a ? { _id: a._id, name: a.name, slug: slugOf(a), role: a.role, bio: a.bio } : null
 }
 
 const approvedLocal = (id: string) => mem.comments.filter((c) => c.target === id && c.status === 'approved').length

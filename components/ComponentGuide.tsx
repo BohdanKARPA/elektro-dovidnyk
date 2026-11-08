@@ -5,6 +5,8 @@ import { useMemo, useState } from 'react'
 import type { Lang } from '@/lib/types'
 import type { Dict } from '@/lib/i18n'
 
+const MAX_COMPARE = 4
+
 export interface GuideRow {
   id: string
   name: string
@@ -24,15 +26,20 @@ export function ComponentGuide({
   lang,
   dict,
   initialCategory,
+  compareLabels,
 }: {
   rows: GuideRow[]
   categories: { slug: string; title: string }[]
   lang: Lang
   dict: Dict
   initialCategory?: string
+  compareLabels: { col: string; reset: string; max: string }
 }) {
   const [query, setQuery] = useState('')
   const [cat, setCat] = useState<string | undefined>(initialCategory)
+  const [picked, setPicked] = useState<string[]>([])
+  const toggle = (slug: string) =>
+    setPicked((p) => (p.includes(slug) ? p.filter((s) => s !== slug) : p.length >= MAX_COMPARE ? p : [...p, slug]))
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -78,6 +85,9 @@ export function ComponentGuide({
               <th scope="col" className="num">
                 {dict.price}
               </th>
+              <th scope="col" className="cmp">
+                {compareLabels.col}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -93,10 +103,38 @@ export function ComponentGuide({
                 </td>
                 <td className="dim">{r.package}</td>
                 <td className="num">{r.priceUah ? `≈ ${r.priceUah} ${dict.uah}` : '—'}</td>
+                <td className="cmp">
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={picked.includes(r.slug)}
+                      disabled={!picked.includes(r.slug) && picked.length >= MAX_COMPARE}
+                      onChange={() => toggle(r.slug)}
+                      aria-label={`${compareLabels.col}: ${r.name}`}
+                    />
+                    <span className="cmp-text">{compareLabels.col}</span>
+                  </label>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
+      )}
+
+      {picked.length > 0 && (
+        <div className="compare-bar" role="region" aria-label={compareLabels.col}>
+          <span>
+            {picked.length >= MAX_COMPARE ? compareLabels.max : picked.map((s) => rows.find((r) => r.slug === s)?.name).join(', ')}
+          </span>
+          <span className="compare-bar-actions">
+            <button type="button" className="btn ghost small" onClick={() => setPicked([])}>
+              {compareLabels.reset}
+            </button>
+            <Link className="btn small" href={`/${lang}/compare?items=${picked.join(',')}`} aria-disabled={picked.length < 2}>
+              {compareLabels.col} ({picked.length})
+            </Link>
+          </span>
+        </div>
       )}
     </>
   )

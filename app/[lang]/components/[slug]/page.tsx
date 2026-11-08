@@ -4,8 +4,10 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Comments } from '@/components/Comments'
 import { Difficulty } from '@/components/Difficulty'
+import { FavoriteButton } from '@/components/FavoriteButton'
 import { getComponent, getProjectsUsing, getSlugs } from '@/lib/data'
 import { getDict, isLang, LANGS, t } from '@/lib/i18n'
+import { getExtraDict } from '@/lib/i18n-extra'
 import { imageUrl } from '@/lib/sanity'
 
 export const revalidate = 3600
@@ -36,6 +38,7 @@ export default async function ComponentPage({ params }: PageProps<'/[lang]/compo
   const c = await getComponent(slug)
   if (!c) notFound()
   const dict = getDict(lang)
+  const x = getExtraDict(lang)
   const projects = await getProjectsUsing(c._id)
   const img = imageUrl(c.image, 900)
 
@@ -72,6 +75,12 @@ export default async function ComponentPage({ params }: PageProps<'/[lang]/compo
                 ≈ {c.priceUah} {dict.uah}
               </span>
             ) : null}
+          </div>
+          <div className="item-actions">
+            <FavoriteButton kind="component" slug={c.slug} labels={{ add: x.favAdd, remove: x.favRemove }} />
+            <Link className="btn ghost small" href={`/${lang}/compare?items=${c.slug}`}>
+              {x.compareWith}
+            </Link>
           </div>
           {img && (
             <figure className="figure">

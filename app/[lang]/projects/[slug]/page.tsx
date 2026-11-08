@@ -4,8 +4,10 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Comments } from '@/components/Comments'
 import { Difficulty } from '@/components/Difficulty'
+import { FavoriteButton } from '@/components/FavoriteButton'
 import { getProject, getSlugs } from '@/lib/data'
 import { formatDate, getDict, isLang, LANGS, t } from '@/lib/i18n'
+import { getExtraDict } from '@/lib/i18n-extra'
 import { imageUrl } from '@/lib/sanity'
 
 export const revalidate = 3600
@@ -36,6 +38,7 @@ export default async function ProjectPage({ params }: PageProps<'/[lang]/project
   const p = await getProject(slug)
   if (!p) notFound()
   const dict = getDict(lang)
+  const x = getExtraDict(lang)
   const cover = imageUrl(p.cover, 1200)
 
   return (
@@ -57,6 +60,9 @@ export default async function ProjectPage({ params }: PageProps<'/[lang]/project
             ) : null}
             {p.author && <span>{p.author.name}</span>}
             <span>{formatDate(p.publishedAt, lang)}</span>
+          </div>
+          <div className="item-actions">
+            <FavoriteButton kind="project" slug={p.slug} labels={{ add: x.favAdd, remove: x.favRemove }} />
           </div>
           {cover && (
             <figure className="figure">

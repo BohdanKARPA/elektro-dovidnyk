@@ -4,6 +4,7 @@ const paths: Record<string, string> = {
   mosfet: 'M4 12h6 M10 7v10 M13 6v3 M13 10.5v3 M13 15v3 M13 7.5h6V4 M13 16.5h6V20 M13 12h6v4.5',
   power: 'M13 2 5 14h6l-1 8 8-12h-6z',
   passive: 'M2 12h5 M17 12h5 M7 8h10v8H7z',
+  link: 'M3 8h6 M3 16h6 M9 5v14 M15 5v14 M15 12h6 M11 10l2 2-2 2',
 }
 
 export function CategoryIcon({ name }: { name?: string }) {

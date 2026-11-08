@@ -49,7 +49,7 @@ export const category = defineType({
       name: 'icon',
       title: 'Іконка',
       type: 'string',
-      options: { list: ['chip', 'sensor', 'mosfet', 'power', 'passive'] },
+      options: { list: ['chip', 'sensor', 'mosfet', 'power', 'passive', 'link'] },
     }),
     defineField({ name: 'order', title: 'Порядок', type: 'number' }),
     defineField({ name: 'description', title: 'Опис', type: 'localeText' }),

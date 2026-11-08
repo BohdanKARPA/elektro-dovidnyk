@@ -5,6 +5,7 @@ import '@fontsource-variable/onest'
 import '../globals.css'
 import { Header } from '@/components/Header'
 import { getDict, isLang, LANGS } from '@/lib/i18n'
+import { clientExtra, getExtraDict } from '@/lib/i18n-extra'
 import { isSanityConfigured } from '@/sanity/env'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
@@ -21,7 +22,11 @@ export async function generateMetadata({ params }: LayoutProps<'/[lang]'>): Prom
     metadataBase: new URL(siteUrl),
     title: { default: dict.siteName, template: `%s — ${dict.siteName}` },
     description: dict.tagline,
-    alternates: { canonical: `/${lang}`, languages: { uk: '/uk', en: '/en' } },
+    alternates: {
+      canonical: `/${lang}`,
+      languages: { uk: '/uk', en: '/en' },
+      types: { 'application/rss+xml': [{ url: `/${lang}/rss.xml`, title: getExtraDict(lang).rssTitle }] },
+    },
     openGraph: { siteName: dict.siteName, locale: lang === 'uk' ? 'uk_UA' : 'en_GB', type: 'website' },
   }
 }
@@ -37,7 +42,7 @@ export default async function LangLayout({ children, params }: LayoutProps<'/[la
         <a className="skip" href="#main">
           {lang === 'uk' ? 'Перейти до вмісту' : 'Skip to content'}
         </a>
-        <Header lang={lang} dict={dict} />
+        <Header lang={lang} dict={dict} extra={clientExtra(lang)} />
         {!isSanityConfigured && (
           <div className="demo-banner">
             <div className="wrap">{dict.demo}</div>
@@ -51,7 +56,11 @@ export default async function LangLayout({ children, params }: LayoutProps<'/[la
             <span>
               © 2026 {dict.siteName}. Next.js + Sanity (headless CMS).
             </span>
-            <a href="/studio">Sanity Studio</a>
+            <span className="footer-links">
+              <a href={`/${lang}/compare`}>{getExtraDict(lang).compare}</a>
+              <a href={`/${lang}/rss.xml`}>{getExtraDict(lang).rss}</a>
+              <a href="/studio">Sanity Studio</a>
+            </span>
           </div>
         </footer>
       </body>

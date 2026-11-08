@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { ComponentGuide } from '@/components/ComponentGuide'
 import { getCategories, getComponents } from '@/lib/data'
 import { getDict, isLang, t } from '@/lib/i18n'
+import { getExtraDict } from '@/lib/i18n-extra'
 
 export const revalidate = 3600
 
@@ -16,6 +17,7 @@ export default async function ComponentsPage({ params, searchParams }: PageProps
   const { lang } = await params
   if (!isLang(lang)) notFound()
   const dict = getDict(lang)
+  const x = getExtraDict(lang)
   const sp = await searchParams
   const initial = typeof sp.category === 'string' ? sp.category : undefined
   const [components, categories] = await Promise.all([getComponents(), getCategories()])
@@ -33,6 +35,7 @@ export default async function ComponentsPage({ params, searchParams }: PageProps
         lang={lang}
         dict={dict}
         initialCategory={categories.some((c) => c.slug === initial) ? initial : undefined}
+        compareLabels={{ col: x.compareCol, reset: x.compareReset, max: x.compareMax }}
         categories={categories.map((c) => ({ slug: c.slug, title: t(c.title, lang) }))}
         rows={components.map((c) => ({
           id: c._id,

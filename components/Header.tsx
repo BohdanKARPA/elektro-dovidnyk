@@ -5,9 +5,10 @@ import { usePathname } from 'next/navigation'
 import type { Lang } from '@/lib/types'
 import type { Dict } from '@/lib/i18n'
 import { getAuthDict } from '@/lib/i18n-auth'
+import type { ClientExtra } from '@/lib/i18n-extra'
 import { AuthNav } from './AuthNav'
 
-export function Header({ lang, dict }: { lang: Lang; dict: Dict }) {
+export function Header({ lang, dict, extra }: { lang: Lang; dict: Dict; extra: ClientExtra }) {
   const pathname = usePathname() || `/${lang}`
   const rest = pathname.replace(/^\/(uk|en)/, '')
   const items = [
@@ -15,6 +16,7 @@ export function Header({ lang, dict }: { lang: Lang; dict: Dict }) {
     { href: `/${lang}/components`, label: dict.nav.components },
     { href: `/${lang}/projects`, label: dict.nav.projects },
     { href: `/${lang}/forum`, label: dict.nav.forum },
+    { href: `/${lang}/tools`, label: extra.tools },
     { href: `/${lang}/about`, label: dict.nav.about },
   ]
 
@@ -45,6 +47,27 @@ export function Header({ lang, dict }: { lang: Lang; dict: Dict }) {
             )
           })}
         </nav>
+        <Link
+          className="icon-link"
+          href={`/${lang}/search`}
+          title={extra.searchLabel}
+          aria-label={extra.searchLabel}
+          aria-current={pathname.startsWith(`/${lang}/search`) ? 'page' : undefined}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" />
+            <path d="m20 20-4-4" />
+          </svg>
+        </Link>
+        <Link
+          className="icon-link fav-link"
+          href={`/${lang}/favorites`}
+          title={extra.favorites}
+          aria-label={extra.favorites}
+          aria-current={pathname.startsWith(`/${lang}/favorites`) ? 'page' : undefined}
+        >
+          ★
+        </Link>
         <div className="lang" aria-label="Language">
           {(['uk', 'en'] as const).map((l) => (
             <Link key={l} href={`/${l}${rest}`} aria-current={l === lang ? 'true' : undefined} hrefLang={l}>

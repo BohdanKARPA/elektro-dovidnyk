@@ -68,6 +68,14 @@ export const author = defineType({
     defineField({ name: 'role', title: 'Роль', type: 'localeString' }),
     defineField({ name: 'bio', title: 'Біографія', type: 'localeText' }),
     defineField({ name: 'avatar', title: 'Фото', type: 'image', options: { hotspot: true } }),
+    defineField({
+      name: 'user',
+      title: 'Акаунт на сайті',
+      description: 'Обліковий запис цього автора: його проєкти, теми й коментарі показуються в «Моєму кабінеті».',
+      type: 'reference',
+      to: [{ type: 'siteUser' }],
+      weak: true,
+    }),
   ],
 })
 

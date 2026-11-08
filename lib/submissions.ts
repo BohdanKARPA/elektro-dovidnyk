@@ -201,7 +201,7 @@ export async function createProject(
 /* ------------------------------ moderation ----------------------------- */
 
 const sanityRow = `_id, "kind": _type, "title": coalesce(name, title.uk), "slug": slug.current, "status": coalesce(status, "published"),
-  "authorName": submittedByName, "userId": submittedBy._ref, "createdAt": submittedAt, aiReview`
+  "authorName": submittedByName, "userId": submittedBy._ref, "createdAt": coalesce(submittedAt, publishedAt), aiReview`
 
 function memRows(filter: (r: { status: SubmissionStatus; userId: string }) => boolean): SubmissionRow[] {
   return [
@@ -222,8 +222,16 @@ export async function listSubmissions(): Promise<SubmissionRow[]> {
 }
 
 export async function listUserSubmissions(uid: string): Promise<SubmissionRow[]> {
+  // Submissions made through the site, plus projects whose editorial author profile is linked to this account.
   const fromSanity = writeClient
-    ? (await writeClient.fetch<SubmissionRow[]>(`*[_type in ["component", "project"] && submittedBy._ref == $uid] | order(submittedAt desc){ ${sanityRow} }`, { uid }, noStore)).map((r) => ({ ...r, editable: true }))
+    ? (
+        await writeClient.fetch<SubmissionRow[]>(
+          `*[(_type in ["component", "project"] && submittedBy._ref == $uid) || (_type == "project" && author->user._ref == $uid)]
+            | order(coalesce(submittedAt, publishedAt) desc){ ${sanityRow} }`,
+          { uid },
+          noStore,
+        )
+      ).map((r) => ({ ...r, editable: true }))
     : []
   return [...memRows((r) => r.userId === uid), ...fromSanity].sort(byDate)
 }

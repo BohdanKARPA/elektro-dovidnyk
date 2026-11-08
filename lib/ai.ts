@@ -24,11 +24,16 @@ interface Provider {
 }
 
 const PROVIDERS: Record<ProviderName, { label: string; env: string; alias?: string; baseURL?: string; models: string[] }> = {
-  // "*-latest" aliases follow Google's current Flash model, so the site keeps working when old models are retired.
-  gemini: { label: 'Gemini', env: 'GEMINI_API_KEY', alias: 'GOOGLE_API_KEY', baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/', models: ['gemini-flash-latest', 'gemini-2.5-flash', 'gemini-flash-lite-latest'] },
+  // "*-latest" aliases follow Google's current models, so the site keeps working when old ones are retired.
+  // Flash-Lite first: it answers in about a second and is enough for review and moderation; Flash is the fallback.
+  gemini: { label: 'Gemini', env: 'GEMINI_API_KEY', alias: 'GOOGLE_API_KEY', baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/', models: ['gemini-flash-lite-latest', 'gemini-flash-latest', 'gemini-2.5-flash'] },
   groq: { label: 'Groq', env: 'GROQ_API_KEY', baseURL: 'https://api.groq.com/openai/v1', models: ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant'] },
   openai: { label: 'OpenAI', env: 'OPENAI_API_KEY', models: ['gpt-5-mini', 'gpt-4o-mini'] },
 }
+
+const REQUEST_TIMEOUT_MS = 15_000
+/** Overall time budget of one AI task across all keys and models. */
+const TOTAL_BUDGET_MS = 40_000
 
 function setupProviders(): Provider[] {
   const order: ProviderName[] = ['gemini', 'groq', 'openai']
@@ -50,7 +55,7 @@ function setupProviders(): Provider[] {
     const baseURL = (first && process.env.AI_BASE_URL?.trim()) || cfg.baseURL
     keys.forEach((apiKey, i) => {
       const label = keys.length > 1 ? `${cfg.label} #${i + 1}` : cfg.label
-      out.push({ name, label, client: new OpenAI({ apiKey, baseURL, maxRetries: 0, timeout: 25_000 }), models })
+      out.push({ name, label, client: new OpenAI({ apiKey, baseURL, maxRetries: 0, timeout: REQUEST_TIMEOUT_MS }), models })
     })
   }
   return out
@@ -69,6 +74,7 @@ function explainAiError(err: unknown, label: string): string {
   if (e?.status === 429) return e.code === 'insufficient_quota' ? `на рахунку ${label} немає коштів (insufficient_quota)` : `вичерпано безкоштовний ліміт запитів ${label} (429), спробуйте пізніше`
   if (e?.status === 403) return `ключ ${label} не має доступу до моделі (403)`
   if (e?.status === 404) return `модель ${label} недоступна (404)`
+  if (/timed? ?out/i.test(`${(e as { name?: string })?.name} ${e?.message}`)) return `${label} не відповів вчасно`
   return `помилка ${label}${e?.status ? ` (${e.status})` : ''}: ${String(e?.message ?? err).slice(0, 120)}`
 }
 
@@ -103,38 +109,55 @@ class AiUnavailable extends Error {
  * then the next provider. Errors that a different model or provider can fix
  * (model missing, quota, outage) move on; the last error is reported.
  */
+/**
+ * Remembers what failed recently (per server instance) so later requests skip
+ * it instead of waiting again: a key out of quota for a minute, a key that is
+ * invalid for an hour, a model that is missing or keeps timing out for a while.
+ */
+const skipUntil = new Map<string, number>()
+const cool = (key: string, ms: number) => skipUntil.set(key, Date.now() + ms)
+const cooling = (key: string) => (skipUntil.get(key) ?? 0) > Date.now()
+
 async function chatJson(system: string, user: string): Promise<{ data: Record<string, unknown>; blocked: boolean }> {
   if (!providers.length) throw new AiUnavailable('на сервері не задано ключ AI (GEMINI_API_KEY, GROQ_API_KEY або OPENAI_API_KEY)')
+  const messages = [
+    { role: 'system' as const, content: system },
+    { role: 'user' as const, content: user },
+  ]
+  const started = Date.now()
   let last = ''
-  for (const p of providers) {
-    for (const model of p.models) {
-      const messages = [
-        { role: 'system' as const, content: system },
-        { role: 'user' as const, content: user },
-      ]
+  let tried = 0
+
+  const attempts = providers.flatMap((p) => p.models.map((model) => ({ p, model })))
+  // Everything cooling down (e.g. all keys hit the limit a moment ago)? Try once anyway rather than fail outright.
+  const fresh = attempts.filter(({ p, model }) => !cooling(p.label) && !cooling(`${p.label}|${model}`))
+  for (const { p, model } of fresh.length ? fresh : attempts.slice(0, 1)) {
+    if (cooling(p.label) && fresh.length) continue // the key was put on hold by an earlier attempt in this loop
+    if (Date.now() - started > TOTAL_BUDGET_MS) break
+    tried++
+    try {
+      let res
       try {
-        let res
-        try {
-          res = await p.client.chat.completions.create({ model, messages, response_format: { type: 'json_object' } })
-        } catch (err) {
-          // Some models reject JSON mode; ask again without it and parse the text.
-          if ((err as Err).status !== 400 || /api key/i.test((err as Err).message ?? '')) throw err
-          res = await p.client.chat.completions.create({ model, messages })
-        }
-        const choice = res.choices[0]
-        const blocked = choice?.finish_reason === 'content_filter'
-        return { data: parseJson(choice?.message?.content), blocked }
+        res = await p.client.chat.completions.create({ model, messages, response_format: { type: 'json_object' } })
       } catch (err) {
-        const status = (err as Err).status
-        last = explainAiError(err, p.label)
-        console.warn(`[ai] ${p.label} ${model} failed: ${last}`)
-        if (status === 401 || status === 403 || (status === 400 && /api key/i.test((err as Err).message ?? ''))) break // bad key: skip this provider's other models
-        if (status === 429) break // quota is per account, not per model
-        // 404/400/5xx/network: try the next model
+        // Some models reject JSON mode; ask again without it and parse the text.
+        if ((err as Err).status !== 400 || /api key/i.test((err as Err).message ?? '')) throw err
+        res = await p.client.chat.completions.create({ model, messages })
       }
+      const choice = res.choices[0]
+      const blocked = choice?.finish_reason === 'content_filter'
+      return { data: parseJson(choice?.message?.content), blocked }
+    } catch (err) {
+      const e = err as Err & { name?: string }
+      last = explainAiError(err, p.label)
+      console.warn(`[ai] ${p.label} ${model} failed: ${last}`)
+      if (e.status === 401 || e.status === 403 || (e.status === 400 && /api key/i.test(e.message ?? ''))) cool(p.label, 60 * 60_000) // bad key
+      else if (e.status === 429) cool(p.label, 60_000) // quota is per key/project, not per model
+      else if (e.status === 404) cool(`${p.label}|${model}`, 6 * 60 * 60_000) // model not offered to this key
+      else if (/timed? ?out/i.test(`${e.name} ${e.message}`)) cool(`${p.label}|${model}`, 10 * 60_000)
     }
   }
-  throw new AiUnavailable(last || 'AI не відповів')
+  throw new AiUnavailable(last || (tried ? 'AI не відповів' : 'усі ключі AI тимчасово недоступні'))
 }
 
 export interface ModerationResult {

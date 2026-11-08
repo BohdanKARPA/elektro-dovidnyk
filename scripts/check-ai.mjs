@@ -11,7 +11,7 @@
 import OpenAI from 'openai'
 
 const PROVIDERS = [
-  { name: 'Gemini', env: 'GEMINI_API_KEY', alias: 'GOOGLE_API_KEY', baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/', models: ['gemini-flash-latest', 'gemini-2.5-flash', 'gemini-flash-lite-latest'], keys: 'https://aistudio.google.com/apikey' },
+  { name: 'Gemini', env: 'GEMINI_API_KEY', alias: 'GOOGLE_API_KEY', baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/', models: ['gemini-flash-lite-latest', 'gemini-flash-latest', 'gemini-2.5-flash'], keys: 'https://aistudio.google.com/apikey' },
   { name: 'Groq', env: 'GROQ_API_KEY', baseURL: 'https://api.groq.com/openai/v1', models: ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant'], keys: 'https://console.groq.com/keys' },
   { name: 'OpenAI', env: 'OPENAI_API_KEY', models: [process.env.OPENAI_MODEL?.trim() || 'gpt-5-mini', 'gpt-4o-mini'], keys: 'https://platform.openai.com/api-keys' },
 ]
@@ -43,7 +43,7 @@ const runs = configured.flatMap((p) => {
 for (const { p, key, label } of runs) {
   if (p.name === 'Gemini' && !key.startsWith('AIza')) console.log(`\n${label}: ⚠ the key does not start with "AIza" — probably copied with a missing character`)
   console.log(`\n${label}  (${key.slice(0, 6)}…${key.slice(-4)})`)
-  const client = new OpenAI({ apiKey: key, baseURL: p.baseURL, maxRetries: 0, timeout: 25_000 })
+  const client = new OpenAI({ apiKey: key, baseURL: p.baseURL, maxRetries: 0, timeout: 15_000 })
   for (const model of [...new Set(p.models)]) {
     try {
       const t = Date.now()

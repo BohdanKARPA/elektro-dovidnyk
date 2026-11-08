@@ -2,11 +2,35 @@
 
 import Link from 'next/link'
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react'
-import type { SubmitDict } from '@/lib/i18n-submit'
+import type { ClientSubmitDict as SubmitDict } from '@/lib/i18n-submit'
 import type { Lang } from '@/lib/types'
 
 type Me = { name: string; blocked: boolean } | null
-type Result = { status: 'published' | 'pending' | 'rejected'; slug: string; reason: string | null }
+type Result = { status: 'published' | 'pending' | 'changes' | 'rejected'; slug: string; id?: string; reason: string | null }
+
+export interface ComponentInitial {
+  id: string
+  name: string
+  manufacturer?: string
+  categoryId: string
+  package?: string
+  priceUah?: number
+  summary: string
+  description: string
+  specs: { label: string; value: string }[]
+  datasheetUrl?: string
+  lcscPart?: string
+  tags: string[]
+}
+export interface ProjectInitial {
+  id: string
+  title: string
+  summary: string
+  difficulty: 'easy' | 'medium' | 'hard'
+  durationHours?: number
+  componentIds: string[]
+  steps: { title: string; text: string }[]
+}
 
 /** Shows the form only to signed-in, non-blocked users. */
 function useMe() {
@@ -69,6 +93,11 @@ function Outcome({ result, href, lang, l }: { result: Result; href: string; lang
             {l.result.open}
           </Link>
         )}
+        {result.status === 'changes' && result.id && (
+          <Link className="btn" href={`/${lang}/account/edit/${result.id}`}>
+            {l.fix}
+          </Link>
+        )}
         <Link className="btn ghost" href={`/${lang}/account`}>
           {l.result.toAccount}
         </Link>
@@ -79,9 +108,9 @@ function Outcome({ result, href, lang, l }: { result: Result; href: string; lang
 
 /* ------------------------------ component ------------------------------ */
 
-export function ComponentSubmitForm({ lang, l, categories }: { lang: Lang; l: SubmitDict; categories: { id: string; title: string }[] }) {
+export function ComponentSubmitForm({ lang, l, categories, initial }: { lang: Lang; l: SubmitDict; categories: { id: string; title: string }[]; initial?: ComponentInitial }) {
   const me = useMe()
-  const [specs, setSpecs] = useState([{ k: 0, label: '', value: '' }])
+  const [specs, setSpecs] = useState(initial?.specs.length ? initial.specs.map((sp, i) => ({ k: i, ...sp })) : [{ k: 0, label: '', value: '' }])
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [result, setResult] = useState<Result | null>(null)
@@ -106,6 +135,7 @@ export function ComponentSubmitForm({ lang, l, categories }: { lang: Lang; l: Su
         lcscPart: f.lcscPart,
         tags: f.tags,
         website: f.website,
+        ...(initial && { id: initial.id }),
       },
       l,
     )
@@ -117,20 +147,20 @@ export function ComponentSubmitForm({ lang, l, categories }: { lang: Lang; l: Su
   if (result) return <Outcome result={result} href={`/${lang}/components/${result.slug}`} lang={lang} l={l} />
 
   return (
-    <Gate me={me} lang={lang} back={`/${lang}/components/new`} l={l}>
+    <Gate me={me} lang={lang} back={initial ? `/${lang}/account/edit/${initial.id}` : `/${lang}/components/new`} l={l}>
       <form className="comment-form submit-form" onSubmit={onSubmit}>
         <div className="form-grid">
           <label>
             {l.f.name}
-            <input name="name" required minLength={2} maxLength={60} placeholder={l.f.namePh} />
+            <input name="name" required minLength={2} maxLength={60} placeholder={l.f.namePh} defaultValue={initial?.name} />
           </label>
           <label>
             {l.f.manufacturer}
-            <input name="manufacturer" maxLength={60} />
+            <input name="manufacturer" maxLength={60} defaultValue={initial?.manufacturer} />
           </label>
           <label>
             {l.f.category}
-            <select name="categoryId" required defaultValue="">
+            <select name="categoryId" required defaultValue={initial?.categoryId ?? ''}>
               <option value="" disabled>
                 {l.f.chooseCategory}
               </option>
@@ -143,24 +173,24 @@ export function ComponentSubmitForm({ lang, l, categories }: { lang: Lang; l: Su
           </label>
           <label>
             {l.f.package}
-            <input name="package" maxLength={60} placeholder={l.f.packagePh} />
+            <input name="package" maxLength={60} placeholder={l.f.packagePh} defaultValue={initial?.package} />
           </label>
           <label>
             {l.f.price}
-            <input name="priceUah" type="number" min={0} max={1000000} step="any" inputMode="decimal" />
+            <input name="priceUah" type="number" min={0} max={1000000} step="any" inputMode="decimal" defaultValue={initial?.priceUah} />
           </label>
           <label>
             {l.f.lcsc}
-            <input name="lcscPart" pattern="C[0-9]{1,9}" maxLength={10} />
+            <input name="lcscPart" pattern="C[0-9]{1,9}" maxLength={10} defaultValue={initial?.lcscPart} />
           </label>
         </div>
         <label>
           {l.f.summary}
-          <input name="summary" required minLength={20} maxLength={200} />
+          <input name="summary" required minLength={20} maxLength={200} defaultValue={initial?.summary} />
         </label>
         <label>
           {l.f.description}
-          <textarea name="description" required minLength={40} maxLength={4000} rows={6} />
+          <textarea name="description" required minLength={40} maxLength={4000} rows={6} defaultValue={initial?.description} />
           <span className="dim">{l.f.descriptionHint}</span>
         </label>
 
@@ -185,11 +215,11 @@ export function ComponentSubmitForm({ lang, l, categories }: { lang: Lang; l: Su
         <div className="form-grid">
           <label>
             {l.f.datasheet}
-            <input name="datasheetUrl" type="url" pattern="https://.*" maxLength={500} />
+            <input name="datasheetUrl" type="url" pattern="https://.*" maxLength={500} defaultValue={initial?.datasheetUrl} />
           </label>
           <label>
             {l.f.tags}
-            <input name="tags" maxLength={160} placeholder="i2c, sensor" />
+            <input name="tags" maxLength={160} placeholder="i2c, sensor" defaultValue={initial?.tags.join(', ')} />
           </label>
         </div>
         <input className="hp" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
@@ -200,7 +230,7 @@ export function ComponentSubmitForm({ lang, l, categories }: { lang: Lang; l: Su
         )}
         <div>
           <button className="btn" type="submit" disabled={busy}>
-            {busy ? l.f.sending : l.f.submit}
+            {busy ? l.f.sending : initial ? l.resubmit : l.f.submit}
           </button>
         </div>
       </form>
@@ -215,15 +245,17 @@ export function ProjectSubmitForm({
   l,
   parts,
   difficulty,
+  initial,
 }: {
   lang: Lang
   l: SubmitDict
   parts: { id: string; name: string; category: string }[]
   difficulty: { easy: string; medium: string; hard: string }
+  initial?: ProjectInitial
 }) {
   const me = useMe()
-  const [steps, setSteps] = useState([{ k: 0, title: '', text: '' }])
-  const [picked, setPicked] = useState<string[]>([])
+  const [steps, setSteps] = useState(initial?.steps.length ? initial.steps.map((st, i) => ({ k: i, ...st })) : [{ k: 0, title: '', text: '' }])
+  const [picked, setPicked] = useState<string[]>(initial?.componentIds ?? [])
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [result, setResult] = useState<Result | null>(null)
@@ -247,6 +279,7 @@ export function ProjectSubmitForm({
         componentIds: picked,
         steps: steps.map(({ title, text }) => ({ title, text })),
         website: f.website,
+        ...(initial && { id: initial.id }),
       },
       l,
     )
@@ -258,20 +291,20 @@ export function ProjectSubmitForm({
   if (result) return <Outcome result={result} href={`/${lang}/projects/${result.slug}`} lang={lang} l={l} />
 
   return (
-    <Gate me={me} lang={lang} back={`/${lang}/projects/new`} l={l}>
+    <Gate me={me} lang={lang} back={initial ? `/${lang}/account/edit/${initial.id}` : `/${lang}/projects/new`} l={l}>
       <form className="comment-form submit-form" onSubmit={onSubmit}>
         <label>
           {l.f.title}
-          <input name="title" required minLength={8} maxLength={120} />
+          <input name="title" required minLength={8} maxLength={120} defaultValue={initial?.title} />
         </label>
         <label>
           {l.f.projectSummary}
-          <textarea name="summary" required minLength={20} maxLength={240} rows={2} />
+          <textarea name="summary" required minLength={20} maxLength={240} rows={2} defaultValue={initial?.summary} />
         </label>
         <div className="form-grid">
           <label>
             {l.f.difficulty}
-            <select name="difficulty" defaultValue="easy">
+            <select name="difficulty" defaultValue={initial?.difficulty ?? 'easy'}>
               <option value="easy">{difficulty.easy}</option>
               <option value="medium">{difficulty.medium}</option>
               <option value="hard">{difficulty.hard}</option>
@@ -279,7 +312,7 @@ export function ProjectSubmitForm({
           </label>
           <label>
             {l.f.hours}
-            <input name="durationHours" type="number" min={1} max={500} step={1} inputMode="numeric" />
+            <input name="durationHours" type="number" min={1} max={500} step={1} inputMode="numeric" defaultValue={initial?.durationHours} />
           </label>
         </div>
 
@@ -354,7 +387,7 @@ export function ProjectSubmitForm({
         )}
         <div>
           <button className="btn" type="submit" disabled={busy}>
-            {busy ? l.f.sending : l.f.submit}
+            {busy ? l.f.sending : initial ? l.resubmit : l.f.submit}
           </button>
         </div>
       </form>

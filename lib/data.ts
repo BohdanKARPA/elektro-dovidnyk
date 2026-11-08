@@ -12,7 +12,7 @@ import { mem, type MemComponent, type MemProject } from './memory'
  * ------------------------------------------------------------------ */
 
 /** Documents shown on the site: editor-made ones (no status) and published user submissions. */
-const PUB = groq`!(status in ["pending", "rejected"])`
+const PUB = groq`(!defined(status) || status == "published")`
 
 const categoryFields = groq`_id, title, "slug": slug.current, icon, description`
 const componentCard = groq`

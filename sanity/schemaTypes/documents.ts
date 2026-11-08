@@ -35,12 +35,13 @@ const submissionFields = [
     title: 'Статус',
     type: 'string',
     group: 'review',
-    options: { list: [{ title: 'Опубліковано', value: 'published' }, { title: 'Чекає перевірки', value: 'pending' }, { title: 'Відхилено', value: 'rejected' }], layout: 'radio' },
+    options: { list: [{ title: 'Опубліковано', value: 'published' }, { title: 'Чекає перевірки', value: 'pending' }, { title: 'Потребує доопрацювання', value: 'changes' }, { title: 'Відхилено', value: 'rejected' }], layout: 'radio' },
     initialValue: 'published',
   }),
   defineField({ name: 'submittedBy', title: 'Подав користувач', type: 'reference', to: [{ type: 'siteUser' }], weak: true, readOnly: true, group: 'review' }),
   defineField({ name: 'submittedByName', title: 'Ім’я автора заявки', type: 'string', readOnly: true, group: 'review' }),
   defineField({ name: 'submittedAt', title: 'Подано', type: 'datetime', readOnly: true, group: 'review' }),
+  defineField({ name: 'resubmittedAt', title: 'Подано повторно після доопрацювання', type: 'datetime', readOnly: true, group: 'review' }),
   defineField({
     name: 'aiReview',
     title: 'AI-перевірка',
@@ -52,9 +53,20 @@ const submissionFields = [
       defineField({ name: 'reason', title: 'Пояснення', type: 'text', rows: 2 }),
       defineField({ name: 'flagged', title: 'Порушення правил', type: 'boolean' }),
       defineField({ name: 'categories', title: 'Категорії порушень', type: 'array', of: [{ type: 'string' }] }),
+      defineField({ name: 'failed', title: 'AI не зміг перевірити', type: 'boolean' }),
       defineField({ name: 'checkedAt', title: 'Перевірено', type: 'datetime' }),
     ],
   }),
+  defineField({
+    name: 'moderatorNote',
+    title: 'Коментар модератора',
+    description: 'Причина відмови або побажання автору. Автор бачить її у своєму кабінеті.',
+    type: 'text',
+    rows: 3,
+    group: 'review',
+    validation: (r) => r.max(500),
+  }),
+  defineField({ name: 'moderatedAt', title: 'Рішення прийнято', type: 'datetime', readOnly: true, group: 'review' }),
 ]
 
 export const author = defineType({
@@ -312,4 +324,28 @@ export const siteUser = defineType({
       subtitle,
     }),
   },
+})
+
+/**
+ * Private conversation between a site user and the administrators.
+ * Stored with "messages.*" ids, which Sanity keeps private: they are readable
+ * only with a token on the server, never through the public API.
+ */
+export const message = defineType({
+  name: 'message',
+  title: 'Повідомлення',
+  type: 'document',
+  icon: () => '✉️',
+  fields: [
+    defineField({ name: 'thread', title: 'Розмова з користувачем', type: 'reference', to: [{ type: 'siteUser' }], weak: true, readOnly: true }),
+    defineField({ name: 'from', title: 'Від', type: 'string', options: { list: [{ title: 'Користувач', value: 'user' }, { title: 'Адміністратор', value: 'admin' }] }, readOnly: true }),
+    defineField({ name: 'authorName', title: 'Ім’я', type: 'string', readOnly: true }),
+    defineField({ name: 'text', title: 'Текст', type: 'text', rows: 4, readOnly: true }),
+    defineField({ name: 'about', title: 'Щодо заявки', type: 'reference', to: [{ type: 'component' }, { type: 'project' }], weak: true, readOnly: true }),
+    defineField({ name: 'readByUser', title: 'Прочитано користувачем', type: 'boolean' }),
+    defineField({ name: 'readByAdmin', title: 'Прочитано адміністратором', type: 'boolean' }),
+    defineField({ name: 'createdAt', title: 'Надіслано', type: 'datetime', readOnly: true }),
+  ],
+  orderings: [{ title: 'Нові спочатку', name: 'createdDesc', by: [{ field: 'createdAt', direction: 'desc' }] }],
+  preview: { select: { title: 'text', subtitle: 'authorName' } },
 })

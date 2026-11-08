@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { clearSession, createUser, findUserByEmail, getCurrentUser, setSession, verifyPassword } from '@/lib/auth'
 import { clientIp, sameOrigin } from '@/lib/http'
 import { rateLimit } from '@/lib/rate-limit'
+import { unreadCount } from '@/lib/messages'
 
 export const runtime = 'nodejs'
 
@@ -19,7 +20,10 @@ type Ctx = { params: Promise<{ action: string }> }
 export async function GET(_req: NextRequest, { params }: Ctx) {
   const { action } = await params
   if (action !== 'me') return NextResponse.json({ error: 'not_found' }, { status: 404 })
-  return NextResponse.json({ user: await getCurrentUser() }, { headers: { 'Cache-Control': 'no-store' } })
+  const user = await getCurrentUser()
+  // Unread chat messages for the header badge (replies for users, new messages for admins).
+  const unread = user ? await unreadCount(user).catch(() => 0) : 0
+  return NextResponse.json({ user, unread }, { headers: { 'Cache-Control': 'no-store' } })
 }
 
 export async function POST(req: NextRequest, { params }: Ctx) {

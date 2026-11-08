@@ -7,19 +7,22 @@ import { getUserComments, getUserTopics } from '@/lib/community'
 import { formatDate, isLang } from '@/lib/i18n'
 import { getAuthDict } from '@/lib/i18n-auth'
 import { SubmissionRows } from '@/components/SubmissionRows'
-import { getSubmitDict } from '@/lib/i18n-submit'
+import { clientSubmitDict } from '@/lib/i18n-submit'
+import { ChatBox } from '@/components/ChatBox'
 import { listUserSubmissions } from '@/lib/submissions'
 
 export const metadata: Metadata = { robots: { index: false } }
 
-export default async function AccountPage({ params }: PageProps<'/[lang]/account'>) {
+export default async function AccountPage({ params, searchParams }: PageProps<'/[lang]/account'>) {
   const { lang } = await params
+  const aboutId = (await searchParams).about
   if (!isLang(lang)) notFound()
   const user = await getCurrentUser()
   if (!user) redirect(`/${lang}/login?next=/${lang}/account`)
   const l = getAuthDict(lang)
   const [comments, topics, submissions] = await Promise.all([getUserComments(user._id, lang), getUserTopics(user._id), listUserSubmissions(user._id)])
-  const sl = getSubmitDict(lang)
+  const sl = clientSubmitDict(lang)
+  const about = typeof aboutId === 'string' ? submissions.find((s) => s._id === aboutId) : undefined
 
   return (
     <>
@@ -71,6 +74,12 @@ export default async function AccountPage({ params }: PageProps<'/[lang]/account
               + {sl.addProject}
             </Link>
           </div>
+
+          <section id="chat" className="section chat-section" aria-labelledby="chat-title">
+            <h2 id="chat-title">{sl.chat.title}</h2>
+            <p className="lede">{sl.chat.intro}</p>
+            <ChatBox lang={lang} l={sl} side="user" about={about ? { id: about._id, title: about.title } : null} />
+          </section>
 
           <h2 style={{ marginTop: 40 }}>{l.myTopics}</h2>
           {topics.length === 0 ? (

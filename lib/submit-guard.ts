@@ -25,10 +25,11 @@ export async function guardSubmission(req: NextRequest, kind: 'component' | 'pro
 /**
  * Count a valid submission against the limit (3 per kind per hour for non-admins).
  * Called after validation, so a form with mistakes does not use up the quota,
- * and before the AI review, so floods never reach OpenAI.
+ * and before the AI review, so floods never reach the AI provider.
  */
-export function consumeQuota(user: SiteUser, kind: 'component' | 'project'): NextResponse | null {
+export function consumeQuota(user: SiteUser, kind: 'component' | 'project', edit = false): NextResponse | null {
   if (user.role === 'admin') return null
-  const limit = rateLimit(`submit:${kind}:${user._id}`, 3, 60 * 60 * 1000)
+  // New submissions: 3 an hour. Fixes of a returned submission have their own, larger allowance.
+  const limit = edit ? rateLimit(`resubmit:${user._id}`, 10, 60 * 60 * 1000) : rateLimit(`submit:${kind}:${user._id}`, 3, 60 * 60 * 1000)
   return limit.ok ? null : NextResponse.json({ error: 'too_many_requests', retryAfter: limit.retryAfter }, { status: 429 })
 }

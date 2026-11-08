@@ -32,7 +32,7 @@ export const structure: StructureResolver = (S) =>
           S.documentList()
             .title('Компоненти й проєкти на перевірці')
             .apiVersion('2025-02-19')
-            .filter('_type in ["component", "project"] && status == "pending"')
+            .filter('_type in ["component", "project"] && status in ["pending", "changes"]')
             .defaultOrdering([{ field: 'submittedAt', direction: 'desc' }]),
         ),
       S.divider(),
@@ -47,4 +47,5 @@ export const structure: StructureResolver = (S) =>
       S.documentTypeListItem('comment').title('Усі коментарі'),
       S.documentTypeListItem('author').title('Автори'),
       S.documentTypeListItem('siteUser').title('🔑 Користувачі сайту'),
+      S.documentTypeListItem('message').title('✉️ Повідомлення'),
     ])

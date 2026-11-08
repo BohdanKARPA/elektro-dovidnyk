@@ -9,7 +9,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "tsc --noEmit",
-    "seed": "node --env-file=.env.local scripts/seed.mjs"
+    "seed": "node --env-file=.env.local scripts/seed.mjs",
+    "check:ai": "node --env-file=.env.local scripts/check-ai.mjs"
   },
   "dependencies": {
     "@fontsource-variable/onest": "^5.3.1",

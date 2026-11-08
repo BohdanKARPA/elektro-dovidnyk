@@ -6,6 +6,8 @@ import { findUserById, getCurrentUser, updateUser } from '@/lib/auth'
 import { setCommentStatus, setTopicHidden } from '@/lib/community'
 import { revalidateCatalog, revalidateCommunity } from '@/lib/revalidate'
 import { setSubmissionStatus } from '@/lib/submissions'
+import { sendMessage } from '@/lib/messages'
+import { getSubmitDict } from '@/lib/i18n-submit'
 
 /**
  * Admin-only server actions. Every action re-checks the role on the server:
@@ -55,9 +57,21 @@ export async function setTopicVisibility(formData: FormData) {
   done()
 }
 
+/**
+ * Publish, return for changes or reject a user submission. Returning and
+ * rejecting need a note; the author gets it in their account and as a chat message.
+ */
 export async function moderateSubmission(formData: FormData) {
-  await requireAdmin()
-  await setSubmissionStatus(id.parse(formData.get('id')), z.enum(['published', 'rejected']).parse(formData.get('status')))
+  const admin = await requireAdmin()
+  const submissionId = id.parse(formData.get('id'))
+  const status = z.enum(['published', 'changes', 'rejected']).parse(formData.get('status'))
+  const note = z.string().trim().max(500).parse(formData.get('note') ?? '')
+  if (status !== 'published' && !note) return // the form requires a note; ignore crafted requests without one
+  const meta = await setSubmissionStatus(submissionId, status, note || undefined)
+  if (meta?.userId && (status !== 'published' || note)) {
+    const t = getSubmitDict('uk').auto
+    await sendMessage({ thread: meta.userId, from: 'admin', authorName: admin.name, text: t[status](meta.title, note), about: submissionId })
+  }
   revalidateCatalog()
   done()
 }

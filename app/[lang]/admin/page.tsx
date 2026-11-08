@@ -9,7 +9,8 @@ import { getAuthDict, type AuthDict } from '@/lib/i18n-auth'
 import type { Lang } from '@/lib/types'
 import { moderateComment, moderateSubmission, setTopicVisibility, setUserBlocked, setUserRole } from './actions'
 import { SubmissionRows } from '@/components/SubmissionRows'
-import { getSubmitDict } from '@/lib/i18n-submit'
+import { clientSubmitDict } from '@/lib/i18n-submit'
+import { listThreads } from '@/lib/messages'
 import { listSubmissions } from '@/lib/submissions'
 
 export const metadata: Metadata = { title: 'Admin', robots: { index: false } }
@@ -93,17 +94,24 @@ export default async function AdminPage({ params }: PageProps<'/[lang]/admin'>) 
     )
   }
 
-  const [users, queue, recent, topics, submissions] = await Promise.all([listUsers(), getModerationQueue(lang), getRecentComments(lang), getAllTopics(), listSubmissions()])
-  const sl = getSubmitDict(lang)
+  const [users, queue, recent, topics, submissions, threads] = await Promise.all([listUsers(), getModerationQueue(lang), getRecentComments(lang), getAllTopics(), listSubmissions(), listThreads()])
+  const sl = clientSubmitDict(lang)
   const waiting = submissions.filter((s) => s.status === 'pending')
+  const unreadMsgs = threads.reduce((n, t) => n + t.unread, 0)
 
   return (
     <>
       <div className="section-head">
         <h1>{l.adminTitle}</h1>
-        <a className="btn ghost" href="/studio">
-          {l.openStudio}
-        </a>
+        <span className="actions">
+          <Link className="btn ghost" href={`/${lang}/admin/messages`}>
+            {sl.chat.inbox}
+            {unreadMsgs > 0 && <span className="count-dot">{unreadMsgs}</span>}
+          </Link>
+          <a className="btn ghost" href="/studio">
+            {l.openStudio}
+          </a>
+        </span>
       </div>
       <p className="lede">{l.adminIntro}</p>
       <p className="notice">{usersStoredInSanity ? l.storageSanity : l.storageMemory}</p>

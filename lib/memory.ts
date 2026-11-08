@@ -38,12 +38,15 @@ export interface MemTopic {
   hidden: boolean
 }
 
-export type SubmissionStatus = 'published' | 'pending' | 'rejected'
+/** published — on the site; pending — waits for an admin; changes — returned to the author for fixes; rejected — final. */
+export type SubmissionStatus = 'published' | 'pending' | 'changes' | 'rejected'
 export interface AiReview {
-  verdict: 'approve' | 'reject' | 'review'
+  verdict: 'approve' | 'revise' | 'reject' | 'review'
   reason?: string
   flagged?: boolean
   categories?: string[]
+  /** AI could not run; `reason` explains why (admin only). */
+  failed?: boolean
   checkedAt: string
 }
 type Loc = { uk?: string; en?: string }
@@ -68,6 +71,8 @@ export interface MemComponent {
   authorName: string
   createdAt: string
   aiReview?: AiReview
+  moderatorNote?: string
+  moderatedAt?: string
 }
 
 export interface MemProject {
@@ -84,6 +89,23 @@ export interface MemProject {
   authorName: string
   createdAt: string
   aiReview?: AiReview
+  moderatorNote?: string
+  moderatedAt?: string
+}
+
+/** One message in the private conversation between a user and the site administrators. */
+export interface MemMessage {
+  _id: string
+  /** The user the conversation belongs to. */
+  thread: string
+  from: 'user' | 'admin'
+  authorName: string
+  text: string
+  createdAt: string
+  /** Optional submission the message is about. */
+  about?: string
+  readByUser: boolean
+  readByAdmin: boolean
 }
 
 type Store = {
@@ -92,10 +114,12 @@ type Store = {
   topics: MemTopic[]
   components: MemComponent[]
   projects: MemProject[]
+  messages: MemMessage[]
 }
 
 // Kept on globalThis so the data survives hot reloads in `next dev`.
 const g = globalThis as unknown as { __mem?: Store }
-export const mem: Store = (g.__mem ??= { users: new Map(), comments: [], topics: [], components: [], projects: [] })
+export const mem: Store = (g.__mem ??= { users: new Map(), comments: [], topics: [], components: [], projects: [], messages: [] })
 mem.components ??= []
 mem.projects ??= []
+mem.messages ??= []

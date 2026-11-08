@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation'
 import { ProjectRow } from '@/components/ProjectRow'
 import { getProjects } from '@/lib/data'
 import { getDict, isLang } from '@/lib/i18n'
+import { getSubmitDict } from '@/lib/i18n-submit'
+import Link from 'next/link'
 
 export const revalidate = 3600
 
@@ -20,7 +22,12 @@ export default async function ProjectsPage({ params }: PageProps<'/[lang]/projec
 
   return (
     <>
-      <h1>{dict.nav.projects}</h1>
+      <div className="section-head">
+        <h1>{dict.nav.projects}</h1>
+        <Link className="btn ghost" href={`/${lang}/projects/new`}>
+          + {getSubmitDict(lang).addProject}
+        </Link>
+      </div>
       <p className="lede">
         {lang === 'uk'
           ? 'Покрокові збірки з переліком компонентів, часом на виконання і рівнем складності.'

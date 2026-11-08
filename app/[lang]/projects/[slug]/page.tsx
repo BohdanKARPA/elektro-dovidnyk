@@ -59,7 +59,7 @@ export default async function ProjectPage({ params }: PageProps<'/[lang]/project
                 {p.durationHours} {dict.hours}
               </span>
             ) : null}
-            {p.author && <span>{p.author.name}</span>}
+            {(p.author?.name || p.submittedByName) && <span>{p.author?.name ?? p.submittedByName}</span>}
             <span>{formatDate(p.publishedAt, lang)}</span>
           </div>
           <div className="item-actions">

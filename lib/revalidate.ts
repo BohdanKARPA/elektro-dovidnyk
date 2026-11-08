@@ -12,3 +12,12 @@ export function revalidateCommunity() {
     revalidatePath(route, 'page')
   }
 }
+
+/** After a component or project is submitted or moderated. */
+export function revalidateCatalog() {
+  revalidateTag('component', { expire: 0 })
+  revalidateTag('project', { expire: 0 })
+  for (const route of ['/[lang]', '/[lang]/components', '/[lang]/components/[slug]', '/[lang]/projects', '/[lang]/projects/[slug]', '/[lang]/about']) {
+    revalidatePath(route, 'page')
+  }
+}

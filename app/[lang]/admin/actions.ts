@@ -4,7 +4,8 @@ import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { findUserById, getCurrentUser, updateUser } from '@/lib/auth'
 import { setCommentStatus, setTopicHidden } from '@/lib/community'
-import { revalidateCommunity } from '@/lib/revalidate'
+import { revalidateCatalog, revalidateCommunity } from '@/lib/revalidate'
+import { setSubmissionStatus } from '@/lib/submissions'
 
 /**
  * Admin-only server actions. Every action re-checks the role on the server:
@@ -51,5 +52,12 @@ export async function setTopicVisibility(formData: FormData) {
   await requireAdmin()
   await setTopicHidden(id.parse(formData.get('id')), z.enum(['true', 'false']).parse(formData.get('hidden')) === 'true')
   revalidateCommunity()
+  done()
+}
+
+export async function moderateSubmission(formData: FormData) {
+  await requireAdmin()
+  await setSubmissionStatus(id.parse(formData.get('id')), z.enum(['published', 'rejected']).parse(formData.get('status')))
+  revalidateCatalog()
   done()
 }

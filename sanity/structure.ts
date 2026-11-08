@@ -26,6 +26,15 @@ export const structure: StructureResolver = (S) =>
             .apiVersion('2025-02-19')
             .filter('_type == "comment" && aiModeration.flagged == true'),
         ),
+      S.listItem()
+        .title('📥 Заявки користувачів')
+        .child(
+          S.documentList()
+            .title('Компоненти й проєкти на перевірці')
+            .apiVersion('2025-02-19')
+            .filter('_type in ["component", "project"] && status == "pending"')
+            .defaultOrdering([{ field: 'submittedAt', direction: 'desc' }]),
+        ),
       S.divider(),
       S.documentTypeListItem('component').title('Компоненти'),
       S.documentTypeListItem('category').title('Категорії'),

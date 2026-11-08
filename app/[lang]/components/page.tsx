@@ -4,6 +4,8 @@ import { ComponentGuide } from '@/components/ComponentGuide'
 import { getCategories, getComponents } from '@/lib/data'
 import { getDict, isLang, t } from '@/lib/i18n'
 import { getExtraDict } from '@/lib/i18n-extra'
+import { getSubmitDict } from '@/lib/i18n-submit'
+import Link from 'next/link'
 
 export const revalidate = 3600
 
@@ -24,7 +26,12 @@ export default async function ComponentsPage({ params, searchParams }: PageProps
 
   return (
     <>
-      <h1>{dict.nav.components}</h1>
+      <div className="section-head">
+        <h1>{dict.nav.components}</h1>
+        <Link className="btn ghost" href={`/${lang}/components/new`}>
+          + {getSubmitDict(lang).addComponent}
+        </Link>
+      </div>
       <p className="lede">
         {lang === 'uk'
           ? 'Таблиця підбору: головні параметри кожного компонента в одному рядку. Натисніть на рядок, щоб відкрити картку з характеристиками.'

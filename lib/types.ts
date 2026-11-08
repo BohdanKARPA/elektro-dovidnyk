@@ -64,6 +64,8 @@ export interface ProjectDoc {
   durationHours?: number
   publishedAt?: string
   author?: Author | null
+  /** Name of the site user who submitted the project (user submissions). */
+  submittedByName?: string
   cover?: SanityImage | null
   components?: ComponentDoc[]
   steps?: Step[]

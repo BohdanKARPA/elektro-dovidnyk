@@ -80,3 +80,52 @@ export async function generateSeoDescription(title: string, body: string): Promi
   if (typeof parsed.uk !== 'string' || typeof parsed.en !== 'string') return null
   return { uk: parsed.uk.slice(0, 160), en: parsed.en.slice(0, 160) }
 }
+
+export interface SubmissionReview {
+  verdict: 'approve' | 'reject' | 'review'
+  /** One short sentence in Ukrainian, shown to the author. */
+  reason: string
+  flagged: boolean
+  categories: string[]
+}
+
+const REVIEW_PROMPT = [
+  'You review user submissions to a public Ukrainian reference website about electronics.',
+  'The submission is either an electronic component card (kind "component") or a DIY electronics project (kind "project").',
+  'Approve it when it is a genuine, on-topic, coherent description that a hobbyist would find useful.',
+  'Reject spam, advertising, links-only or shop promotion, gibberish, off-topic text, insults, and obviously wrong technical claims.',
+  'Answer "review" (a human moderator decides) when you are unsure, when specifications look doubtful,',
+  'or when the project involves mains voltage, high-energy batteries or other hazards without safety notes.',
+  'Reply with JSON {"verdict": "approve" | "reject" | "review", "reason": "<one short sentence in Ukrainian addressed to the author>"}.',
+].join(' ')
+
+/**
+ * Two-step check of a user submission: the free Moderation endpoint (abuse),
+ * then a model that judges relevance and quality. Returns null when AI is not
+ * configured or fails — the caller then queues the submission for an admin.
+ */
+export async function reviewSubmission(kind: 'component' | 'project', fields: Record<string, unknown>): Promise<SubmissionReview | null> {
+  if (!openai) return null
+  const text = JSON.stringify(fields)
+  const mod = await moderate(text.slice(0, 8000))
+  if (mod?.flagged) {
+    return { verdict: 'reject', reason: 'Текст порушує правила сайту, тому його не опубліковано.', flagged: true, categories: mod.categories }
+  }
+  try {
+    const res = await openai.chat.completions.create({
+      model: MODEL,
+      response_format: { type: 'json_object' },
+      messages: [
+        { role: 'system', content: REVIEW_PROMPT },
+        { role: 'user', content: JSON.stringify({ kind, ...fields }).slice(0, 12000) },
+      ],
+    })
+    const parsed = JSON.parse(res.choices[0]?.message?.content || '{}') as { verdict?: unknown; reason?: unknown }
+    const verdict = parsed.verdict === 'approve' || parsed.verdict === 'reject' || parsed.verdict === 'review' ? parsed.verdict : 'review'
+    const reason = typeof parsed.reason === 'string' ? parsed.reason.slice(0, 300) : ''
+    return { verdict, reason, flagged: false, categories: mod?.categories ?? [] }
+  } catch (err) {
+    console.error('[ai] submission review failed', err)
+    return null
+  }
+}

@@ -7,7 +7,10 @@ import { getAllTopics, getModerationQueue, getRecentComments, type CommunityComm
 import { formatDate, isLang } from '@/lib/i18n'
 import { getAuthDict, type AuthDict } from '@/lib/i18n-auth'
 import type { Lang } from '@/lib/types'
-import { moderateComment, setTopicVisibility, setUserBlocked, setUserRole } from './actions'
+import { moderateComment, moderateSubmission, setTopicVisibility, setUserBlocked, setUserRole } from './actions'
+import { SubmissionRows } from '@/components/SubmissionRows'
+import { getSubmitDict } from '@/lib/i18n-submit'
+import { listSubmissions } from '@/lib/submissions'
 
 export const metadata: Metadata = { title: 'Admin', robots: { index: false } }
 
@@ -90,7 +93,9 @@ export default async function AdminPage({ params }: PageProps<'/[lang]/admin'>) 
     )
   }
 
-  const [users, queue, recent, topics] = await Promise.all([listUsers(), getModerationQueue(lang), getRecentComments(lang), getAllTopics()])
+  const [users, queue, recent, topics, submissions] = await Promise.all([listUsers(), getModerationQueue(lang), getRecentComments(lang), getAllTopics(), listSubmissions()])
+  const sl = getSubmitDict(lang)
+  const waiting = submissions.filter((s) => s.status === 'pending')
 
   return (
     <>
@@ -120,11 +125,27 @@ export default async function AdminPage({ params }: PageProps<'/[lang]/admin'>) 
           <strong>{queue.length}</strong>
           <span>{l.kpi.pending}</span>
         </div>
+        <div className={waiting.length > 0 ? 'alert' : undefined}>
+          <strong>{waiting.length}</strong>
+          <span>{sl.status.pending}</span>
+        </div>
         <div>
           <strong>{topics.length}</strong>
           <span>{l.kpi.topics}</span>
         </div>
       </div>
+
+      <section className="section" aria-labelledby="submissions">
+        <h2 id="submissions">
+          {sl.queue} ({waiting.length})
+        </h2>
+        <p className="lede">{sl.queueIntro}</p>
+        {submissions.length === 0 ? (
+          <p className="lede">{sl.queueEmpty}</p>
+        ) : (
+          <SubmissionRows rows={submissions} l={sl} lang={lang} action={moderateSubmission} showAuthor needsToken={l.needsToken} />
+        )}
+      </section>
 
       <section className="section" aria-labelledby="queue">
         <h2 id="queue">

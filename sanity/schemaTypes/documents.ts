@@ -21,6 +21,40 @@ const aiFields = [
 const groups = [
   { name: 'content', title: 'Контент', default: true },
   { name: 'ai', title: 'AI та SEO' },
+  { name: 'review', title: 'Публікація' },
+]
+
+/**
+ * Components and projects can be submitted by site users. A submission keeps
+ * its author, the AI review and a status; only "published" (or no status, for
+ * editor-made documents) is shown on the site.
+ */
+const submissionFields = [
+  defineField({
+    name: 'status',
+    title: 'Статус',
+    type: 'string',
+    group: 'review',
+    options: { list: [{ title: 'Опубліковано', value: 'published' }, { title: 'Чекає перевірки', value: 'pending' }, { title: 'Відхилено', value: 'rejected' }], layout: 'radio' },
+    initialValue: 'published',
+  }),
+  defineField({ name: 'submittedBy', title: 'Подав користувач', type: 'reference', to: [{ type: 'siteUser' }], weak: true, readOnly: true, group: 'review' }),
+  defineField({ name: 'submittedByName', title: 'Ім’я автора заявки', type: 'string', readOnly: true, group: 'review' }),
+  defineField({ name: 'submittedAt', title: 'Подано', type: 'datetime', readOnly: true, group: 'review' }),
+  defineField({
+    name: 'aiReview',
+    title: 'AI-перевірка',
+    type: 'object',
+    readOnly: true,
+    group: 'review',
+    fields: [
+      defineField({ name: 'verdict', title: 'Рішення', type: 'string' }),
+      defineField({ name: 'reason', title: 'Пояснення', type: 'text', rows: 2 }),
+      defineField({ name: 'flagged', title: 'Порушення правил', type: 'boolean' }),
+      defineField({ name: 'categories', title: 'Категорії порушень', type: 'array', of: [{ type: 'string' }] }),
+      defineField({ name: 'checkedAt', title: 'Перевірено', type: 'datetime' }),
+    ],
+  }),
 ]
 
 export const author = defineType({
@@ -115,6 +149,7 @@ export const component = defineType({
     }),
     defineField({ name: 'tags', title: 'Теги', type: 'array', of: [{ type: 'string' }], options: { layout: 'tags' }, group: 'content' }),
     ...aiFields,
+    ...submissionFields,
   ],
   preview: { select: { title: 'name', subtitle: 'summary.uk', media: 'image' } },
 })
@@ -167,6 +202,7 @@ export const project = defineType({
       ],
     }),
     ...aiFields,
+    ...submissionFields,
   ],
   preview: { select: { title: 'title.uk', subtitle: 'difficulty', media: 'cover' } },
 })

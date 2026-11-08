@@ -6,6 +6,9 @@ import { getCurrentUser } from '@/lib/auth'
 import { getUserComments, getUserTopics } from '@/lib/community'
 import { formatDate, isLang } from '@/lib/i18n'
 import { getAuthDict } from '@/lib/i18n-auth'
+import { SubmissionRows } from '@/components/SubmissionRows'
+import { getSubmitDict } from '@/lib/i18n-submit'
+import { listUserSubmissions } from '@/lib/submissions'
 
 export const metadata: Metadata = { robots: { index: false } }
 
@@ -15,7 +18,8 @@ export default async function AccountPage({ params }: PageProps<'/[lang]/account
   const user = await getCurrentUser()
   if (!user) redirect(`/${lang}/login?next=/${lang}/account`)
   const l = getAuthDict(lang)
-  const [comments, topics] = await Promise.all([getUserComments(user._id, lang), getUserTopics(user._id)])
+  const [comments, topics, submissions] = await Promise.all([getUserComments(user._id, lang), getUserTopics(user._id), listUserSubmissions(user._id)])
+  const sl = getSubmitDict(lang)
 
   return (
     <>
@@ -52,6 +56,21 @@ export default async function AccountPage({ params }: PageProps<'/[lang]/account
               </tbody>
             </table>
           )}
+
+          <h2 style={{ marginTop: 40 }}>{sl.mine}</h2>
+          {submissions.length === 0 ? (
+            <p className="lede">{l.nothingYet}</p>
+          ) : (
+            <SubmissionRows rows={submissions} l={sl} lang={lang} />
+          )}
+          <div className="actions" style={{ marginTop: 16 }}>
+            <Link className="btn ghost small" href={`/${lang}/components/new`}>
+              + {sl.addComponent}
+            </Link>
+            <Link className="btn ghost small" href={`/${lang}/projects/new`}>
+              + {sl.addProject}
+            </Link>
+          </div>
 
           <h2 style={{ marginTop: 40 }}>{l.myTopics}</h2>
           {topics.length === 0 ? (

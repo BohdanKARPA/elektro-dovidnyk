@@ -4,12 +4,15 @@ import seed from '@/data/seed.json'
 import { isSanityConfigured } from '@/sanity/env'
 import { sanityFetch } from './sanity'
 import type { Author, Category, CommentDoc, ComponentDoc, ProjectDoc, Topic } from './types'
-import { mem } from './memory'
+import { mem, type MemComponent, type MemProject } from './memory'
 
 /* ------------------------------------------------------------------ *
  *  GROQ queries. All user-supplied values are passed as $params,     *
  *  never concatenated into the query string (no GROQ injection).     *
  * ------------------------------------------------------------------ */
+
+/** Documents shown on the site: editor-made ones (no status) and published user submissions. */
+const PUB = groq`!(status in ["pending", "rejected"])`
 
 const categoryFields = groq`_id, title, "slug": slug.current, icon, description`
 const componentCard = groq`
@@ -17,7 +20,7 @@ const componentCard = groq`
   "category": category->{ ${categoryFields} }`
 const componentFull = groq`${componentCard}, description, seoDescription, specs, datasheetUrl, lcscPart`
 const projectCard = groq`
-  _id, title, "slug": slug.current, summary, difficulty, durationHours, publishedAt, cover,
+  _id, title, "slug": slug.current, summary, difficulty, durationHours, publishedAt, cover, submittedByName,
   "author": author->{ _id, name, "slug": slug.current, role }`
 
 // Lists also carry a light parts list: project covers are drawn from it.
@@ -25,17 +28,17 @@ const projectListItem = groq`${projectCard}, "components": components[]->{ _id, 
 
 const Q = {
   categories: groq`*[_type == "category"] | order(order asc) {
-    ${categoryFields}, "count": count(*[_type == "component" && references(^._id)])
+    ${categoryFields}, "count": count(*[_type == "component" && references(^._id) && ${PUB}])
   }`,
-  components: groq`*[_type == "component"] | order(name asc) { ${componentCard} }`,
-  component: groq`*[_type == "component" && slug.current == $slug][0] { ${componentFull} }`,
-  componentSlugs: groq`*[_type == "component" && defined(slug.current)].slug.current`,
-  projectsUsing: groq`*[_type == "project" && references($id)] | order(publishedAt desc) { ${projectListItem} }`,
-  projects: groq`*[_type == "project"] | order(publishedAt desc) { ${projectListItem} }`,
-  project: groq`*[_type == "project" && slug.current == $slug][0] {
+  components: groq`*[_type == "component" && ${PUB}] | order(name asc) { ${componentCard} }`,
+  component: groq`*[_type == "component" && slug.current == $slug && ${PUB}][0] { ${componentFull} }`,
+  componentSlugs: groq`*[_type == "component" && defined(slug.current) && ${PUB}].slug.current`,
+  projectsUsing: groq`*[_type == "project" && references($id) && ${PUB}] | order(publishedAt desc) { ${projectListItem} }`,
+  projects: groq`*[_type == "project" && ${PUB}] | order(publishedAt desc) { ${projectListItem} }`,
+  project: groq`*[_type == "project" && slug.current == $slug && ${PUB}][0] {
     ${projectCard}, seoDescription, steps, "components": components[]->{ ${componentCard} }
   }`,
-  projectSlugs: groq`*[_type == "project" && defined(slug.current)].slug.current`,
+  projectSlugs: groq`*[_type == "project" && defined(slug.current) && ${PUB}].slug.current`,
   author: groq`*[_type == "author" && slug.current == $slug][0] { _id, name, "slug": slug.current, role, bio }`,
   topics: groq`*[_type == "topic" && hidden != true] | order(pinned desc, createdAt desc) {
     _id, title, "slug": slug.current, authorName, body, pinned, createdAt,
@@ -50,8 +53,8 @@ const Q = {
     _id, authorName, text, createdAt
   }`,
   stats: groq`{
-    "components": count(*[_type == "component"]),
-    "projects": count(*[_type == "project"]),
+    "components": count(*[_type == "component" && ${PUB}]),
+    "projects": count(*[_type == "project" && ${PUB}]),
     "topics": count(*[_type == "topic" && hidden != true])
   }`,
 }
@@ -88,41 +91,103 @@ const demo = {
     ofType('comment').filter((c) => c.status === 'approved' && c.target?._ref === id),
 }
 
+/* ---------- user submissions kept in memory (no CMS write token) ---------- */
+
+const memPublished = {
+  components: () => mem.components.filter((c) => c.status === 'published'),
+  projects: () => mem.projects.filter((p) => p.status === 'published'),
+}
+
+function fromMemComponent(c: MemComponent, cats: Category[]): ComponentDoc {
+  return {
+    _id: c._id,
+    name: c.name,
+    slug: c.slug,
+    manufacturer: c.manufacturer,
+    category: cats.find((k) => k._id === c.categoryId) ?? null,
+    summary: c.summary,
+    description: c.description,
+    specs: c.specs,
+    package: c.package,
+    priceUah: c.priceUah,
+    datasheetUrl: c.datasheetUrl,
+    lcscPart: c.lcscPart,
+    tags: c.tags,
+    image: null,
+  }
+}
+
+function fromMemProject(p: MemProject, components: ComponentDoc[]): ProjectDoc {
+  return {
+    _id: p._id,
+    title: p.title,
+    slug: p.slug,
+    summary: p.summary,
+    difficulty: p.difficulty,
+    durationHours: p.durationHours,
+    publishedAt: p.createdAt,
+    author: null,
+    submittedByName: p.authorName,
+    cover: null,
+    components: p.componentIds.map((id) => components.find((c) => c._id === id)).filter((c): c is ComponentDoc => Boolean(c)),
+    steps: p.steps,
+  }
+}
+
 /* ------------------------------ API -------------------------------- */
 
-export async function getCategories(): Promise<Category[]> {
+async function baseCategories(): Promise<Category[]> {
   if (isSanityConfigured) return sanityFetch(Q.categories, {}, ['category', 'component'])
   return ofType('category')
     .sort((a, b) => a.order - b.order)
     .map((c) => ({ ...demo.category(c), count: ofType('component').filter((x) => x.category?._ref === c._id).length }))
 }
 
+export async function getCategories(): Promise<Category[]> {
+  const cats = await baseCategories()
+  const extra = memPublished.components()
+  return extra.length ? cats.map((c) => ({ ...c, count: (c.count ?? 0) + extra.filter((x) => x.categoryId === c._id).length })) : cats
+}
+
 export async function getComponents(): Promise<ComponentDoc[]> {
-  if (isSanityConfigured) return sanityFetch(Q.components, {}, ['component', 'category'])
-  return ofType('component').map(demo.component).sort((a, b) => a.name.localeCompare(b.name))
+  const base: ComponentDoc[] = isSanityConfigured
+    ? await sanityFetch(Q.components, {}, ['component', 'category'])
+    : ofType('component').map(demo.component)
+  const extra = memPublished.components()
+  const cats = extra.length ? await baseCategories() : []
+  return [...base, ...extra.map((c) => fromMemComponent(c, cats))].sort((a, b) => a.name.localeCompare(b.name))
 }
 
 export async function getComponent(slug: string): Promise<ComponentDoc | null> {
+  const m = memPublished.components().find((c) => c.slug === slug)
+  if (m) return fromMemComponent(m, await baseCategories())
   if (isSanityConfigured) return sanityFetch(Q.component, { slug }, ['component', 'category'])
   const d = ofType('component').find((c) => slugOf(c) === slug)
   return d ? demo.component(d) : null
 }
 
 export async function getProjectsUsing(componentId: string): Promise<ProjectDoc[]> {
-  if (isSanityConfigured) return sanityFetch(Q.projectsUsing, { id: componentId }, ['project'])
-  return ofType('project')
-    .filter((p) => (p.components ?? []).some((r: Raw) => r._ref === componentId))
-    .map(demo.project)
+  const base: ProjectDoc[] = isSanityConfigured
+    ? await sanityFetch(Q.projectsUsing, { id: componentId }, ['project'])
+    : ofType('project')
+        .filter((p) => (p.components ?? []).some((r: Raw) => r._ref === componentId))
+        .map(demo.project)
+  const extra = memPublished.projects().filter((p) => p.componentIds.includes(componentId))
+  if (!extra.length) return base
+  const comps = await getComponents()
+  return [...base, ...extra.map((p) => fromMemProject(p, comps))]
 }
 
 export async function getProjects(): Promise<ProjectDoc[]> {
-  if (isSanityConfigured) return sanityFetch(Q.projects, {}, ['project', 'author'])
-  return ofType('project')
-    .map(demo.project)
-    .sort((a, b) => (b.publishedAt ?? '').localeCompare(a.publishedAt ?? ''))
+  const base: ProjectDoc[] = isSanityConfigured ? await sanityFetch(Q.projects, {}, ['project', 'author']) : ofType('project').map(demo.project)
+  const extra = memPublished.projects()
+  const comps = extra.length ? await getComponents() : []
+  return [...base, ...extra.map((p) => fromMemProject(p, comps))].sort((a, b) => (b.publishedAt ?? '').localeCompare(a.publishedAt ?? ''))
 }
 
 export async function getProject(slug: string): Promise<ProjectDoc | null> {
+  const m = memPublished.projects().find((p) => p.slug === slug)
+  if (m) return fromMemProject(m, await getComponents())
   if (isSanityConfigured) return sanityFetch(Q.project, { slug }, ['project', 'component', 'author'])
   const d = ofType('project').find((p) => slugOf(p) === slug)
   return d ? demo.project(d) : null
@@ -174,8 +239,9 @@ export async function getComments(targetId: string): Promise<CommentDoc[]> {
 /** Does a commentable document with this id exist (CMS, demo data or a user topic)? */
 export async function targetExists(id: string): Promise<boolean> {
   if (mem.topics.some((t) => t._id === id && !t.hidden)) return true
+  if (memPublished.components().some((c) => c._id === id) || memPublished.projects().some((p) => p._id === id)) return true
   if (isSanityConfigured) {
-    return Boolean(await sanityFetch<string | null>(`*[_id == $id && _type in $types][0]._id`, { id, types: COMMENTABLE_TYPES }, []))
+    return Boolean(await sanityFetch<string | null>(`*[_id == $id && _type in $types && ${PUB}][0]._id`, { id, types: COMMENTABLE_TYPES }, []))
   }
   return docs.some((d) => d._id === id && (COMMENTABLE_TYPES as readonly string[]).includes(d._type))
 }
@@ -184,6 +250,8 @@ export async function targetExists(id: string): Promise<boolean> {
 export async function describeTargets(ids: string[]): Promise<Record<string, { type: string; slug: string; title: string }>> {
   const out: Record<string, { type: string; slug: string; title: string }> = {}
   for (const t of mem.topics) if (ids.includes(t._id)) out[t._id] = { type: 'topic', slug: t.slug, title: t.title }
+  for (const c of mem.components) if (ids.includes(c._id)) out[c._id] = { type: 'component', slug: c.slug, title: c.name }
+  for (const p of mem.projects) if (ids.includes(p._id)) out[p._id] = { type: 'project', slug: p.slug, title: p.title.uk ?? p.slug }
   const rest = ids.filter((id) => !out[id])
   if (rest.length === 0) return out
   const rows: Raw[] = isSanityConfigured
@@ -198,15 +266,25 @@ export async function getStats(): Promise<{ components: number; projects: number
   const base = isSanityConfigured
     ? await sanityFetch<{ components: number; projects: number; topics: number }>(Q.stats, {}, ['component', 'project', 'topic'])
     : { components: ofType('component').length, projects: ofType('project').length, topics: ofType('topic').length }
-  return { ...base, topics: base.topics + extraTopics }
+  return {
+    components: base.components + memPublished.components().length,
+    projects: base.projects + memPublished.projects().length,
+    topics: base.topics + extraTopics,
+  }
 }
 
 export async function getSlugs(type: 'component' | 'project' | 'topic'): Promise<string[]> {
   if (isSanityConfigured) {
     const q = type === 'component' ? Q.componentSlugs : type === 'project' ? Q.projectSlugs : Q.topicSlugs
-    return sanityFetch(q, {}, [type])
+    return [...(await sanityFetch<string[]>(q, {}, [type])), ...memSlugs(type)]
   }
-  return ofType(type).map(slugOf)
+  return [...ofType(type).map(slugOf), ...memSlugs(type)]
+}
+
+function memSlugs(type: 'component' | 'project' | 'topic'): string[] {
+  if (type === 'component') return memPublished.components().map((c) => c.slug)
+  if (type === 'project') return memPublished.projects().map((p) => p.slug)
+  return []
 }
 
 /** Ids a visitor is allowed to comment on (used to validate the comment API). */

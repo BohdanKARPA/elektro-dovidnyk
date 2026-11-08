@@ -12,7 +12,6 @@ export function Header({ lang, dict, extra }: { lang: Lang; dict: Dict; extra: C
   const pathname = usePathname() || `/${lang}`
   const rest = pathname.replace(/^\/(uk|en)/, '')
   const items = [
-    { href: `/${lang}`, label: dict.nav.home, exact: true },
     { href: `/${lang}/components`, label: dict.nav.components },
     { href: `/${lang}/projects`, label: dict.nav.projects },
     { href: `/${lang}/forum`, label: dict.nav.forum },
@@ -39,7 +38,7 @@ export function Header({ lang, dict, extra }: { lang: Lang; dict: Dict; extra: C
         </Link>
         <nav className="nav" aria-label="Main">
           {items.map((item) => {
-            const active = item.exact ? pathname === item.href : pathname.startsWith(item.href)
+            const active = pathname.startsWith(item.href)
             return (
               <Link key={item.href} href={item.href} aria-current={active ? 'page' : undefined}>
                 {item.label}

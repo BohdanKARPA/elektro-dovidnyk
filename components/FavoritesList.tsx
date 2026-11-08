@@ -32,7 +32,14 @@ export function FavoritesList({
     }
   }, [])
 
-  if (items === undefined) return null
+  if (items === undefined)
+    return (
+      <div aria-hidden="true">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="skeleton" />
+        ))}
+      </div>
+    )
   // Keep only entries that still exist on the site (a document may have been deleted in the CMS).
   const rows = items
     .map((f) => catalog.find((c) => c.kind === f.kind && c.slug === f.slug))

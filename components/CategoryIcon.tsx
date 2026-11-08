@@ -10,7 +10,7 @@ const paths: Record<string, string> = {
 export function CategoryIcon({ name }: { name?: string }) {
   return (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d={paths[name ?? 'chip'] ?? paths.chip} />
+      <path d={paths[name ?? 'chip'] ?? paths.chip} pathLength={1} />
     </svg>
   )
 }

@@ -80,7 +80,7 @@ function Result({ rows }: { rows: [string, string, boolean?][] }) {
       {rows.map(([k, v, warn]) => (
         <div key={k} className={warn ? 'warn' : undefined}>
           <dt>{k}</dt>
-          <dd>{v}</dd>
+          <dd key={v}>{v}</dd>
         </div>
       ))}
     </dl>

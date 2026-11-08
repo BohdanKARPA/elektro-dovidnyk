@@ -4,6 +4,8 @@ import '@fontsource-variable/unbounded'
 import '@fontsource-variable/onest'
 import '../globals.css'
 import { Header } from '@/components/Header'
+import { Motion } from '@/components/Motion'
+import { ScrollUi } from '@/components/ScrollUi'
 import { getDict, isLang, LANGS } from '@/lib/i18n'
 import { clientExtra, getExtraDict } from '@/lib/i18n-extra'
 import { isSanityConfigured } from '@/sanity/env'
@@ -63,6 +65,8 @@ export default async function LangLayout({ children, params }: LayoutProps<'/[la
             </span>
           </div>
         </footer>
+        <ScrollUi topLabel={getExtraDict(lang).toTop} />
+        <Motion />
       </body>
     </html>
   )

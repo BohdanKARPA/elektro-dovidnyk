@@ -33,6 +33,8 @@ const extra = {
     compareMax: 'Можна порівнювати не більше 4 компонентів.',
     rss: 'RSS',
     rssTitle: 'Нові проєкти й теми форуму',
+    toTop: 'Нагору',
+    scopeLabel: 'Осцилограма: ШІМ-сигнал і синусоїда',
   },
   en: {
     tools: 'Tools',
@@ -65,6 +67,8 @@ const extra = {
     compareMax: 'Up to 4 parts can be compared.',
     rss: 'RSS',
     rssTitle: 'New projects and forum topics',
+    toTop: 'Back to top',
+    scopeLabel: 'Oscilloscope trace: a PWM signal and a sine wave',
   },
 }
 

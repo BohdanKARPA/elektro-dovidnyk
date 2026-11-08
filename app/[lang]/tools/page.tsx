@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { Calculators } from '@/components/Calculators'
+import { Scope } from '@/components/Scope'
 import { isLang } from '@/lib/i18n'
 import { getExtraDict } from '@/lib/i18n-extra'
 
@@ -26,6 +27,7 @@ export default async function ToolsPage({ params }: PageProps<'/[lang]/tools'>) 
     <>
       <h1>{getExtraDict(lang).tools}</h1>
       <p className="lede">{intro[lang]}</p>
+      <Scope label={getExtraDict(lang).scopeLabel} />
       <Calculators lang={lang} />
     </>
   )

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { HeroBoard } from '@/components/HeroBoard'
 import { CategoryIcon } from '@/components/CategoryIcon'
+import { CountUp } from '@/components/CountUp'
 import { Difficulty } from '@/components/Difficulty'
 import { getCategories, getProjects, getStats } from '@/lib/data'
 import { getDict, isLang, t, formatDate } from '@/lib/i18n'
@@ -30,15 +31,21 @@ export default async function Home({ params }: PageProps<'/[lang]'>) {
           </div>
           <ul className="stats">
             <li>
-              <strong>{stats.components}</strong>
+              <strong>
+                <CountUp value={stats.components} />
+              </strong>
               {dict.stats.components}
             </li>
             <li>
-              <strong>{stats.projects}</strong>
+              <strong>
+                <CountUp value={stats.projects} />
+              </strong>
               {dict.stats.projects}
             </li>
             <li>
-              <strong>{stats.topics}</strong>
+              <strong>
+                <CountUp value={stats.topics} />
+              </strong>
               {dict.stats.topics}
             </li>
           </ul>

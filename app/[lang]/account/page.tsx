@@ -10,6 +10,7 @@ import { SubmissionRows } from '@/components/SubmissionRows'
 import { clientSubmitDict } from '@/lib/i18n-submit'
 import { ChatBox } from '@/components/ChatBox'
 import { listUserSubmissions } from '@/lib/submissions'
+import { listThreads } from '@/lib/messages'
 
 export const metadata: Metadata = { robots: { index: false } }
 
@@ -23,6 +24,10 @@ export default async function AccountPage({ params, searchParams }: PageProps<'/
   const [comments, topics, submissions] = await Promise.all([getUserComments(user._id, lang), getUserTopics(user._id), listUserSubmissions(user._id)])
   const sl = clientSubmitDict(lang)
   const about = typeof aboutId === 'string' ? submissions.find((s) => s._id === aboutId) : undefined
+  // Admins do not write to themselves: instead of the chat they get a shortcut to the users' messages.
+  const isAdmin = user.role === 'admin'
+  const threads = isAdmin ? await listThreads() : []
+  const unreadThreads = threads.filter((t) => t.unread > 0).length
 
   return (
     <>
@@ -64,7 +69,7 @@ export default async function AccountPage({ params, searchParams }: PageProps<'/
           {submissions.length === 0 ? (
             <p className="lede">{l.nothingYet}</p>
           ) : (
-            <SubmissionRows rows={submissions} l={sl} lang={lang} />
+            <SubmissionRows rows={submissions} l={sl} lang={lang} discuss={!isAdmin} />
           )}
           <div className="actions" style={{ marginTop: 16 }}>
             <Link className="btn ghost small" href={`/${lang}/components/new`}>
@@ -75,11 +80,24 @@ export default async function AccountPage({ params, searchParams }: PageProps<'/
             </Link>
           </div>
 
-          <section id="chat" className="section chat-section" aria-labelledby="chat-title">
-            <h2 id="chat-title">{sl.chat.title}</h2>
-            <p className="lede">{sl.chat.intro}</p>
-            <ChatBox lang={lang} l={sl} side="user" about={about ? { id: about._id, title: about.title } : null} />
-          </section>
+          {isAdmin ? (
+            <section className="section chat-section" aria-labelledby="inbox-title">
+              <h2 id="inbox-title">{sl.chat.inbox}</h2>
+              <p className="lede">
+                {sl.chat.adminIntro}{' '}
+                {threads.length === 0 ? sl.chat.inboxEmpty : unreadThreads > 0 ? sl.chat.unreadThreads.replace('{n}', String(unreadThreads)) : sl.chat.allRead}
+              </p>
+              <Link className="btn small" href={`/${lang}/admin/messages`}>
+                {sl.chat.openInbox}
+              </Link>
+            </section>
+          ) : (
+            <section id="chat" className="section chat-section" aria-labelledby="chat-title">
+              <h2 id="chat-title">{sl.chat.title}</h2>
+              <p className="lede">{sl.chat.intro}</p>
+              <ChatBox lang={lang} l={sl} side="user" about={about ? { id: about._id, title: about.title } : null} />
+            </section>
+          )}
 
           <h2 style={{ marginTop: 40 }}>{l.myTopics}</h2>
           {topics.length === 0 ? (

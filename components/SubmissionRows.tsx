@@ -17,6 +17,7 @@ export function SubmissionRows({
   action,
   showAuthor = false,
   needsToken,
+  discuss = true,
 }: {
   rows: SubmissionRow[]
   l: ClientSubmitDict
@@ -24,6 +25,8 @@ export function SubmissionRows({
   action?: (formData: FormData) => Promise<void>
   showAuthor?: boolean
   needsToken?: string
+  /** Show "Discuss with an admin" (not for admins looking at their own submissions). */
+  discuss?: boolean
 }) {
   const admin = Boolean(action)
   return (
@@ -64,9 +67,11 @@ export function SubmissionRows({
                         {l.fix}
                       </Link>
                     )}
-                    <Link className="btn ghost small" href={`/${lang}/account?about=${encodeURIComponent(r._id)}#chat`}>
-                      {l.discuss}
-                    </Link>
+                    {discuss && (
+                      <Link className="btn ghost small" href={`/${lang}/account?about=${encodeURIComponent(r._id)}#chat`}>
+                        {l.discuss}
+                      </Link>
+                    )}
                   </div>
                 )}
               </td>

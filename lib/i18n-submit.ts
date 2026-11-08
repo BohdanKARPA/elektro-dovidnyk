@@ -67,7 +67,8 @@ const s = {
     queueEmpty: 'Заявок немає.',
     publish: 'Опублікувати',
     reject: 'Відхилити',
-    noAi: 'AI не перевіряв (немає ключа OpenAI)',
+    noAi: 'Без AI-перевірки',
+    editorial: 'Додано через Sanity Studio',
   },
   en: {
     addComponent: 'Add a component',
@@ -134,7 +135,8 @@ const s = {
     queueEmpty: 'No submissions.',
     publish: 'Publish',
     reject: 'Reject',
-    noAi: 'Not reviewed by AI (no OpenAI key)',
+    noAi: 'Not reviewed by AI',
+    editorial: 'Added in Sanity Studio',
   },
 }
 

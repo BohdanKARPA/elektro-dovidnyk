@@ -2,6 +2,7 @@ import 'server-only'
 import { getComponents, getProjects, getTopics } from './data'
 import { t } from './i18n'
 import type { Lang } from './types'
+import { isBoard } from './part-kind'
 
 export interface SearchHit {
   kind: 'component' | 'project' | 'topic'
@@ -34,7 +35,9 @@ export async function searchSite(query: string, lang: Lang): Promise<SearchHit[]
   }
 
   for (const c of components) {
-    const score = rank(c.name, [c.manufacturer ?? '', t(c.summary, lang), t(c.category?.title, lang), ...(c.tags ?? []), c.package ?? ''])
+    // The kind words let "плата" / "мікросхема" (or "board" / "chip") find the right parts in both languages.
+    const kind = isBoard(c) ? 'плата модуль board module' : 'мікросхема чип chip ic'
+    const score = rank(c.name, [c.manufacturer ?? '', t(c.summary, lang), t(c.category?.title, lang), ...(c.tags ?? []), c.package ?? '', kind])
     if (score) hits.push({ kind: 'component', href: `/${lang}/components/${c.slug}`, title: c.name, excerpt: t(c.summary, lang), score })
   }
   for (const p of projects) {

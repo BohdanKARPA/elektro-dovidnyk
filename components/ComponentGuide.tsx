@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useMemo, useState } from 'react'
 import type { Lang } from '@/lib/types'
 import type { Dict } from '@/lib/i18n'
+import { packageLabel } from '@/lib/part-kind'
 import { PartRender } from './PartRender'
 
 const MAX_COMPARE = 4
@@ -17,6 +18,8 @@ export interface GuideRow {
   category?: string
   categorySlug?: string
   package?: string
+  /** A ready board or module rather than a bare chip. */
+  board?: boolean
   priceUah?: number
   tags?: string[]
 }
@@ -86,7 +89,7 @@ export function ComponentGuide({
             <tr>
               <th scope="col">{lang === 'uk' ? 'Компонент' : 'Part'}</th>
               <th scope="col">{lang === 'uk' ? 'Опис' : 'Description'}</th>
-              <th scope="col">{dict.package}</th>
+              <th scope="col">{packageLabel(visible.map((r) => Boolean(r.board)), lang)}</th>
               <th scope="col" className="num">
                 {dict.price}
               </th>

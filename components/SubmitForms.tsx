@@ -170,6 +170,7 @@ export function ComponentSubmitForm({ lang, l, categories, initial }: { lang: La
                 </option>
               ))}
             </select>
+            <span className="hint">{l.f.categoryHint}</span>
           </label>
           <label>
             {l.f.package}

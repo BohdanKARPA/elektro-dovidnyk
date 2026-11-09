@@ -760,3 +760,13 @@ fieldset.rows > .btn { justify-self: start; }
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+/* Chip vs board label on a component card */
+.kind-badge {
+  display: inline-block;
+  padding: 1px 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: var(--step--1);
+  color: var(--muted);
+}

@@ -293,6 +293,151 @@ function modelSOT(pins: number, name: string): Model {
   return { boxes, decor: [{ z: 1 + H, node: marking(bw / 2, lead + bd / 2, bw - 2, name) }] }
 }
 
+/**
+ * ST Discovery board (STM32F407G-DISC1): portrait PCB, two long double-row
+ * headers along the sides, the LQFP-100 MCU in the middle, the ST-LINK
+ * programmer and its USB at the top, USB OTG at the bottom, user LEDs and button.
+ */
+function modelDiscovery(name: string): Model {
+  const w = 104
+  const d = 150
+  const T = 3
+  const rows = 22
+  const pitch = 6
+  const sideHeader = (x: number): [Box, Decor] => [
+    { x, y: 12, w: 13, d: rows * pitch + 2, z0: T, z1: T + 7, m: 'plastic', layer: 1 },
+    {
+      z: T + 7,
+      node: (
+        <g>
+          {Array.from({ length: rows * 2 }, (_, i) => (
+            <rect key={i} x={x + 2 + (i % 2) * 5.6} y={14 + Math.floor(i / 2) * pitch} width={3.4} height={3.4} rx=".6" fill="#d8b24a" />
+          ))}
+        </g>
+      ),
+    },
+  ]
+  const [left, leftPins] = sideHeader(3)
+  const [right, rightPins] = sideHeader(w - 16)
+  return {
+    boxes: [
+      { x: 0, y: 0, w, d, z0: 0, z1: T, m: 'pcb' },
+      left,
+      right,
+      // ST-LINK: its USB connector over the top edge and the programmer chip
+      { x: 44, y: -4, w: 16, d: 12, z0: T, z1: T + 7, m: 'tab', layer: 1 },
+      { x: 42, y: 16, w: 20, d: 20, z0: T, z1: T + 2.5, m: 'body', layer: 1 },
+      // the STM32F407 itself
+      { x: 30, y: 58, w: 44, d: 44, z0: T, z1: T + 3, m: 'body', layer: 1 },
+      // USB OTG micro-AB at the bottom edge
+      { x: 46, y: d - 9, w: 12, d: 11, z0: T, z1: T + 5, m: 'tab', layer: 1 },
+      // user button
+      { x: 68, y: 112, w: 10, d: 10, z0: T, z1: T + 3, m: 'lid', layer: 1 },
+      { x: 70.5, y: 114.5, w: 5, d: 5, z0: T + 3, z1: T + 5, m: 'plastic', layer: 1 },
+      // user LEDs LD3..LD6 around the MCU
+      ...[[48, 50], [80, 78], [48, 108], [22, 78]].map(([x, y]): Box => ({ x, y, w: 6, d: 4, z0: T, z1: T + 1.2, m: 'gold', layer: 1 })),
+    ],
+    decor: [
+      {
+        z: T,
+        node: (
+          <>
+            {[
+              [w / 2 - 30, 6],
+              [w / 2 + 30, 6],
+              [w / 2 - 30, d - 6],
+              [w / 2 + 30, d - 6],
+            ].map(([x, y]) => (
+              <circle key={`${x}${y}`} cx={x} cy={y} r="2.6" fill="#0a1f26" stroke="#d8b24a" strokeWidth="1.1" />
+            ))}
+            <line x1={18} y1={44} x2={w - 18} y2={44} stroke="rgb(255 255 255 / .35)" strokeWidth=".8" strokeDasharray="2 2" />
+            {[50, 82, 50, 26].map((x, i) => (
+              <circle key={i} cx={x + 1} cy={[52, 80, 110, 80][i]} r="1.6" fill={['#f59e0b', '#52f2a6', '#ef4444', '#60a5fa'][i]} className="board-led" />
+            ))}
+            <text x={w / 2} y={d - 18} fontSize="5.6" fill="rgb(255 255 255 / .85)" fontWeight="600" textAnchor="middle" className="part-marking">
+              {name}
+            </text>
+          </>
+        ),
+      },
+      leftPins,
+      rightPins,
+      { z: T + 2.5, node: marking(52, 26, 18, 'ST-LINK') },
+      { z: T + 3, node: marking(52, 80, 40, 'STM32F407', 'ST') },
+    ],
+  }
+}
+
+/**
+ * Espressif DevKitC: a narrow board with a single-row header along each long
+ * side, the shielded WROOM module with its PCB antenna at one end, and two
+ * USB-C ports, Boot/Reset buttons and the RGB LED at the other.
+ */
+function modelDevKit(name: string): Model {
+  const w = 150
+  const d = 56
+  const T = 3
+  const pins = 16
+  const row = (y: number): [Box, Decor] => [
+    { x: 14, y, w: pins * 7.4 + 2, d: 7, z0: T, z1: T + 7, m: 'plastic', layer: 1 },
+    {
+      z: T + 7,
+      node: (
+        <g>
+          {Array.from({ length: pins }, (_, i) => (
+            <rect key={i} x={16 + i * 7.4} y={y + 1.8} width={3.4} height={3.4} rx=".6" fill="#d8b24a" />
+          ))}
+        </g>
+      ),
+    },
+  ]
+  const [top, topPins] = row(2)
+  const [bottom, bottomPins] = row(d - 9)
+  return {
+    boxes: [
+      { x: 0, y: 0, w, d, z0: 0, z1: T, m: 'pcb' },
+      top,
+      bottom,
+      // WROOM module: PCB antenna part, then the metal shield
+      { x: 92, y: 13, w: 18, d: 30, z0: T, z1: T + 0.8, m: 'pcb', layer: 1 },
+      { x: 110, y: 13, w: 36, d: 30, z0: T, z1: T + 3.2, m: 'lid', layer: 1 },
+      // two USB-C ports over the left edge
+      { x: -4, y: 12, w: 10, d: 11, z0: T, z1: T + 3.5, m: 'tab', layer: 1 },
+      { x: -4, y: 33, w: 10, d: 11, z0: T, z1: T + 3.5, m: 'tab', layer: 1 },
+      // USB-UART bridge, LDO, Boot and Reset buttons
+      { x: 22, y: 20, w: 12, d: 12, z0: T, z1: T + 1.8, m: 'body', layer: 1 },
+      { x: 42, y: 34, w: 10, d: 7, z0: T, z1: T + 2.2, m: 'body', layer: 1 },
+      { x: 60, y: 14, w: 9, d: 9, z0: T, z1: T + 2.5, m: 'lid', layer: 1 },
+      { x: 60, y: 33, w: 9, d: 9, z0: T, z1: T + 2.5, m: 'lid', layer: 1 },
+      { x: 78, y: 25, w: 6, d: 6, z0: T, z1: T + 1.6, m: 'plastic', layer: 1 },
+    ],
+    decor: [
+      {
+        z: T,
+        node: (
+          <>
+            <circle cx={81} cy={28} r="1.8" fill="#52f2a6" className="board-led" />
+            {/* The board is narrow: its name sits on the module, the silkscreen only says which end is which. */}
+            <text x={9} y={19.5} fontSize="4.2" fill="rgb(255 255 255 / .7)" className="part-marking">
+              UART
+            </text>
+            <text x={9} y={40.5} fontSize="4.2" fill="rgb(255 255 255 / .7)" className="part-marking">
+              USB
+            </text>
+          </>
+        ),
+      },
+      {
+        z: T + 0.8,
+        node: <path d="M95 18h12v4H96v4h11v4H96v4h11v4H95" fill="none" stroke="#d8b24a" strokeWidth="1" />,
+      },
+      topPins,
+      bottomPins,
+      { z: T + 3.2, node: marking(128, 28, 32, name.replace(/-DevKit.*$/i, ''), 'WROOM-1', true) },
+    ],
+  }
+}
+
 function modelBoard(name: string): Model {
   const w = 150
   const d = 104
@@ -423,7 +568,11 @@ export function PartRender({
                 : kind === 'sot'
                   ? modelSOT(pins, mark)
                   : kind === 'board'
-                    ? modelBoard(mark)
+                    ? /DISC|DISCOVERY/i.test(`${name} ${pkg ?? ''}`)
+                      ? modelDiscovery(mark)
+                      : /DEVKIT/i.test(`${name} ${pkg ?? ''}`)
+                        ? modelDevKit(mark)
+                        : modelBoard(mark)
                     : modelSO(pins, mark, sub)
 
   const isIso = view === 'iso'

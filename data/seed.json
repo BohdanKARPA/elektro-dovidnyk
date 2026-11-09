@@ -3,68 +3,180 @@
     "_id": "author-karpa",
     "_type": "author",
     "name": "Богдан Карпа",
-    "slug": { "_type": "slug", "current": "bohdan-karpa" },
-    "role": { "_type": "localeString", "uk": "Автор і модератор", "en": "Author and moderator" },
-    "bio": { "_type": "localeText", "uk": "Інженер вбудованих систем, бакалавр комп'ютерної інженерії (Львівська політехніка, 2026), магістрант. Пише про мікроконтролери STM32, AVR і ESP32, силову електроніку, захист і живлення та системи керування батареями.", "en": "Embedded systems engineer, BSc in Computer Engineering (Lviv Polytechnic, 2026), now a master's student. Writes about STM32, AVR and ESP32 microcontrollers, power electronics, protection and supply circuits, and battery management systems." }
+    "slug": {
+      "_type": "slug",
+      "current": "bohdan-karpa"
+    },
+    "role": {
+      "_type": "localeString",
+      "uk": "Автор і модератор",
+      "en": "Author and moderator"
+    },
+    "bio": {
+      "_type": "localeText",
+      "uk": "Інженер вбудованих систем, бакалавр комп'ютерної інженерії (Львівська політехніка, 2026), магістрант. Пише про мікроконтролери STM32, AVR і ESP32, силову електроніку, захист і живлення та системи керування батареями.",
+      "en": "Embedded systems engineer, BSc in Computer Engineering (Lviv Polytechnic, 2026), now a master's student. Writes about STM32, AVR and ESP32 microcontrollers, power electronics, protection and supply circuits, and battery management systems."
+    }
   },
-
   {
     "_id": "cat-mcu",
     "_type": "category",
-    "title": { "_type": "localeString", "uk": "Мікроконтролери", "en": "Microcontrollers" },
-    "slug": { "_type": "slug", "current": "mcu" },
+    "title": {
+      "_type": "localeString",
+      "uk": "Мікроконтролери",
+      "en": "Microcontrollers"
+    },
+    "slug": {
+      "_type": "slug",
+      "current": "mcu"
+    },
     "icon": "chip",
     "order": 1,
-    "description": { "_type": "localeText", "uk": "8- та 32-бітні МК для автоматизації, IoT і керування.", "en": "8- and 32-bit MCUs for automation, IoT and control." }
+    "description": {
+      "_type": "localeText",
+      "uk": "Окремі мікросхеми мікроконтролерів (8- та 32-бітні) для автоматизації, IoT і керування. Готові плати — у розділі «Плати та модулі».",
+      "en": "Microcontroller chips (8- and 32-bit) for automation, IoT and control. Ready-made boards are under “Boards & modules”."
+    }
+  },
+  {
+    "_id": "cat-boards",
+    "_type": "category",
+    "title": {
+      "_type": "localeString",
+      "uk": "Плати та модулі",
+      "en": "Boards & modules"
+    },
+    "slug": {
+      "_type": "slug",
+      "current": "boards"
+    },
+    "icon": "board",
+    "order": 2,
+    "description": {
+      "_type": "localeText",
+      "uk": "Готові плати й модулі: мікроконтролер або процесор уже розпаяний разом з живленням, роз’ємами та периферією.",
+      "en": "Ready-made boards and modules: an MCU or processor already soldered together with power, connectors and peripherals."
+    }
   },
   {
     "_id": "cat-sensors",
     "_type": "category",
-    "title": { "_type": "localeString", "uk": "Датчики та вимірювання", "en": "Sensors & measurement" },
-    "slug": { "_type": "slug", "current": "sensors" },
+    "title": {
+      "_type": "localeString",
+      "uk": "Датчики та вимірювання",
+      "en": "Sensors & measurement"
+    },
+    "slug": {
+      "_type": "slug",
+      "current": "sensors"
+    },
     "icon": "sensor",
-    "order": 2,
-    "description": { "_type": "localeText", "uk": "Датчики середовища, струму, напруги та потужності.", "en": "Environmental, current, voltage and power sensors." }
+    "order": 3,
+    "description": {
+      "_type": "localeText",
+      "uk": "Датчики середовища, струму, напруги та потужності.",
+      "en": "Environmental, current, voltage and power sensors."
+    }
   },
   {
     "_id": "cat-switches",
     "_type": "category",
-    "title": { "_type": "localeString", "uk": "Силові ключі", "en": "Power switches" },
-    "slug": { "_type": "slug", "current": "switches" },
+    "title": {
+      "_type": "localeString",
+      "uk": "Силові ключі",
+      "en": "Power switches"
+    },
+    "slug": {
+      "_type": "slug",
+      "current": "switches"
+    },
     "icon": "mosfet",
-    "order": 3,
-    "description": { "_type": "localeText", "uk": "MOSFET, IGBT та інші ключі для комутації навантаження.", "en": "MOSFETs, IGBTs and other load switches." }
+    "order": 4,
+    "description": {
+      "_type": "localeText",
+      "uk": "MOSFET, IGBT та інші ключі для комутації навантаження.",
+      "en": "MOSFETs, IGBTs and other load switches."
+    }
   },
   {
     "_id": "cat-power",
     "_type": "category",
-    "title": { "_type": "localeString", "uk": "Живлення", "en": "Power supply" },
-    "slug": { "_type": "slug", "current": "power" },
+    "title": {
+      "_type": "localeString",
+      "uk": "Живлення",
+      "en": "Power supply"
+    },
+    "slug": {
+      "_type": "slug",
+      "current": "power"
+    },
     "icon": "power",
-    "order": 4,
-    "description": { "_type": "localeText", "uk": "Перетворювачі напруги, стабілізатори та контролери заряду.", "en": "Voltage converters, regulators and charge controllers." }
+    "order": 5,
+    "description": {
+      "_type": "localeText",
+      "uk": "Перетворювачі напруги, стабілізатори та контролери заряду.",
+      "en": "Voltage converters, regulators and charge controllers."
+    }
   },
-
   {
     "_id": "comp-esp32c3",
     "lcscPart": "C2838500",
     "_type": "component",
     "name": "ESP32-C3",
-    "slug": { "_type": "slug", "current": "esp32-c3" },
+    "slug": {
+      "_type": "slug",
+      "current": "esp32-c3"
+    },
     "manufacturer": "Espressif",
-    "category": { "_type": "reference", "_ref": "cat-mcu" },
+    "category": {
+      "_type": "reference",
+      "_ref": "cat-mcu"
+    },
     "package": "QFN32 (5×5 мм)",
     "priceUah": 120,
     "datasheetUrl": "https://www.espressif.com/en/support/documents/technical-documents",
-    "tags": ["wifi", "ble", "risc-v", "iot"],
-    "summary": { "_type": "localeString", "uk": "RISC-V мікроконтролер з Wi-Fi та Bluetooth LE 5 для недорогих IoT-пристроїв.", "en": "RISC-V microcontroller with Wi-Fi and Bluetooth LE 5 for low-cost IoT devices." },
-    "description": { "_type": "localeText", "uk": "Одноядерний 32-бітний RISC-V процесор із частотою до 160 МГц, вбудованим радіо 2,4 ГГц (Wi-Fi 802.11 b/g/n і Bluetooth LE 5) та апаратним USB Serial/JTAG. Завдяки вбудованому USB плату можна прошивати й налагоджувати без окремого USB-UART перетворювача.\n\nПідходить для датчиків, що надсилають дані в хмару, розумних реле та бездротових пультів. Для батарейних пристроїв варто використовувати режим deep sleep і прокидатися за таймером.", "en": "Single-core 32-bit RISC-V CPU running up to 160 MHz, with an integrated 2.4 GHz radio (Wi-Fi 802.11 b/g/n and Bluetooth LE 5) and a hardware USB Serial/JTAG controller. The built-in USB lets you flash and debug the board without a separate USB-UART bridge.\n\nGood for sensors that push data to the cloud, smart relays and wireless remotes. For battery devices use deep sleep and wake on a timer." },
+    "tags": [
+      "wifi",
+      "ble",
+      "risc-v",
+      "iot"
+    ],
+    "summary": {
+      "_type": "localeString",
+      "uk": "RISC-V мікроконтролер з Wi-Fi та Bluetooth LE 5 для недорогих IoT-пристроїв.",
+      "en": "RISC-V microcontroller with Wi-Fi and Bluetooth LE 5 for low-cost IoT devices."
+    },
+    "description": {
+      "_type": "localeText",
+      "uk": "Одноядерний 32-бітний RISC-V процесор із частотою до 160 МГц, вбудованим радіо 2,4 ГГц (Wi-Fi 802.11 b/g/n і Bluetooth LE 5) та апаратним USB Serial/JTAG. Завдяки вбудованому USB плату можна прошивати й налагоджувати без окремого USB-UART перетворювача.\n\nПідходить для датчиків, що надсилають дані в хмару, розумних реле та бездротових пультів. Для батарейних пристроїв варто використовувати режим deep sleep і прокидатися за таймером.",
+      "en": "Single-core 32-bit RISC-V CPU running up to 160 MHz, with an integrated 2.4 GHz radio (Wi-Fi 802.11 b/g/n and Bluetooth LE 5) and a hardware USB Serial/JTAG controller. The built-in USB lets you flash and debug the board without a separate USB-UART bridge.\n\nGood for sensors that push data to the cloud, smart relays and wireless remotes. For battery devices use deep sleep and wake on a timer."
+    },
     "specs": [
-      { "_key": "s1", "label": "Ядро", "value": "RISC-V 32-біт, до 160 МГц" },
-      { "_key": "s2", "label": "SRAM", "value": "400 КБ" },
-      { "_key": "s3", "label": "Радіо", "value": "Wi-Fi 2,4 ГГц, BLE 5" },
-      { "_key": "s4", "label": "Живлення", "value": "3,0–3,6 В" },
-      { "_key": "s5", "label": "Інтерфейси", "value": "UART, SPI, I²C, I²S, USB Serial/JTAG" }
+      {
+        "_key": "s1",
+        "label": "Ядро",
+        "value": "RISC-V 32-біт, до 160 МГц"
+      },
+      {
+        "_key": "s2",
+        "label": "SRAM",
+        "value": "400 КБ"
+      },
+      {
+        "_key": "s3",
+        "label": "Радіо",
+        "value": "Wi-Fi 2,4 ГГц, BLE 5"
+      },
+      {
+        "_key": "s4",
+        "label": "Живлення",
+        "value": "3,0–3,6 В"
+      },
+      {
+        "_key": "s5",
+        "label": "Інтерфейси",
+        "value": "UART, SPI, I²C, I²S, USB Serial/JTAG"
+      }
     ]
   },
   {
@@ -72,21 +184,60 @@
     "lcscPart": "C529356",
     "_type": "component",
     "name": "STM32G431CBU6",
-    "slug": { "_type": "slug", "current": "stm32g431" },
+    "slug": {
+      "_type": "slug",
+      "current": "stm32g431"
+    },
     "manufacturer": "STMicroelectronics",
-    "category": { "_type": "reference", "_ref": "cat-mcu" },
+    "category": {
+      "_type": "reference",
+      "_ref": "cat-mcu"
+    },
     "package": "UFQFPN48",
     "priceUah": 210,
     "datasheetUrl": "https://www.st.com/en/microcontrollers-microprocessors/stm32g431cb.html",
-    "tags": ["arm", "cortex-m4", "motor-control", "adc"],
-    "summary": { "_type": "localeString", "uk": "Cortex-M4F на 170 МГц з аналоговою периферією для систем керування та силової електроніки.", "en": "170 MHz Cortex-M4F with rich analog peripherals for control and power electronics." },
-    "description": { "_type": "localeText", "uk": "Мікроконтролер серії G4 з ядром ARM Cortex-M4 з FPU, математичними прискорювачами CORDIC та FMAC, швидкими 12-бітними АЦП, компараторами та операційними підсилювачами на кристалі.\n\nЧасто використовується у цифрових джерелах живлення, контролерах двигунів і системах керування батареями, де потрібно швидко вимірювати струм і напругу та розраховувати регулятор у реальному часі.", "en": "G4-series MCU with an ARM Cortex-M4 core with FPU, CORDIC and FMAC math accelerators, fast 12-bit ADCs, comparators and on-chip op-amps.\n\nCommon in digital power supplies, motor controllers and battery management systems where current and voltage must be sampled fast and a control loop computed in real time." },
+    "tags": [
+      "arm",
+      "cortex-m4",
+      "motor-control",
+      "adc"
+    ],
+    "summary": {
+      "_type": "localeString",
+      "uk": "Cortex-M4F на 170 МГц з аналоговою периферією для систем керування та силової електроніки.",
+      "en": "170 MHz Cortex-M4F with rich analog peripherals for control and power electronics."
+    },
+    "description": {
+      "_type": "localeText",
+      "uk": "Мікроконтролер серії G4 з ядром ARM Cortex-M4 з FPU, математичними прискорювачами CORDIC та FMAC, швидкими 12-бітними АЦП, компараторами та операційними підсилювачами на кристалі.\n\nЧасто використовується у цифрових джерелах живлення, контролерах двигунів і системах керування батареями, де потрібно швидко вимірювати струм і напругу та розраховувати регулятор у реальному часі.",
+      "en": "G4-series MCU with an ARM Cortex-M4 core with FPU, CORDIC and FMAC math accelerators, fast 12-bit ADCs, comparators and on-chip op-amps.\n\nCommon in digital power supplies, motor controllers and battery management systems where current and voltage must be sampled fast and a control loop computed in real time."
+    },
     "specs": [
-      { "_key": "s1", "label": "Ядро", "value": "Cortex-M4F, 170 МГц" },
-      { "_key": "s2", "label": "Flash / SRAM", "value": "128 КБ / 32 КБ" },
-      { "_key": "s3", "label": "АЦП", "value": "2 × 12 біт" },
-      { "_key": "s4", "label": "Прискорювачі", "value": "CORDIC, FMAC" },
-      { "_key": "s5", "label": "Живлення", "value": "1,71–3,6 В" }
+      {
+        "_key": "s1",
+        "label": "Ядро",
+        "value": "Cortex-M4F, 170 МГц"
+      },
+      {
+        "_key": "s2",
+        "label": "Flash / SRAM",
+        "value": "128 КБ / 32 КБ"
+      },
+      {
+        "_key": "s3",
+        "label": "АЦП",
+        "value": "2 × 12 біт"
+      },
+      {
+        "_key": "s4",
+        "label": "Прискорювачі",
+        "value": "CORDIC, FMAC"
+      },
+      {
+        "_key": "s5",
+        "label": "Живлення",
+        "value": "1,71–3,6 В"
+      }
     ]
   },
   {
@@ -94,20 +245,54 @@
     "lcscPart": "C33901",
     "_type": "component",
     "name": "ATmega328P",
-    "slug": { "_type": "slug", "current": "atmega328p" },
+    "slug": {
+      "_type": "slug",
+      "current": "atmega328p"
+    },
     "manufacturer": "Microchip",
-    "category": { "_type": "reference", "_ref": "cat-mcu" },
+    "category": {
+      "_type": "reference",
+      "_ref": "cat-mcu"
+    },
     "package": "DIP-28 / TQFP-32",
     "priceUah": 95,
     "datasheetUrl": "https://www.microchip.com/en-us/product/ATmega328P",
-    "tags": ["avr", "arduino", "8-bit"],
-    "summary": { "_type": "localeString", "uk": "Класичний 8-бітний AVR, серце Arduino Uno та Nano.", "en": "Classic 8-bit AVR, the heart of the Arduino Uno and Nano." },
-    "description": { "_type": "localeText", "uk": "Простий і надійний мікроконтролер для навчання та невеликих проєктів. Працює від 1,8 до 5,5 В, має 32 КБ Flash, 2 КБ SRAM та 1 КБ EEPROM.\n\nЗавдяки величезній спільноті Arduino для нього існують бібліотеки майже під будь-який датчик. Для задач з Wi-Fi чи важкою математикою краще обрати 32-бітний МК.", "en": "A simple, robust MCU for learning and small projects. Runs from 1.8 to 5.5 V with 32 KB Flash, 2 KB SRAM and 1 KB EEPROM.\n\nThanks to the huge Arduino community there are libraries for almost any sensor. For Wi-Fi or heavy math, pick a 32-bit MCU instead." },
+    "tags": [
+      "avr",
+      "arduino",
+      "8-bit"
+    ],
+    "summary": {
+      "_type": "localeString",
+      "uk": "Класичний 8-бітний AVR, серце Arduino Uno та Nano.",
+      "en": "Classic 8-bit AVR, the heart of the Arduino Uno and Nano."
+    },
+    "description": {
+      "_type": "localeText",
+      "uk": "Простий і надійний мікроконтролер для навчання та невеликих проєктів. Працює від 1,8 до 5,5 В, має 32 КБ Flash, 2 КБ SRAM та 1 КБ EEPROM.\n\nЗавдяки величезній спільноті Arduino для нього існують бібліотеки майже під будь-який датчик. Для задач з Wi-Fi чи важкою математикою краще обрати 32-бітний МК.",
+      "en": "A simple, robust MCU for learning and small projects. Runs from 1.8 to 5.5 V with 32 KB Flash, 2 KB SRAM and 1 KB EEPROM.\n\nThanks to the huge Arduino community there are libraries for almost any sensor. For Wi-Fi or heavy math, pick a 32-bit MCU instead."
+    },
     "specs": [
-      { "_key": "s1", "label": "Ядро", "value": "AVR 8-біт, до 20 МГц" },
-      { "_key": "s2", "label": "Flash / SRAM / EEPROM", "value": "32 КБ / 2 КБ / 1 КБ" },
-      { "_key": "s3", "label": "Живлення", "value": "1,8–5,5 В" },
-      { "_key": "s4", "label": "АЦП", "value": "10 біт, 6–8 каналів" }
+      {
+        "_key": "s1",
+        "label": "Ядро",
+        "value": "AVR 8-біт, до 20 МГц"
+      },
+      {
+        "_key": "s2",
+        "label": "Flash / SRAM / EEPROM",
+        "value": "32 КБ / 2 КБ / 1 КБ"
+      },
+      {
+        "_key": "s3",
+        "label": "Живлення",
+        "value": "1,8–5,5 В"
+      },
+      {
+        "_key": "s4",
+        "label": "АЦП",
+        "value": "10 біт, 6–8 каналів"
+      }
     ]
   },
   {
@@ -115,20 +300,55 @@
     "lcscPart": "C49851",
     "_type": "component",
     "name": "INA226",
-    "slug": { "_type": "slug", "current": "ina226" },
+    "slug": {
+      "_type": "slug",
+      "current": "ina226"
+    },
     "manufacturer": "Texas Instruments",
-    "category": { "_type": "reference", "_ref": "cat-sensors" },
+    "category": {
+      "_type": "reference",
+      "_ref": "cat-sensors"
+    },
     "package": "VSSOP-10",
     "priceUah": 85,
     "datasheetUrl": "https://www.ti.com/product/INA226",
-    "tags": ["i2c", "current", "power", "battery"],
-    "summary": { "_type": "localeString", "uk": "16-бітний монітор струму, напруги й потужності з інтерфейсом I²C.", "en": "16-bit current, voltage and power monitor with I²C interface." },
-    "description": { "_type": "localeText", "uk": "Вимірює падіння напруги на шунті та напругу шини до 36 В, розраховує струм і потужність усередині мікросхеми. Має програмоване усереднення та вивід ALERT для спрацювання при перевищенні порогів.\n\nПрацює як на верхньому, так і на нижньому плечі. Точність залежить насамперед від шунта: використовуйте резистор з малим ТКО та чотирипровідне (Кельвінове) підключення.", "en": "Measures the shunt voltage drop and bus voltage up to 36 V, and computes current and power on-chip. Offers programmable averaging and an ALERT pin for threshold events.\n\nWorks on the high or low side. Accuracy depends mostly on the shunt: use a low-TCR resistor and a four-wire (Kelvin) connection." },
+    "tags": [
+      "i2c",
+      "current",
+      "power",
+      "battery"
+    ],
+    "summary": {
+      "_type": "localeString",
+      "uk": "16-бітний монітор струму, напруги й потужності з інтерфейсом I²C.",
+      "en": "16-bit current, voltage and power monitor with I²C interface."
+    },
+    "description": {
+      "_type": "localeText",
+      "uk": "Вимірює падіння напруги на шунті та напругу шини до 36 В, розраховує струм і потужність усередині мікросхеми. Має програмоване усереднення та вивід ALERT для спрацювання при перевищенні порогів.\n\nПрацює як на верхньому, так і на нижньому плечі. Точність залежить насамперед від шунта: використовуйте резистор з малим ТКО та чотирипровідне (Кельвінове) підключення.",
+      "en": "Measures the shunt voltage drop and bus voltage up to 36 V, and computes current and power on-chip. Offers programmable averaging and an ALERT pin for threshold events.\n\nWorks on the high or low side. Accuracy depends mostly on the shunt: use a low-TCR resistor and a four-wire (Kelvin) connection."
+    },
     "specs": [
-      { "_key": "s1", "label": "Напруга шини", "value": "0–36 В" },
-      { "_key": "s2", "label": "Розрядність", "value": "16 біт" },
-      { "_key": "s3", "label": "Інтерфейс", "value": "I²C / SMBus, 16 адрес" },
-      { "_key": "s4", "label": "Живлення", "value": "2,7–5,5 В" }
+      {
+        "_key": "s1",
+        "label": "Напруга шини",
+        "value": "0–36 В"
+      },
+      {
+        "_key": "s2",
+        "label": "Розрядність",
+        "value": "16 біт"
+      },
+      {
+        "_key": "s3",
+        "label": "Інтерфейс",
+        "value": "I²C / SMBus, 16 адрес"
+      },
+      {
+        "_key": "s4",
+        "label": "Живлення",
+        "value": "2,7–5,5 В"
+      }
     ]
   },
   {
@@ -136,20 +356,55 @@
     "lcscPart": "C92489",
     "_type": "component",
     "name": "BME280",
-    "slug": { "_type": "slug", "current": "bme280" },
+    "slug": {
+      "_type": "slug",
+      "current": "bme280"
+    },
     "manufacturer": "Bosch Sensortec",
-    "category": { "_type": "reference", "_ref": "cat-sensors" },
+    "category": {
+      "_type": "reference",
+      "_ref": "cat-sensors"
+    },
     "package": "LGA-8 (2,5×2,5 мм)",
     "priceUah": 140,
     "datasheetUrl": "https://www.bosch-sensortec.com/products/environmental-sensors/humidity-sensors-bme280/",
-    "tags": ["i2c", "spi", "weather", "humidity"],
-    "summary": { "_type": "localeString", "uk": "Датчик температури, вологості та атмосферного тиску в одному корпусі.", "en": "Temperature, humidity and barometric pressure sensor in one package." },
-    "description": { "_type": "localeText", "uk": "Комбінований датчик середовища з інтерфейсами I²C та SPI і дуже малим споживанням у режимі сну. Підходить для метеостанцій, вимірювання висоти та систем вентиляції.\n\nНа дешевих модулях часто стоїть BMP280 без датчика вологості — перевіряйте регістр ID (0x60 для BME280).", "en": "Combined environmental sensor with I²C and SPI and very low sleep current. Good for weather stations, altitude measurement and ventilation control.\n\nCheap modules are often fitted with a BMP280 that lacks humidity — check the chip ID register (0x60 for BME280)." },
+    "tags": [
+      "i2c",
+      "spi",
+      "weather",
+      "humidity"
+    ],
+    "summary": {
+      "_type": "localeString",
+      "uk": "Датчик температури, вологості та атмосферного тиску в одному корпусі.",
+      "en": "Temperature, humidity and barometric pressure sensor in one package."
+    },
+    "description": {
+      "_type": "localeText",
+      "uk": "Комбінований датчик середовища з інтерфейсами I²C та SPI і дуже малим споживанням у режимі сну. Підходить для метеостанцій, вимірювання висоти та систем вентиляції.\n\nНа дешевих модулях часто стоїть BMP280 без датчика вологості — перевіряйте регістр ID (0x60 для BME280).",
+      "en": "Combined environmental sensor with I²C and SPI and very low sleep current. Good for weather stations, altitude measurement and ventilation control.\n\nCheap modules are often fitted with a BMP280 that lacks humidity — check the chip ID register (0x60 for BME280)."
+    },
     "specs": [
-      { "_key": "s1", "label": "Вимірює", "value": "T, RH, P" },
-      { "_key": "s2", "label": "Тиск", "value": "300–1100 гПа" },
-      { "_key": "s3", "label": "Інтерфейс", "value": "I²C, SPI" },
-      { "_key": "s4", "label": "Живлення", "value": "1,71–3,6 В" }
+      {
+        "_key": "s1",
+        "label": "Вимірює",
+        "value": "T, RH, P"
+      },
+      {
+        "_key": "s2",
+        "label": "Тиск",
+        "value": "300–1100 гПа"
+      },
+      {
+        "_key": "s3",
+        "label": "Інтерфейс",
+        "value": "I²C, SPI"
+      },
+      {
+        "_key": "s4",
+        "label": "Живлення",
+        "value": "1,71–3,6 В"
+      }
     ]
   },
   {
@@ -157,20 +412,54 @@
     "lcscPart": "C38774",
     "_type": "component",
     "name": "IRLZ44N",
-    "slug": { "_type": "slug", "current": "irlz44n" },
+    "slug": {
+      "_type": "slug",
+      "current": "irlz44n"
+    },
     "manufacturer": "Infineon",
-    "category": { "_type": "reference", "_ref": "cat-switches" },
+    "category": {
+      "_type": "reference",
+      "_ref": "cat-switches"
+    },
     "package": "TO-220AB",
     "priceUah": 35,
     "datasheetUrl": "https://www.infineon.com/",
-    "tags": ["mosfet", "n-channel", "logic-level"],
-    "summary": { "_type": "localeString", "uk": "N-канальний MOSFET з логічним рівнем керування на 55 В.", "en": "55 V logic-level N-channel MOSFET." },
-    "description": { "_type": "localeText", "uk": "Популярний транзистор для комутації LED-стрічок, двигунів і нагрівачів напряму від виводу мікроконтролера з рівнем 5 В. Опір каналу вказаний також для керування 4–5 В.\n\nПри 3,3 В транзистор відкривається не повністю, тож для ESP32 чи STM32 краще додати драйвер затвора або обрати MOSFET з нижчою пороговою напругою. Обов'язково ставте резистор 10–100 кОм між затвором і витоком.", "en": "A popular transistor for switching LED strips, motors and heaters straight from a 5 V MCU pin. On-resistance is also specified for 4–5 V gate drive.\n\nAt 3.3 V it does not fully enhance, so with ESP32 or STM32 add a gate driver or pick a MOSFET with a lower threshold. Always fit a 10–100 kΩ gate-to-source resistor." },
+    "tags": [
+      "mosfet",
+      "n-channel",
+      "logic-level"
+    ],
+    "summary": {
+      "_type": "localeString",
+      "uk": "N-канальний MOSFET з логічним рівнем керування на 55 В.",
+      "en": "55 V logic-level N-channel MOSFET."
+    },
+    "description": {
+      "_type": "localeText",
+      "uk": "Популярний транзистор для комутації LED-стрічок, двигунів і нагрівачів напряму від виводу мікроконтролера з рівнем 5 В. Опір каналу вказаний також для керування 4–5 В.\n\nПри 3,3 В транзистор відкривається не повністю, тож для ESP32 чи STM32 краще додати драйвер затвора або обрати MOSFET з нижчою пороговою напругою. Обов'язково ставте резистор 10–100 кОм між затвором і витоком.",
+      "en": "A popular transistor for switching LED strips, motors and heaters straight from a 5 V MCU pin. On-resistance is also specified for 4–5 V gate drive.\n\nAt 3.3 V it does not fully enhance, so with ESP32 or STM32 add a gate driver or pick a MOSFET with a lower threshold. Always fit a 10–100 kΩ gate-to-source resistor."
+    },
     "specs": [
-      { "_key": "s1", "label": "Vds", "value": "55 В" },
-      { "_key": "s2", "label": "Id", "value": "47 А (25 °C)" },
-      { "_key": "s3", "label": "Rds(on)", "value": "22 мОм @ 10 В, 25 мОм @ 5 В" },
-      { "_key": "s4", "label": "Тип", "value": "N-канал, логічний рівень" }
+      {
+        "_key": "s1",
+        "label": "Vds",
+        "value": "55 В"
+      },
+      {
+        "_key": "s2",
+        "label": "Id",
+        "value": "47 А (25 °C)"
+      },
+      {
+        "_key": "s3",
+        "label": "Rds(on)",
+        "value": "22 мОм @ 10 В, 25 мОм @ 5 В"
+      },
+      {
+        "_key": "s4",
+        "label": "Тип",
+        "value": "N-канал, логічний рівень"
+      }
     ]
   },
   {
@@ -178,20 +467,54 @@
     "lcscPart": "C16581",
     "_type": "component",
     "name": "TP4056",
-    "slug": { "_type": "slug", "current": "tp4056" },
+    "slug": {
+      "_type": "slug",
+      "current": "tp4056"
+    },
     "manufacturer": "NanJing Top Power",
-    "category": { "_type": "reference", "_ref": "cat-power" },
+    "category": {
+      "_type": "reference",
+      "_ref": "cat-power"
+    },
     "package": "SOP-8 з тепловідводом",
     "priceUah": 15,
     "datasheetUrl": "https://dlnmh9ip6v2uc.cloudfront.net/datasheets/Prototyping/TP4056.pdf",
-    "tags": ["li-ion", "charger", "usb"],
-    "summary": { "_type": "localeString", "uk": "Лінійний зарядний контролер для однієї Li-ion комірки до 1 А.", "en": "Linear charger for a single Li-ion cell, up to 1 A." },
-    "description": { "_type": "localeText", "uk": "Заряджає комірку методом CC/CV до 4,2 В. Струм заряду задається одним резистором на виводі PROG. Оскільки це лінійний зарядник, надлишок потужності розсіюється у вигляді тепла.\n\nНе підходить для LiFePO4: їм потрібна напруга кінця заряду близько 3,6 В, а 4,2 В перезарядить комірку.", "en": "Charges a cell with CC/CV up to 4.2 V. Charge current is set by a single resistor on PROG. As a linear charger it dissipates excess power as heat.\n\nNot suitable for LiFePO4: those cells need about 3.6 V end-of-charge, and 4.2 V would overcharge them." },
+    "tags": [
+      "li-ion",
+      "charger",
+      "usb"
+    ],
+    "summary": {
+      "_type": "localeString",
+      "uk": "Лінійний зарядний контролер для однієї Li-ion комірки до 1 А.",
+      "en": "Linear charger for a single Li-ion cell, up to 1 A."
+    },
+    "description": {
+      "_type": "localeText",
+      "uk": "Заряджає комірку методом CC/CV до 4,2 В. Струм заряду задається одним резистором на виводі PROG. Оскільки це лінійний зарядник, надлишок потужності розсіюється у вигляді тепла.\n\nНе підходить для LiFePO4: їм потрібна напруга кінця заряду близько 3,6 В, а 4,2 В перезарядить комірку.",
+      "en": "Charges a cell with CC/CV up to 4.2 V. Charge current is set by a single resistor on PROG. As a linear charger it dissipates excess power as heat.\n\nNot suitable for LiFePO4: those cells need about 3.6 V end-of-charge, and 4.2 V would overcharge them."
+    },
     "specs": [
-      { "_key": "s1", "label": "Напруга заряду", "value": "4,2 В ±1%" },
-      { "_key": "s2", "label": "Струм заряду", "value": "до 1 А" },
-      { "_key": "s3", "label": "Вхід", "value": "4–8 В" },
-      { "_key": "s4", "label": "Тип", "value": "Лінійний CC/CV" }
+      {
+        "_key": "s1",
+        "label": "Напруга заряду",
+        "value": "4,2 В ±1%"
+      },
+      {
+        "_key": "s2",
+        "label": "Струм заряду",
+        "value": "до 1 А"
+      },
+      {
+        "_key": "s3",
+        "label": "Вхід",
+        "value": "4–8 В"
+      },
+      {
+        "_key": "s4",
+        "label": "Тип",
+        "value": "Лінійний CC/CV"
+      }
     ]
   },
   {
@@ -199,94 +522,322 @@
     "lcscPart": "C1355333",
     "_type": "component",
     "name": "LM2596",
-    "slug": { "_type": "slug", "current": "lm2596" },
+    "slug": {
+      "_type": "slug",
+      "current": "lm2596"
+    },
     "manufacturer": "Texas Instruments",
-    "category": { "_type": "reference", "_ref": "cat-power" },
+    "category": {
+      "_type": "reference",
+      "_ref": "cat-power"
+    },
     "package": "TO-263-5",
     "priceUah": 60,
     "datasheetUrl": "https://www.ti.com/product/LM2596",
-    "tags": ["buck", "dc-dc", "regulator"],
-    "summary": { "_type": "localeString", "uk": "Понижувальний DC-DC перетворювач на 3 А з входом до 40 В.", "en": "3 A step-down DC-DC converter with up to 40 V input." },
-    "description": { "_type": "localeText", "uk": "Імпульсний стабілізатор з частотою 150 кГц, що потребує мінімуму зовнішніх елементів: дросель, діод Шотткі та конденсатори. Є версії з фіксованим виходом і регульована (ADJ).\n\nНа дешевих модулях реальний тривалий струм без радіатора помітно менший за 3 А, а вихідні пульсації варто перевіряти осцилографом.", "en": "A 150 kHz switching regulator needing few external parts: an inductor, a Schottky diode and capacitors. Available in fixed-output and adjustable (ADJ) versions.\n\nOn cheap modules the continuous current without a heatsink is well below 3 A, and output ripple is worth checking with a scope." },
+    "tags": [
+      "buck",
+      "dc-dc",
+      "regulator"
+    ],
+    "summary": {
+      "_type": "localeString",
+      "uk": "Понижувальний DC-DC перетворювач на 3 А з входом до 40 В.",
+      "en": "3 A step-down DC-DC converter with up to 40 V input."
+    },
+    "description": {
+      "_type": "localeText",
+      "uk": "Імпульсний стабілізатор з частотою 150 кГц, що потребує мінімуму зовнішніх елементів: дросель, діод Шотткі та конденсатори. Є версії з фіксованим виходом і регульована (ADJ).\n\nНа дешевих модулях реальний тривалий струм без радіатора помітно менший за 3 А, а вихідні пульсації варто перевіряти осцилографом.",
+      "en": "A 150 kHz switching regulator needing few external parts: an inductor, a Schottky diode and capacitors. Available in fixed-output and adjustable (ADJ) versions.\n\nOn cheap modules the continuous current without a heatsink is well below 3 A, and output ripple is worth checking with a scope."
+    },
     "specs": [
-      { "_key": "s1", "label": "Вхід", "value": "4,5–40 В" },
-      { "_key": "s2", "label": "Вихідний струм", "value": "до 3 А" },
-      { "_key": "s3", "label": "Частота", "value": "150 кГц" },
-      { "_key": "s4", "label": "Вихід", "value": "3,3 / 5 / 12 В або ADJ" }
+      {
+        "_key": "s1",
+        "label": "Вхід",
+        "value": "4,5–40 В"
+      },
+      {
+        "_key": "s2",
+        "label": "Вихідний струм",
+        "value": "до 3 А"
+      },
+      {
+        "_key": "s3",
+        "label": "Частота",
+        "value": "150 кГц"
+      },
+      {
+        "_key": "s4",
+        "label": "Вихід",
+        "value": "3,3 / 5 / 12 В або ADJ"
+      }
     ]
   },
-
   {
     "_id": "proj-weather",
     "_type": "project",
-    "title": { "_type": "localeString", "uk": "Wi-Fi метеостанція на ESP32-C3", "en": "Wi-Fi weather station on ESP32-C3" },
-    "slug": { "_type": "slug", "current": "wifi-weather-station" },
+    "title": {
+      "_type": "localeString",
+      "uk": "Wi-Fi метеостанція на ESP32-C3",
+      "en": "Wi-Fi weather station on ESP32-C3"
+    },
+    "slug": {
+      "_type": "slug",
+      "current": "wifi-weather-station"
+    },
     "difficulty": "easy",
     "durationHours": 4,
-    "author": { "_type": "reference", "_ref": "author-karpa" },
+    "author": {
+      "_type": "reference",
+      "_ref": "author-karpa"
+    },
     "publishedAt": "2026-10-20T10:00:00Z",
     "components": [
-      { "_type": "reference", "_ref": "comp-esp32c3", "_key": "c1" },
-      { "_type": "reference", "_ref": "comp-bme280", "_key": "c2" }
+      {
+        "_type": "reference",
+        "_ref": "comp-esp32c3",
+        "_key": "c1"
+      },
+      {
+        "_type": "reference",
+        "_ref": "comp-bme280",
+        "_key": "c2"
+      }
     ],
-    "summary": { "_type": "localeString", "uk": "Датчик температури, вологості й тиску, що раз на 10 хвилин надсилає дані на сервер і спить між вимірюваннями.", "en": "A temperature, humidity and pressure sensor that reports to a server every 10 minutes and sleeps in between." },
+    "summary": {
+      "_type": "localeString",
+      "uk": "Датчик температури, вологості й тиску, що раз на 10 хвилин надсилає дані на сервер і спить між вимірюваннями.",
+      "en": "A temperature, humidity and pressure sensor that reports to a server every 10 minutes and sleeps in between."
+    },
     "steps": [
-      { "_key": "st1", "title": { "_type": "localeString", "uk": "Підключення датчика", "en": "Wire the sensor" }, "text": { "_type": "localeText", "uk": "З'єднайте BME280 з ESP32-C3 по I²C: SDA → GPIO8, SCL → GPIO9, живлення 3,3 В. Якщо на модулі немає підтягувальних резисторів, додайте 4,7 кОм на обидві лінії.", "en": "Connect the BME280 to the ESP32-C3 over I²C: SDA → GPIO8, SCL → GPIO9, 3.3 V supply. If the module has no pull-ups, add 4.7 kΩ on both lines." } },
-      { "_key": "st2", "title": { "_type": "localeString", "uk": "Прошивка", "en": "Firmware" }, "text": { "_type": "localeText", "uk": "Створіть проєкт у PlatformIO або Arduino IDE, підключіть бібліотеку для BME280 і перевірте ID датчика. Прошивайте напряму через вбудований USB.", "en": "Create a PlatformIO or Arduino IDE project, add a BME280 library and verify the chip ID. Flash directly over the built-in USB." } },
-      { "_key": "st3", "title": { "_type": "localeString", "uk": "Надсилання даних", "en": "Send the data" }, "text": { "_type": "localeText", "uk": "Підключіться до Wi-Fi, надішліть JSON з показаннями HTTP POST-запитом або через MQTT і відразу вимкніть радіо.", "en": "Join Wi-Fi, send a JSON reading via HTTP POST or MQTT, then shut the radio down immediately." } },
-      { "_key": "st4", "title": { "_type": "localeString", "uk": "Енергозбереження", "en": "Save power" }, "text": { "_type": "localeText", "uk": "Переведіть BME280 у forced mode, а ESP32-C3 — у deep sleep на 10 хвилин. Так пристрій працюватиме від акумулятора тижнями.", "en": "Put the BME280 in forced mode and the ESP32-C3 into deep sleep for 10 minutes. The device will then run for weeks on a battery." } }
+      {
+        "_key": "st1",
+        "title": {
+          "_type": "localeString",
+          "uk": "Підключення датчика",
+          "en": "Wire the sensor"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "З'єднайте BME280 з ESP32-C3 по I²C: SDA → GPIO8, SCL → GPIO9, живлення 3,3 В. Якщо на модулі немає підтягувальних резисторів, додайте 4,7 кОм на обидві лінії.",
+          "en": "Connect the BME280 to the ESP32-C3 over I²C: SDA → GPIO8, SCL → GPIO9, 3.3 V supply. If the module has no pull-ups, add 4.7 kΩ on both lines."
+        }
+      },
+      {
+        "_key": "st2",
+        "title": {
+          "_type": "localeString",
+          "uk": "Прошивка",
+          "en": "Firmware"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "Створіть проєкт у PlatformIO або Arduino IDE, підключіть бібліотеку для BME280 і перевірте ID датчика. Прошивайте напряму через вбудований USB.",
+          "en": "Create a PlatformIO or Arduino IDE project, add a BME280 library and verify the chip ID. Flash directly over the built-in USB."
+        }
+      },
+      {
+        "_key": "st3",
+        "title": {
+          "_type": "localeString",
+          "uk": "Надсилання даних",
+          "en": "Send the data"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "Підключіться до Wi-Fi, надішліть JSON з показаннями HTTP POST-запитом або через MQTT і відразу вимкніть радіо.",
+          "en": "Join Wi-Fi, send a JSON reading via HTTP POST or MQTT, then shut the radio down immediately."
+        }
+      },
+      {
+        "_key": "st4",
+        "title": {
+          "_type": "localeString",
+          "uk": "Енергозбереження",
+          "en": "Save power"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "Переведіть BME280 у forced mode, а ESP32-C3 — у deep sleep на 10 хвилин. Так пристрій працюватиме від акумулятора тижнями.",
+          "en": "Put the BME280 in forced mode and the ESP32-C3 into deep sleep for 10 minutes. The device will then run for weeks on a battery."
+        }
+      }
     ]
   },
   {
     "_id": "proj-battery-monitor",
     "_type": "project",
-    "title": { "_type": "localeString", "uk": "Монітор батареї LiFePO4 на INA226", "en": "LiFePO4 battery monitor with INA226" },
-    "slug": { "_type": "slug", "current": "lifepo4-battery-monitor" },
+    "title": {
+      "_type": "localeString",
+      "uk": "Монітор батареї LiFePO4 на INA226",
+      "en": "LiFePO4 battery monitor with INA226"
+    },
+    "slug": {
+      "_type": "slug",
+      "current": "lifepo4-battery-monitor"
+    },
     "difficulty": "medium",
     "durationHours": 10,
-    "author": { "_type": "reference", "_ref": "author-karpa" },
+    "author": {
+      "_type": "reference",
+      "_ref": "author-karpa"
+    },
     "publishedAt": "2026-10-28T10:00:00Z",
     "components": [
-      { "_type": "reference", "_ref": "comp-stm32g431", "_key": "c1" },
-      { "_type": "reference", "_ref": "comp-ina226", "_key": "c2" },
-      { "_type": "reference", "_ref": "comp-lm2596", "_key": "c3" }
+      {
+        "_type": "reference",
+        "_ref": "comp-stm32g431",
+        "_key": "c1"
+      },
+      {
+        "_type": "reference",
+        "_ref": "comp-ina226",
+        "_key": "c2"
+      },
+      {
+        "_type": "reference",
+        "_ref": "comp-lm2596",
+        "_key": "c3"
+      }
     ],
-    "summary": { "_type": "localeString", "uk": "Кулонометр для акумулятора 12 В: струм, напруга, потужність і залишкова ємність.", "en": "A coulomb counter for a 12 V battery: current, voltage, power and remaining capacity." },
+    "summary": {
+      "_type": "localeString",
+      "uk": "Кулонометр для акумулятора 12 В: струм, напруга, потужність і залишкова ємність.",
+      "en": "A coulomb counter for a 12 V battery: current, voltage, power and remaining capacity."
+    },
     "steps": [
-      { "_key": "st1", "title": { "_type": "localeString", "uk": "Шунт і INA226", "en": "Shunt and INA226" }, "text": { "_type": "localeText", "uk": "Оберіть шунт так, щоб при максимальному струмі падіння напруги не перевищувало 81,92 мВ — це межа вхідного діапазону INA226. Для 50 А підійде шунт 1 мОм.", "en": "Pick a shunt so the voltage drop at maximum current stays below 81.92 mV — the INA226 input range limit. For 50 A a 1 mΩ shunt works." } },
-      { "_key": "st2", "title": { "_type": "localeString", "uk": "Живлення схеми", "en": "Power the board" }, "text": { "_type": "localeText", "uk": "Живіть плату від батареї через LM2596 з виходом 5 В і далі LDO на 3,3 В для STM32.", "en": "Feed the board from the battery through an LM2596 set to 5 V, then an LDO to 3.3 V for the STM32." } },
-      { "_key": "st3", "title": { "_type": "localeString", "uk": "Підрахунок заряду", "en": "Charge counting" }, "text": { "_type": "localeText", "uk": "Зчитуйте струм кожні 100 мс і інтегруйте його в ампер-години. Коригуйте рівень заряду за напругою спокою, коли струм близький до нуля.", "en": "Read current every 100 ms and integrate it into amp-hours. Correct the state of charge from rest voltage when current is near zero." } }
+      {
+        "_key": "st1",
+        "title": {
+          "_type": "localeString",
+          "uk": "Шунт і INA226",
+          "en": "Shunt and INA226"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "Оберіть шунт так, щоб при максимальному струмі падіння напруги не перевищувало 81,92 мВ — це межа вхідного діапазону INA226. Для 50 А підійде шунт 1 мОм.",
+          "en": "Pick a shunt so the voltage drop at maximum current stays below 81.92 mV — the INA226 input range limit. For 50 A a 1 mΩ shunt works."
+        }
+      },
+      {
+        "_key": "st2",
+        "title": {
+          "_type": "localeString",
+          "uk": "Живлення схеми",
+          "en": "Power the board"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "Живіть плату від батареї через LM2596 з виходом 5 В і далі LDO на 3,3 В для STM32.",
+          "en": "Feed the board from the battery through an LM2596 set to 5 V, then an LDO to 3.3 V for the STM32."
+        }
+      },
+      {
+        "_key": "st3",
+        "title": {
+          "_type": "localeString",
+          "uk": "Підрахунок заряду",
+          "en": "Charge counting"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "Зчитуйте струм кожні 100 мс і інтегруйте його в ампер-години. Коригуйте рівень заряду за напругою спокою, коли струм близький до нуля.",
+          "en": "Read current every 100 ms and integrate it into amp-hours. Correct the state of charge from rest voltage when current is near zero."
+        }
+      }
     ]
   },
   {
     "_id": "proj-led-strip",
     "_type": "project",
-    "title": { "_type": "localeString", "uk": "Диммер LED-стрічки 12 В на IRLZ44N", "en": "12 V LED strip dimmer with IRLZ44N" },
-    "slug": { "_type": "slug", "current": "led-strip-dimmer" },
+    "title": {
+      "_type": "localeString",
+      "uk": "Диммер LED-стрічки 12 В на IRLZ44N",
+      "en": "12 V LED strip dimmer with IRLZ44N"
+    },
+    "slug": {
+      "_type": "slug",
+      "current": "led-strip-dimmer"
+    },
     "difficulty": "easy",
     "durationHours": 2,
-    "author": { "_type": "reference", "_ref": "author-karpa" },
+    "author": {
+      "_type": "reference",
+      "_ref": "author-karpa"
+    },
     "publishedAt": "2026-11-02T10:00:00Z",
     "components": [
-      { "_type": "reference", "_ref": "comp-atmega328p", "_key": "c1" },
-      { "_type": "reference", "_ref": "comp-irlz44n", "_key": "c2" }
+      {
+        "_type": "reference",
+        "_ref": "comp-atmega328p",
+        "_key": "c1"
+      },
+      {
+        "_type": "reference",
+        "_ref": "comp-irlz44n",
+        "_key": "c2"
+      }
     ],
-    "summary": { "_type": "localeString", "uk": "Плавне керування яскравістю стрічки ШІМ-сигналом з Arduino.", "en": "Smooth brightness control of an LED strip with Arduino PWM." },
+    "summary": {
+      "_type": "localeString",
+      "uk": "Плавне керування яскравістю стрічки ШІМ-сигналом з Arduino.",
+      "en": "Smooth brightness control of an LED strip with Arduino PWM."
+    },
     "steps": [
-      { "_key": "st1", "title": { "_type": "localeString", "uk": "Схема", "en": "Schematic" }, "text": { "_type": "localeText", "uk": "Стік MOSFET — до мінуса стрічки, витік — до землі, затвор — через резистор 100 Ом до виводу D9. Між затвором і витоком — 10 кОм.", "en": "MOSFET drain to the strip's negative, source to ground, gate through 100 Ω to pin D9. Put 10 kΩ from gate to source." } },
-      { "_key": "st2", "title": { "_type": "localeString", "uk": "Програма", "en": "Code" }, "text": { "_type": "localeText", "uk": "Використайте analogWrite() на D9 і зчитуйте потенціометр з A0. Для плавності застосуйте гамма-корекцію яскравості.", "en": "Use analogWrite() on D9 and read a potentiometer on A0. Apply gamma correction for smooth brightness." } },
-      { "_key": "st3", "title": { "_type": "localeString", "uk": "Перевірка нагріву", "en": "Check heating" }, "text": { "_type": "localeText", "uk": "При струмі до 5 А транзистор майже не гріється; для більших струмів додайте радіатор.", "en": "Up to 5 A the transistor barely warms up; add a heatsink for more." } }
+      {
+        "_key": "st1",
+        "title": {
+          "_type": "localeString",
+          "uk": "Схема",
+          "en": "Schematic"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "Стік MOSFET — до мінуса стрічки, витік — до землі, затвор — через резистор 100 Ом до виводу D9. Між затвором і витоком — 10 кОм.",
+          "en": "MOSFET drain to the strip's negative, source to ground, gate through 100 Ω to pin D9. Put 10 kΩ from gate to source."
+        }
+      },
+      {
+        "_key": "st2",
+        "title": {
+          "_type": "localeString",
+          "uk": "Програма",
+          "en": "Code"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "Використайте analogWrite() на D9 і зчитуйте потенціометр з A0. Для плавності застосуйте гамма-корекцію яскравості.",
+          "en": "Use analogWrite() on D9 and read a potentiometer on A0. Apply gamma correction for smooth brightness."
+        }
+      },
+      {
+        "_key": "st3",
+        "title": {
+          "_type": "localeString",
+          "uk": "Перевірка нагріву",
+          "en": "Check heating"
+        },
+        "text": {
+          "_type": "localeText",
+          "uk": "При струмі до 5 А транзистор майже не гріється; для більших струмів додайте радіатор.",
+          "en": "Up to 5 A the transistor barely warms up; add a heatsink for more."
+        }
+      }
     ]
   },
-
   {
     "_id": "topic-esp32-usb",
     "_type": "topic",
     "title": "ESP32-C3 не прошивається через USB — що перевірити?",
-    "slug": { "_type": "slug", "current": "esp32-c3-usb-flash" },
+    "slug": {
+      "_type": "slug",
+      "current": "esp32-c3-usb-flash"
+    },
     "createdAt": "2026-11-01T18:20:00Z",
     "authorName": "Олег",
-    "related": { "_type": "reference", "_ref": "comp-esp32c3" },
+    "related": {
+      "_type": "reference",
+      "_ref": "comp-esp32c3"
+    },
     "body": "Плата на ESP32-C3 визначається як USB JTAG/serial debug unit, але esptool пише «Failed to connect». Драйвери стоять, кабель робочий. Що ще може бути?",
     "pinned": true
   },
@@ -294,21 +845,29 @@
     "_id": "topic-tp4056-lifepo4",
     "_type": "topic",
     "title": "TP4056 для LiFePO4 — чи можна переробити?",
-    "slug": { "_type": "slug", "current": "tp4056-lifepo4" },
+    "slug": {
+      "_type": "slug",
+      "current": "tp4056-lifepo4"
+    },
     "createdAt": "2026-11-04T09:10:00Z",
     "authorName": "Ірина",
-    "related": { "_type": "reference", "_ref": "comp-tp4056" },
+    "related": {
+      "_type": "reference",
+      "_ref": "comp-tp4056"
+    },
     "body": "Маю кілька модулів TP4056 і комірки LiFePO4 32700. Чи можна якось змінити напругу заряду на 3,6 В?",
     "pinned": false
   },
-
   {
     "_id": "comment-1",
     "_type": "comment",
     "authorName": "Богдан",
     "text": "Спробуйте затиснути BOOT (GPIO9) під час підключення USB. Якщо прошивка вимкнула USB Serial/JTAG або перевела піни в інший режим, без цього плата не відповідає.",
     "status": "approved",
-    "target": { "_type": "reference", "_ref": "topic-esp32-usb" },
+    "target": {
+      "_type": "reference",
+      "_ref": "topic-esp32-usb"
+    },
     "createdAt": "2026-11-01T19:02:00Z"
   },
   {
@@ -317,7 +876,10 @@
     "authorName": "Олег",
     "text": "Допомогло, дякую! Проблема була в моєму коді — я використовував GPIO18/19 як звичайні виводи.",
     "status": "approved",
-    "target": { "_type": "reference", "_ref": "topic-esp32-usb" },
+    "target": {
+      "_type": "reference",
+      "_ref": "topic-esp32-usb"
+    },
     "createdAt": "2026-11-01T20:40:00Z"
   },
   {
@@ -326,7 +888,10 @@
     "authorName": "Богдан",
     "text": "Ні, у TP4056 напруга кінця заряду фіксована всередині мікросхеми. Для LiFePO4 візьміть спеціалізований контролер з порогом 3,6 В.",
     "status": "approved",
-    "target": { "_type": "reference", "_ref": "topic-tp4056-lifepo4" },
+    "target": {
+      "_type": "reference",
+      "_ref": "topic-tp4056-lifepo4"
+    },
     "createdAt": "2026-11-04T10:15:00Z"
   },
   {
@@ -335,7 +900,10 @@
     "authorName": "Андрій",
     "text": "Корисна картка. Варто додати, що в INA226 є 16 можливих I²C-адрес, тож на одній шині можна мати кілька датчиків.",
     "status": "approved",
-    "target": { "_type": "reference", "_ref": "comp-ina226" },
+    "target": {
+      "_type": "reference",
+      "_ref": "comp-ina226"
+    },
     "createdAt": "2026-11-05T12:00:00Z"
   },
   {
@@ -346,7 +914,7 @@
       "current": "interfaces"
     },
     "icon": "link",
-    "order": 5,
+    "order": 6,
     "title": {
       "_type": "localeString",
       "uk": "Інтерфейси та розв'язка",
@@ -480,6 +1048,82 @@
     "datasheetUrl": "https://www.st.com/en/microcontrollers-microprocessors/stm32f407vg.html"
   },
   {
+    "_id": "comp-stm32f407-disc1",
+    "_type": "component",
+    "name": "STM32F407G-DISC1",
+    "slug": {
+      "_type": "slug",
+      "current": "stm32f407g-disc1"
+    },
+    "manufacturer": "STMicroelectronics",
+    "category": {
+      "_type": "reference",
+      "_ref": "cat-boards"
+    },
+    "package": "Плата Discovery (STM32F4DISCOVERY)",
+    "priceUah": 1200,
+    "tags": [
+      "stm32",
+      "discovery",
+      "board",
+      "st-link",
+      "cortex-m4"
+    ],
+    "summary": {
+      "_type": "localeString",
+      "uk": "Налагоджувальна плата з STM32F407VGT6, вбудованим програматором ST-LINK, акселерометром, мікрофоном і аудіо-ЦАП.",
+      "en": "A development board with the STM32F407VGT6, an on-board ST-LINK programmer, an accelerometer, a microphone and an audio DAC."
+    },
+    "description": {
+      "_type": "localeText",
+      "uk": "STM32F407G-DISC1 — плата серії Discovery від ST з мікроконтролером STM32F407VGT6. На ній уже є програматор-налагоджувач ST-LINK/V2-A: досить USB-кабелю, щоб прошивати плату й дивитися змінні в налагоджувачі, а віртуальний COM-порт дає консоль без окремого перетворювача.\n\nКрім мікроконтролера, на платі є 3-осьовий акселерометр, цифровий MEMS-мікрофон, аудіо-ЦАП з підсилювачем, чотири світлодіоди й кнопка. Усі виводи корпусу LQFP-100 виведені на штирьові роз’єми, тому до плати легко під’єднати власні модулі. Це зручна основа для прототипу: схему пристрою можна перевірити до того, як розводити власну плату з голим STM32F407.",
+      "en": "The STM32F407G-DISC1 is an ST Discovery board built around the STM32F407VGT6. It carries an ST-LINK/V2-A programmer and debugger: one USB cable is enough to flash the board and watch variables in the debugger, and the virtual COM port gives a console without a separate adapter.\n\nBesides the MCU, the board has a 3-axis accelerometer, a digital MEMS microphone, an audio DAC with an amplifier, four LEDs and a button. Every pin of the LQFP-100 package is brought out to pin headers, so your own modules are easy to connect. It is a handy base for a prototype: the circuit can be proven before you lay out your own board with a bare STM32F407."
+    },
+    "specs": [
+      {
+        "_key": "s1",
+        "label": "Мікроконтролер",
+        "value": "STM32F407VGT6: Cortex-M4F, 1 МБ Flash, 192 КБ RAM"
+      },
+      {
+        "_key": "s2",
+        "label": "Програматор",
+        "value": "Вбудований ST-LINK/V2-A: налагодження, віртуальний COM-порт"
+      },
+      {
+        "_key": "s3",
+        "label": "Датчики",
+        "value": "Акселерометр LIS3DSH (у ранніх ревізіях LIS302DL), MEMS-мікрофон MP45DT02"
+      },
+      {
+        "_key": "s4",
+        "label": "Аудіо",
+        "value": "ЦАП CS43L22 з підсилювачем класу D"
+      },
+      {
+        "_key": "s5",
+        "label": "Керування",
+        "value": "4 світлодіоди користувача, кнопки User і Reset"
+      },
+      {
+        "_key": "s6",
+        "label": "USB",
+        "value": "ST-LINK і USB OTG FS (micro-AB)"
+      },
+      {
+        "_key": "s7",
+        "label": "Живлення",
+        "value": "Від USB або зовнішнього джерела 5 В"
+      },
+      {
+        "_key": "s8",
+        "label": "Роз’єми",
+        "value": "Усі виводи LQFP-100 на штирьових роз’ємах"
+      }
+    ],
+    "datasheetUrl": "https://www.st.com/en/evaluation-tools/stm32f4discovery.html"
+  },
+  {
     "_id": "comp-esp32c6",
     "lcscPart": "C5364646",
     "_type": "component",
@@ -542,6 +1186,79 @@
     "datasheetUrl": "https://www.espressif.com/en/products/socs/esp32-c6"
   },
   {
+    "_id": "comp-esp32c6-devkitc",
+    "_type": "component",
+    "name": "ESP32-C6-DevKitC-1",
+    "slug": {
+      "_type": "slug",
+      "current": "esp32-c6-devkitc-1"
+    },
+    "manufacturer": "Espressif",
+    "category": {
+      "_type": "reference",
+      "_ref": "cat-boards"
+    },
+    "package": "Плата DevKitC (модуль ESP32-C6-WROOM-1)",
+    "priceUah": 500,
+    "tags": [
+      "esp32",
+      "esp32-c6",
+      "wifi-6",
+      "thread",
+      "zigbee",
+      "board",
+      "devkit"
+    ],
+    "summary": {
+      "_type": "localeString",
+      "uk": "Налагоджувальна плата з модулем ESP32-C6-WROOM-1: Wi-Fi 6, Bluetooth LE і Thread/Zigbee, два порти USB-C і RGB-світлодіод.",
+      "en": "A development board with the ESP32-C6-WROOM-1 module: Wi-Fi 6, Bluetooth LE and Thread/Zigbee, two USB-C ports and an RGB LED."
+    },
+    "description": {
+      "_type": "localeText",
+      "uk": "ESP32-C6-DevKitC-1 — офіційна плата Espressif для знайомства з ESP32-C6. На ній стоїть готовий модуль ESP32-C6-WROOM-1 з 8 МБ Flash і антеною на платі, тож радіочастину вже розведено й сертифіковано.\n\nНа платі два порти USB-C: один через перетворювач USB-UART для прошивки й консолі, другий — власний USB мікросхеми з підтримкою JTAG-налагодження. Є кнопки Boot і Reset, адресний RGB-світлодіод на GPIO8, стабілізатор 5 → 3,3 В і перемичка для вимірювання струму модуля. Більшість виводів GPIO винесено на два 16-контактні роз’єми, тому плату зручно ставити на макетну плату.",
+      "en": "The ESP32-C6-DevKitC-1 is Espressif's official board for getting started with the ESP32-C6. It carries a ready ESP32-C6-WROOM-1 module with 8 MB of flash and a PCB antenna, so the radio part is already laid out and certified.\n\nThe board has two USB-C ports: one through a USB-UART bridge for flashing and the console, the other the chip's native USB with JTAG debugging. There are Boot and Reset buttons, an addressable RGB LED on GPIO8, a 5 → 3.3 V regulator and a jumper for measuring the module's current. Most GPIOs are brought out to two 16-pin headers, so the board sits nicely on a breadboard."
+    },
+    "specs": [
+      {
+        "_key": "s1",
+        "label": "Модуль",
+        "value": "ESP32-C6-WROOM-1 (антена на платі), 8 МБ Flash"
+      },
+      {
+        "_key": "s2",
+        "label": "Радіо",
+        "value": "Wi-Fi 6 (2,4 ГГц), Bluetooth LE, IEEE 802.15.4 (Thread, Zigbee)"
+      },
+      {
+        "_key": "s3",
+        "label": "USB",
+        "value": "2 × USB-C: USB-UART та власний USB з JTAG"
+      },
+      {
+        "_key": "s4",
+        "label": "Кнопки й індикація",
+        "value": "Boot, Reset; адресний RGB-світлодіод (GPIO8), індикатор живлення"
+      },
+      {
+        "_key": "s5",
+        "label": "Живлення",
+        "value": "Від USB, 5 В або 3,3 В на роз’ємах; стабілізатор 5 → 3,3 В"
+      },
+      {
+        "_key": "s6",
+        "label": "Роз’єми",
+        "value": "2 × 16 контактів (більшість GPIO)"
+      },
+      {
+        "_key": "s7",
+        "label": "Вимірювання струму",
+        "value": "Перемичка J5 для амперметра"
+      }
+    ],
+    "datasheetUrl": "https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c6/esp32-c6-devkitc-1/user_guide.html"
+  },
+  {
     "_id": "comp-uno-q",
     "_type": "component",
     "name": "Arduino UNO Q",
@@ -552,9 +1269,9 @@
     "manufacturer": "Arduino",
     "category": {
       "_type": "reference",
-      "_ref": "cat-mcu"
+      "_ref": "cat-boards"
     },
-    "package": "Плата формату UNO",
+    "package": "Плата формату UNO (68,6 × 53,3 мм)",
     "priceUah": 2000,
     "tags": [
       "linux",
@@ -1187,8 +1904,8 @@
     },
     "title": {
       "_type": "localeString",
-      "uk": "Захищений канал телеметрії: STM32F407 → ESP32-C6 → UNO Q",
-      "en": "Secure telemetry channel: STM32F407 → ESP32-C6 → UNO Q"
+      "uk": "Захищений канал телеметрії: STM32F407G-DISC1 → ESP32-C6-DevKitC-1 → UNO Q",
+      "en": "Secure telemetry channel: STM32F407G-DISC1 → ESP32-C6-DevKitC-1 → UNO Q"
     },
     "summary": {
       "_type": "localeString",
@@ -1205,12 +1922,12 @@
     "components": [
       {
         "_type": "reference",
-        "_ref": "comp-stm32f407",
+        "_ref": "comp-stm32f407-disc1",
         "_key": "c1"
       },
       {
         "_type": "reference",
-        "_ref": "comp-esp32c6",
+        "_ref": "comp-esp32c6-devkitc",
         "_key": "c2"
       },
       {
@@ -1229,8 +1946,8 @@
         },
         "text": {
           "_type": "localeText",
-          "uk": "STM32F407 збирає дані та шифрує кожен пакет. ESP32-C6 працює як радіомодуль і лише переносить зашифровані байти. Шлюз на Arduino UNO Q розшифровує пакети, перевіряє їх і передає Linux-частині плати для зберігання або показу.\n\nОтже, радіоканал і проміжний модуль не бачать відкритих даних: ключі є лише на кінцевих вузлах.",
-          "en": "The STM32F407 collects data and encrypts each packet. The ESP32-C6 acts as a radio module and only carries encrypted bytes. The gateway on the Arduino UNO Q decrypts and verifies packets and hands them to the board's Linux side for storage or display.\n\nSo neither the radio link nor the intermediate module sees plaintext: keys exist only on the end nodes."
+          "uk": "Плата STM32F407G-DISC1 (мікроконтролер STM32F407VGT6) збирає дані та шифрує кожен пакет. Плата ESP32-C6-DevKitC-1 працює як радіомодуль і лише переносить зашифровані байти. Шлюз на Arduino UNO Q розшифровує пакети, перевіряє їх і передає Linux-частині плати для зберігання або показу.\n\nОтже, радіоканал і проміжний модуль не бачать відкритих даних: ключі є лише на кінцевих вузлах.",
+          "en": "The STM32F407G-DISC1 board (STM32F407VGT6 MCU) collects data and encrypts each packet. The ESP32-C6-DevKitC-1 board acts as a radio module and only carries encrypted bytes. The gateway on the Arduino UNO Q decrypts and verifies packets and hands them to the board's Linux side for storage or display.\n\nSo neither the radio link nor the intermediate module sees plaintext: keys exist only on the end nodes."
         }
       },
       {
@@ -1296,8 +2013,8 @@
     },
     "title": {
       "_type": "localeString",
-      "uk": "Розумне освітлення на UNO Q та ESP32-C6",
-      "en": "Smart lighting with UNO Q and ESP32-C6"
+      "uk": "Розумне освітлення на UNO Q та ESP32-C6-DevKitC-1",
+      "en": "Smart lighting with UNO Q and ESP32-C6-DevKitC-1"
     },
     "summary": {
       "_type": "localeString",
@@ -1319,7 +2036,7 @@
       },
       {
         "_type": "reference",
-        "_ref": "comp-esp32c6",
+        "_ref": "comp-esp32c6-devkitc",
         "_key": "c2"
       }
     ],
@@ -1359,8 +2076,8 @@
         },
         "text": {
           "_type": "localeText",
-          "uk": "ESP32-C6 стоїть біля датчиків і передає їхній стан бездротово. UNO Q приймає дані, виконує логіку й керує навантаженням. Linux-частина плати зручна для журналу подій і налаштування порогів через вебсторінку.",
-          "en": "The ESP32-C6 sits near the sensors and sends their state wirelessly. The UNO Q receives the data, runs the logic and switches the load. The Linux side of the board is handy for an event log and for setting thresholds through a web page."
+          "uk": "Плата ESP32-C6-DevKitC-1 стоїть біля датчиків і передає їхній стан бездротово. UNO Q приймає дані, виконує логіку й керує навантаженням. Linux-частина плати зручна для журналу подій і налаштування порогів через вебсторінку.",
+          "en": "The ESP32-C6-DevKitC-1 board sits near the sensors and sends their state wirelessly. The UNO Q receives the data, runs the logic and switches the load. The Linux side of the board is handy for an event log and for setting thresholds through a web page."
         }
       },
       {

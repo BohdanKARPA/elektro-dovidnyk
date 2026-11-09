@@ -5,6 +5,7 @@ const paths: Record<string, string> = {
   power: 'M13 2 5 14h6l-1 8 8-12h-6z',
   passive: 'M2 12h5 M17 12h5 M7 8h10v8H7z',
   link: 'M3 8h6 M3 16h6 M9 5v14 M15 5v14 M15 12h6 M11 10l2 2-2 2',
+  board: 'M3 6h18v12H3z M6 9h5v6H6z M14 9h1 M17 9h1 M14 12h1 M17 12h1 M14 15h4 M7 3v3 M10 3v3 M14 18v3 M17 18v3',
 }
 
 export function CategoryIcon({ name }: { name?: string }) {

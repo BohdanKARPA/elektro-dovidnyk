@@ -10,6 +10,7 @@ import { getProject, getSlugs } from '@/lib/data'
 import { formatDate, getDict, isLang, LANGS, t } from '@/lib/i18n'
 import { getExtraDict } from '@/lib/i18n-extra'
 import { imageUrl } from '@/lib/sanity'
+import { isBoard } from '@/lib/part-kind'
 
 export const revalidate = 3600
 
@@ -100,7 +101,8 @@ export default async function ProjectPage({ params }: PageProps<'/[lang]/project
             <table className="specs">
               <caption>{dict.parts}</caption>
               <tbody>
-                {p.components.map((c) => (
+                {/* The board first, then the chips mounted around it. */}
+                {[...p.components].sort((a, b) => Number(isBoard(b)) - Number(isBoard(a))).map((c) => (
                   <tr key={c._id}>
                     <th scope="row">
                       <Link href={`/${lang}/components/${c.slug}`}>{c.name}</Link>

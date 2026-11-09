@@ -10,6 +10,7 @@ import { FavoriteButton } from '@/components/FavoriteButton'
 import { getComponent, getProjectsUsing, getSlugs } from '@/lib/data'
 import { getDict, isLang, LANGS, t } from '@/lib/i18n'
 import { getExtraDict } from '@/lib/i18n-extra'
+import { isBoard, kindLabel, packageLabel } from '@/lib/part-kind'
 import { imageUrl } from '@/lib/sanity'
 
 export const revalidate = 3600
@@ -49,6 +50,7 @@ export default async function ComponentPage({ params }: PageProps<'/[lang]/compo
   const x = getExtraDict(lang)
   const projects = await getProjectsUsing(c._id)
   const img = imageUrl(c.image, 900)
+  const board = isBoard(c)
 
   // Structured data for search engines (schema.org/Product).
   const jsonLd = {
@@ -76,8 +78,13 @@ export default async function ComponentPage({ params }: PageProps<'/[lang]/compo
         <article>
           <h1>{c.name}</h1>
           <div className="meta-line">
+            <span className="kind-badge">{kindLabel(board, lang)}</span>
             {c.manufacturer && <span>{c.manufacturer}</span>}
-            {c.package && <span>{c.package}</span>}
+            {c.package && (
+              <span>
+                {packageLabel([board], lang)}: {c.package}
+              </span>
+            )}
             {c.priceUah ? (
               <span>
                 ≈ {c.priceUah} {dict.uah}

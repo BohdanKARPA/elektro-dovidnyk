@@ -5,6 +5,7 @@ import { PartRender } from '@/components/PartRender'
 import { getComponent, getComponents } from '@/lib/data'
 import { getDict, isLang, t } from '@/lib/i18n'
 import { getExtraDict } from '@/lib/i18n-extra'
+import { isBoard, packageLabel } from '@/lib/part-kind'
 import type { ComponentDoc } from '@/lib/types'
 
 const MAX = 4
@@ -47,7 +48,7 @@ export default async function ComparePage({ params, searchParams }: PageProps<'/
 
   const rows: { label: string; values: string[] }[] = [
     { label: dict.manufacturer, values: items.map((c) => c.manufacturer ?? '—') },
-    { label: dict.package, values: items.map((c) => c.package ?? '—') },
+    { label: packageLabel(items.map(isBoard), lang), values: items.map((c) => c.package ?? '—') },
     { label: dict.price, values: items.map((c) => (c.priceUah ? `≈ ${c.priceUah} ${dict.uah}` : '—')) },
     ...labels.map((label) => ({ label, values: items.map((c) => c.specs?.find((s) => s.label === label)?.value ?? '—') })),
   ]

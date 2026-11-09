@@ -245,6 +245,8 @@ const REVIEW_PROMPT = [
   'Answer "revise" when it is on-topic and honest but incomplete or has fixable problems (too short, missing key specs, unclear steps, small technical errors);',
   'then the reason must say exactly what to add or fix.',
   'Reject only spam, advertising, links-only or shop promotion, gibberish, off-topic text, insults, and deliberately false content.',
+  'For a component, check the category: a ready board or module (Arduino, ESP32 DevKit, a sensor breakout, a DC-DC module) belongs to "Плати та модулі",',
+  'a bare chip (ATmega328P, STM32, INA226…) belongs to the category of its purpose, never to "Плати та модулі". A wrong category means "revise", and the reason names the right one.',
   'Answer "review" (a human moderator decides) when you are unsure, when specifications look doubtful,',
   'or when the project involves mains voltage, high-energy batteries or other hazards without safety notes.',
   'Reply with JSON {"verdict": "approve" | "revise" | "reject" | "review", "flagged": true | false, "reason": "<one or two short sentences in Ukrainian addressed to the author>"}.',

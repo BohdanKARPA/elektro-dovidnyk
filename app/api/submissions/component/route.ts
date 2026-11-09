@@ -53,7 +53,8 @@ export async function POST(req: NextRequest) {
     .slice(0, 8)
   const input = { name: d.name, manufacturer: d.manufacturer, categoryId: d.categoryId, package: d.package, priceUah: d.priceUah, summary: d.summary, description: d.description, specs: d.specs, datasheetUrl: d.datasheetUrl, lcscPart: d.lcscPart, tags }
 
-  const review = user.role === 'admin' ? null : await reviewSubmission('component', { ...input, categoryId: undefined })
+  const categoryTitle = (await getCategories()).find((c) => c._id === d.categoryId)?.title?.uk
+  const review = user.role === 'admin' ? null : await reviewSubmission('component', { ...input, categoryId: undefined, category: categoryTitle })
   const status = statusFromReview(review, user.role === 'admin')
   const saved = d.id ? { id: d.id, slug: await updateComponent(d.id, input, status, review) } : await createComponent(input, user, status, review, await getSlugs('component'))
   revalidateCatalog()

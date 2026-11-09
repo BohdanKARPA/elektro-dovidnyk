@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { ComponentGuide } from '@/components/ComponentGuide'
+import { isBoard } from '@/lib/part-kind'
 import { getCategories, getComponents } from '@/lib/data'
 import { getDict, isLang, t } from '@/lib/i18n'
 import { getExtraDict } from '@/lib/i18n-extra'
@@ -53,6 +54,7 @@ export default async function ComponentsPage({ params, searchParams }: PageProps
           category: t(c.category?.title, lang),
           categorySlug: c.category?.slug,
           package: c.package,
+          board: isBoard(c),
           priceUah: c.priceUah,
           tags: c.tags,
         }))}

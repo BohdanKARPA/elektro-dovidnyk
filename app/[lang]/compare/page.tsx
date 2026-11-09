@@ -31,7 +31,13 @@ export default async function ComparePage({ params, searchParams }: PageProps<'/
   const { slugs, overflow } = parseItems(await searchParams)
 
   const [found, all] = await Promise.all([Promise.all(slugs.map((s) => getComponent(s))), getComponents()])
-  const items = found.filter((c): c is ComponentDoc => Boolean(c))
+  // Only parts of one category are compared (an MCU next to a current sensor tells nothing):
+  // the first part sets the category, parts of other categories are left out with a note.
+  const valid = found.filter((c): c is ComponentDoc => Boolean(c))
+  const catSlug = valid[0]?.category?.slug
+  const items = valid.filter((c) => c.category?.slug === catSlug)
+  const dropped = valid.filter((c) => c.category?.slug !== catSlug)
+  const category = items[0]?.category
   const current = items.map((c) => c.slug)
   const href = (list: string[]) => (list.length ? `/${lang}/compare?items=${list.join(',')}` : `/${lang}/compare`)
 
@@ -41,12 +47,25 @@ export default async function ComparePage({ params, searchParams }: PageProps<'/
 
   const rows: { label: string; values: string[] }[] = [
     { label: dict.manufacturer, values: items.map((c) => c.manufacturer ?? '—') },
-    { label: lang === 'uk' ? 'Категорія' : 'Category', values: items.map((c) => t(c.category?.title, lang) || '—') },
     { label: dict.package, values: items.map((c) => c.package ?? '—') },
     { label: dict.price, values: items.map((c) => (c.priceUah ? `≈ ${c.priceUah} ${dict.uah}` : '—')) },
     ...labels.map((label) => ({ label, values: items.map((c) => c.specs?.find((s) => s.label === label)?.value ?? '—') })),
   ]
-  const candidates = all.filter((c) => !current.includes(c.slug))
+  const candidates = all.filter((c) => !current.includes(c.slug) && (!items.length || c.category?.slug === catSlug))
+  // Before the first pick, group the choice by category so it is clear what goes with what.
+  const groups = new Map<string, { title: string; parts: ComponentDoc[] }>()
+  for (const c of candidates) {
+    const key = c.category?.slug ?? '-'
+    const g = groups.get(key) ?? { title: t(c.category?.title, lang) || '—', parts: [] }
+    g.parts.push(c)
+    groups.set(key, g)
+  }
+  const option = (c: ComponentDoc) => (
+    <option key={c._id} value={c.slug}>
+      {c.name}
+      {c.manufacturer ? ` (${c.manufacturer})` : ''}
+    </option>
+  )
 
   return (
     <>
@@ -56,6 +75,17 @@ export default async function ComparePage({ params, searchParams }: PageProps<'/
       <h1>{x.compare}</h1>
       <p className="lede">{x.compareIntro}</p>
       {overflow && <p className="form-note err">{x.compareMax}</p>}
+      {category && (
+        <p className="compare-cat">
+          {x.compareCategory}: <strong>{t(category.title, lang)}</strong>
+          <span className="dim"> · {x.compareSameCategory}</span>
+        </p>
+      )}
+      {dropped.length > 0 && (
+        <p className="form-note err">
+          {x.compareDropped}: {dropped.map((c) => c.name).join(', ')}. {x.compareSameCategory}
+        </p>
+      )}
 
       {items.length === 0 ? (
         <p className="lede">{x.compareEmpty}</p>
@@ -94,6 +124,7 @@ export default async function ComparePage({ params, searchParams }: PageProps<'/
         </div>
       )}
 
+      {items.length > 0 && items.length < MAX && candidates.length === 0 && <p className="lede">{x.compareNoMore}</p>}
       {items.length < MAX && candidates.length > 0 && (
         <form className="toolbar" action={`/${lang}/compare`} method="get">
           {current.length > 0 && <input type="hidden" name="items" value={current.join(',')} />}
@@ -103,12 +134,13 @@ export default async function ComparePage({ params, searchParams }: PageProps<'/
               <option value="" disabled>
                 —
               </option>
-              {candidates.map((c) => (
-                <option key={c._id} value={c.slug}>
-                  {c.name}
-                  {c.manufacturer ? ` (${c.manufacturer})` : ''}
-                </option>
-              ))}
+              {items.length
+                ? candidates.map(option)
+                : [...groups.values()].map((g) => (
+                    <optgroup key={g.title} label={g.title}>
+                      {g.parts.map(option)}
+                    </optgroup>
+                  ))}
             </select>
           </label>
           <button className="btn" type="submit">

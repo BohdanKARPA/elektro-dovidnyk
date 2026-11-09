@@ -34,13 +34,17 @@ export function ComponentGuide({
   lang: Lang
   dict: Dict
   initialCategory?: string
-  compareLabels: { col: string; reset: string; max: string }
+  compareLabels: { col: string; reset: string; max: string; only: string }
 }) {
   const [query, setQuery] = useState('')
   const [cat, setCat] = useState<string | undefined>(initialCategory)
   const [picked, setPicked] = useState<string[]>([])
   const toggle = (slug: string) =>
     setPicked((p) => (p.includes(slug) ? p.filter((s) => s !== slug) : p.length >= MAX_COMPARE ? p : [...p, slug]))
+  // Parts are compared within one category: the first pick sets it.
+  const pickedCat = picked.length ? rows.find((r) => r.slug === picked[0])?.categorySlug : undefined
+  const pickedCatTitle = picked.length ? rows.find((r) => r.slug === picked[0])?.category : undefined
+  const canPick = (r: GuideRow) => picked.includes(r.slug) || (picked.length < MAX_COMPARE && (!picked.length || r.categorySlug === pickedCat))
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -112,11 +116,11 @@ export function ComponentGuide({
                 <td className="dim">{r.package}</td>
                 <td className="num">{r.priceUah ? `≈ ${r.priceUah} ${dict.uah}` : '—'}</td>
                 <td className="cmp">
-                  <label>
+                  <label title={!canPick(r) && picked.length < MAX_COMPARE ? `${compareLabels.only} «${pickedCatTitle}»` : undefined}>
                     <input
                       type="checkbox"
                       checked={picked.includes(r.slug)}
-                      disabled={!picked.includes(r.slug) && picked.length >= MAX_COMPARE}
+                      disabled={!canPick(r)}
                       onChange={() => toggle(r.slug)}
                       aria-label={`${compareLabels.col}: ${r.name}`}
                     />
@@ -133,6 +137,12 @@ export function ComponentGuide({
         <div className="compare-bar" role="region" aria-label={compareLabels.col}>
           <span>
             {picked.length >= MAX_COMPARE ? compareLabels.max : picked.map((s) => rows.find((r) => r.slug === s)?.name).join(', ')}
+            {pickedCatTitle && (
+              <span className="dim">
+                {' '}
+                · {compareLabels.only} «{pickedCatTitle}»
+              </span>
+            )}
           </span>
           <span className="compare-bar-actions">
             <button type="button" className="btn ghost small" onClick={() => setPicked([])}>

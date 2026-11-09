@@ -42,7 +42,7 @@ export default async function ComponentsPage({ params, searchParams }: PageProps
         lang={lang}
         dict={dict}
         initialCategory={categories.some((c) => c.slug === initial) ? initial : undefined}
-        compareLabels={{ col: x.compareCol, reset: x.compareReset, max: x.compareMax }}
+        compareLabels={{ col: x.compareCol, reset: x.compareReset, max: x.compareMax, only: x.compareOnlyCategory }}
         categories={categories.map((c) => ({ slug: c.slug, title: t(c.title, lang) }))}
         rows={components.map((c) => ({
           id: c._id,

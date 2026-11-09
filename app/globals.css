@@ -749,3 +749,14 @@ fieldset.rows > .btn { justify-self: start; }
   .status-led { animation: none !important; opacity: 1; }
   .hero-board:hover, .btn:hover, .project-list a:hover h3, .search-results a:hover h3, .topic-list a:hover .topic-title { transform: none; }
 }
+
+/* Compare: the category the comparison is limited to */
+.compare-cat {
+  margin: -8px 0 20px;
+  color: var(--muted);
+}
+.guide td.cmp input:disabled + .cmp-text,
+.guide td.cmp label:has(input:disabled) {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

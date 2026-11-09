@@ -374,10 +374,12 @@ function modelDiscovery(name: string): Model {
  * USB-C ports, Boot/Reset buttons and the RGB LED at the other.
  */
 function modelDevKit(name: string): Model {
-  const w = 150
+  // ESP32-C3-DevKitM-1: 15 pins a side, one Micro-USB and the smaller MINI module.
+  const mini = /C3/i.test(name)
+  const w = mini ? 140 : 150
   const d = 56
   const T = 3
-  const pins = 16
+  const pins = mini ? 15 : 16
   const row = (y: number): [Box, Decor] => [
     { x: 14, y, w: pins * 7.4 + 2, d: 7, z0: T, z1: T + 7, m: 'plastic', layer: 1 },
     {
@@ -398,12 +400,23 @@ function modelDevKit(name: string): Model {
       { x: 0, y: 0, w, d, z0: 0, z1: T, m: 'pcb' },
       top,
       bottom,
-      // WROOM module: PCB antenna part, then the metal shield
-      { x: 92, y: 13, w: 18, d: 30, z0: T, z1: T + 0.8, m: 'pcb', layer: 1 },
-      { x: 110, y: 13, w: 36, d: 30, z0: T, z1: T + 3.2, m: 'lid', layer: 1 },
-      // two USB-C ports over the left edge
-      { x: -4, y: 12, w: 10, d: 11, z0: T, z1: T + 3.5, m: 'tab', layer: 1 },
-      { x: -4, y: 33, w: 10, d: 11, z0: T, z1: T + 3.5, m: 'tab', layer: 1 },
+      // the module: PCB antenna part, then the metal shield
+      ...(mini
+        ? [
+            { x: 92, y: 16, w: 14, d: 24, z0: T, z1: T + 0.8, m: 'pcb', layer: 1 } as Box,
+            { x: 106, y: 16, w: 26, d: 24, z0: T, z1: T + 2.6, m: 'lid', layer: 1 } as Box,
+          ]
+        : [
+            { x: 92, y: 13, w: 18, d: 30, z0: T, z1: T + 0.8, m: 'pcb', layer: 1 } as Box,
+            { x: 110, y: 13, w: 36, d: 30, z0: T, z1: T + 3.2, m: 'lid', layer: 1 } as Box,
+          ]),
+      // USB over the left edge: one Micro-USB on the C3 board, two USB-C on the C6 board
+      ...(mini
+        ? [{ x: -4, y: 23, w: 9, d: 10, z0: T, z1: T + 3, m: 'tab', layer: 1 } as Box]
+        : [
+            { x: -4, y: 12, w: 10, d: 11, z0: T, z1: T + 3.5, m: 'tab', layer: 1 } as Box,
+            { x: -4, y: 33, w: 10, d: 11, z0: T, z1: T + 3.5, m: 'tab', layer: 1 } as Box,
+          ]),
       // USB-UART bridge, LDO, Boot and Reset buttons
       { x: 22, y: 20, w: 12, d: 12, z0: T, z1: T + 1.8, m: 'body', layer: 1 },
       { x: 42, y: 34, w: 10, d: 7, z0: T, z1: T + 2.2, m: 'body', layer: 1 },
@@ -418,22 +431,30 @@ function modelDevKit(name: string): Model {
           <>
             <circle cx={81} cy={28} r="1.8" fill="#52f2a6" className="board-led" />
             {/* The board is narrow: its name sits on the module, the silkscreen only says which end is which. */}
-            <text x={9} y={19.5} fontSize="4.2" fill="rgb(255 255 255 / .7)" className="part-marking">
-              UART
-            </text>
-            <text x={9} y={40.5} fontSize="4.2" fill="rgb(255 255 255 / .7)" className="part-marking">
-              USB
-            </text>
+            {!mini && (
+              <>
+                <text x={9} y={19.5} fontSize="4.2" fill="rgb(255 255 255 / .7)" className="part-marking">
+                  UART
+                </text>
+                <text x={9} y={40.5} fontSize="4.2" fill="rgb(255 255 255 / .7)" className="part-marking">
+                  USB
+                </text>
+              </>
+            )}
           </>
         ),
       },
       {
         z: T + 0.8,
-        node: <path d="M95 18h12v4H96v4h11v4H96v4h11v4H95" fill="none" stroke="#d8b24a" strokeWidth="1" />,
+        node: mini ? (
+          <path d="M94 20h10v4h-9v4h9v4h-9v4h10" fill="none" stroke="#d8b24a" strokeWidth="1" />
+        ) : (
+          <path d="M95 18h12v4H96v4h11v4H96v4h11v4H95" fill="none" stroke="#d8b24a" strokeWidth="1" />
+        ),
       },
       topPins,
       bottomPins,
-      { z: T + 3.2, node: marking(128, 28, 32, name.replace(/-DevKit.*$/i, ''), 'WROOM-1', true) },
+      { z: mini ? T + 2.6 : T + 3.2, node: mini ? marking(119, 28, 24, name.replace(/-DevKit.*$/i, ''), 'MINI-1', true) : marking(128, 28, 32, name.replace(/-DevKit.*$/i, ''), 'WROOM-1', true) },
     ],
   }
 }

@@ -180,6 +180,79 @@
     ]
   },
   {
+    "_id": "comp-esp32c3-devkitm",
+    "_type": "component",
+    "name": "ESP32-C3-DevKitM-1",
+    "slug": {
+      "_type": "slug",
+      "current": "esp32-c3-devkitm-1"
+    },
+    "manufacturer": "Espressif",
+    "category": {
+      "_type": "reference",
+      "_ref": "cat-boards"
+    },
+    "package": "Плата DevKitM (модуль ESP32-C3-MINI-1)",
+    "priceUah": 350,
+    "tags": [
+      "esp32",
+      "esp32-c3",
+      "wifi",
+      "ble",
+      "risc-v",
+      "board",
+      "devkit"
+    ],
+    "summary": {
+      "_type": "localeString",
+      "uk": "Налагоджувальна плата з модулем ESP32-C3-MINI-1: Wi-Fi і Bluetooth LE, порт Micro-USB, RGB-світлодіод і 30 виводів.",
+      "en": "A development board with the ESP32-C3-MINI-1 module: Wi-Fi and Bluetooth LE, a Micro-USB port, an RGB LED and 30 pins."
+    },
+    "description": {
+      "_type": "localeText",
+      "uk": "ESP32-C3-DevKitM-1 — офіційна плата Espressif для ESP32-C3. На ній стоїть модуль ESP32-C3-MINI-1 з антеною на платі; 4 МБ Flash вбудовано в саму мікросхему ESP32-C3FN4.\n\nПорт Micro-USB живить плату й через перетворювач USB-UART дає прошивку та консоль. Є кнопки Boot і Reset, адресний RGB-світлодіод, стабілізатор 5 → 3,3 В і по 15 виводів з кожного боку. Зверніть увагу: світлодіод підключено до GPIO8, а це ще й strapping-вивід, тому для власних ліній (наприклад, I²C) краще брати інші GPIO.",
+      "en": "The ESP32-C3-DevKitM-1 is Espressif's official ESP32-C3 board. It carries the ESP32-C3-MINI-1 module with a PCB antenna; the 4 MB of flash is built into the ESP32-C3FN4 chip itself.\n\nThe Micro-USB port powers the board and, through a USB-UART bridge, gives flashing and a console. There are Boot and Reset buttons, an addressable RGB LED, a 5 → 3.3 V regulator and 15 pins on each side. Note that the LED is wired to GPIO8, which is also a strapping pin, so use other GPIOs for your own lines (I²C, for example)."
+    },
+    "specs": [
+      {
+        "_key": "s1",
+        "label": "Модуль",
+        "value": "ESP32-C3-MINI-1 (антена на платі)"
+      },
+      {
+        "_key": "s2",
+        "label": "Мікросхема",
+        "value": "ESP32-C3FN4: RISC-V 160 МГц, 4 МБ Flash усередині"
+      },
+      {
+        "_key": "s3",
+        "label": "Радіо",
+        "value": "Wi-Fi 2,4 ГГц, Bluetooth LE"
+      },
+      {
+        "_key": "s4",
+        "label": "USB",
+        "value": "Micro-USB через перетворювач USB-UART"
+      },
+      {
+        "_key": "s5",
+        "label": "Кнопки й індикація",
+        "value": "Boot, Reset; адресний RGB-світлодіод (GPIO8), індикатор живлення"
+      },
+      {
+        "_key": "s6",
+        "label": "Живлення",
+        "value": "Від USB, 5 В або 3,3 В на роз’ємах; стабілізатор 5 → 3,3 В"
+      },
+      {
+        "_key": "s7",
+        "label": "Роз’єми",
+        "value": "2 × 15 контактів"
+      }
+    ],
+    "datasheetUrl": "https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32c3/esp32-c3-devkitm-1/user_guide.html"
+  },
+  {
     "_id": "comp-stm32g431",
     "lcscPart": "C529356",
     "_type": "component",
@@ -577,8 +650,8 @@
     "_type": "project",
     "title": {
       "_type": "localeString",
-      "uk": "Wi-Fi метеостанція на ESP32-C3",
-      "en": "Wi-Fi weather station on ESP32-C3"
+      "uk": "Wi-Fi метеостанція на ESP32-C3-DevKitM-1",
+      "en": "Wi-Fi weather station on ESP32-C3-DevKitM-1"
     },
     "slug": {
       "_type": "slug",
@@ -594,7 +667,7 @@
     "components": [
       {
         "_type": "reference",
-        "_ref": "comp-esp32c3",
+        "_ref": "comp-esp32c3-devkitm",
         "_key": "c1"
       },
       {
@@ -618,8 +691,8 @@
         },
         "text": {
           "_type": "localeText",
-          "uk": "З'єднайте BME280 з ESP32-C3 по I²C: SDA → GPIO8, SCL → GPIO9, живлення 3,3 В. Якщо на модулі немає підтягувальних резисторів, додайте 4,7 кОм на обидві лінії.",
-          "en": "Connect the BME280 to the ESP32-C3 over I²C: SDA → GPIO8, SCL → GPIO9, 3.3 V supply. If the module has no pull-ups, add 4.7 kΩ on both lines."
+          "uk": "З'єднайте BME280 з платою ESP32-C3-DevKitM-1 по I²C: SDA → GPIO4, SCL → GPIO5, живлення 3,3 В. GPIO8 не беріть: на платі до нього підключено RGB-світлодіод, і це strapping-вивід. Якщо на модулі датчика немає підтягувальних резисторів, додайте 4,7 кОм на обидві лінії.",
+          "en": "Connect the BME280 to the ESP32-C3-DevKitM-1 over I²C: SDA → GPIO4, SCL → GPIO5, 3.3 V supply. Avoid GPIO8: the board's RGB LED is wired to it and it is a strapping pin. If the sensor module has no pull-ups, add 4.7 kΩ on both lines."
         }
       },
       {
@@ -631,8 +704,8 @@
         },
         "text": {
           "_type": "localeText",
-          "uk": "Створіть проєкт у PlatformIO або Arduino IDE, підключіть бібліотеку для BME280 і перевірте ID датчика. Прошивайте напряму через вбудований USB.",
-          "en": "Create a PlatformIO or Arduino IDE project, add a BME280 library and verify the chip ID. Flash directly over the built-in USB."
+          "uk": "Створіть проєкт у PlatformIO або Arduino IDE, підключіть бібліотеку для BME280 і перевірте ID датчика. Прошивайте через порт Micro-USB на платі; якщо завантаження не стартує саме, утримуйте Boot і натисніть Reset.",
+          "en": "Create a PlatformIO or Arduino IDE project, add a BME280 library and verify the chip ID. Flash through the board's Micro-USB port; if the download does not start by itself, hold Boot and press Reset."
         }
       },
       {
@@ -657,8 +730,8 @@
         },
         "text": {
           "_type": "localeText",
-          "uk": "Переведіть BME280 у forced mode, а ESP32-C3 — у deep sleep на 10 хвилин. Так пристрій працюватиме від акумулятора тижнями.",
-          "en": "Put the BME280 in forced mode and the ESP32-C3 into deep sleep for 10 minutes. The device will then run for weeks on a battery."
+          "uk": "Переведіть BME280 у forced mode, а ESP32-C3 — у deep sleep на 10 хвилин. На налагоджувальній платі навіть у сні струм споживають стабілізатор, перетворювач USB-UART і світлодіод живлення, тому для роботи від акумулятора тижнями перенесіть схему на власну плату з модулем ESP32-C3-MINI-1.",
+          "en": "Put the BME280 in forced mode and the ESP32-C3 into deep sleep for 10 minutes. On the dev board the regulator, the USB-UART bridge and the power LED still draw current during sleep, so to run for weeks on a battery move the circuit to your own board with the ESP32-C3-MINI-1 module."
         }
       }
     ]
